@@ -1,4 +1,4 @@
-REGISTRY='10.88.0.1:8082'
+. ../meta/functions.sh
 
 CONTAINER_ID=$(buildah from ${REGISTRY}/base:$(date +'%Y.%m.%d')-1)
 
