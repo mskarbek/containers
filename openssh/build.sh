@@ -1,18 +1,19 @@
 . ../meta/functions.sh
 
-CONTAINER_ID=$(buildah from ${REGISTRY}/systemd:$(date +'%Y.%m.%d')-1)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_ID})
+CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
+buildah from --name=${CONTAINER_UUID} ${REGISTRY}/systemd:$(date +'%Y.%m.%d')-1
+CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-ln -s /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/host.repo
+copy_repo
 
 dnf_install "openssh-server openssh-clients rsync"
 
 dnf_clean
 
-buildah run -t ${CONTAINER_ID} systemctl unmask\
+buildah run -t ${CONTAINER_UUID} systemctl unmask\
  systemd-logind.service
 
 clean_files
 
-buildah commit ${CONTAINER_ID} ${REGISTRY}/openssh:$(date +'%Y.%m.%d')-1
+buildah commit ${CONTAINER_UUID} ${REGISTRY}/openssh:$(date +'%Y.%m.%d')-1
 buildah rm -a

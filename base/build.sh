@@ -1,22 +1,23 @@
 . ../meta/functions.sh
 
-CONTAINER_ID=$(buildah from ${REGISTRY}/micro:$(date +'%Y.%m.%d')-1)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_ID})
+CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
+buildah from --name=${CONTAINER_UUID} ${REGISTRY}/micro:$(date +'%Y.%m.%d')-1
+CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-ln -s /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/host.repo
+copy_repo
 
 dnf_install "systemd procps-ng"
 
 dnf_clean
 
-#rsync -r --ignore-existing rootfs/ ${CONTAINER_PATH}/
-rsync -hrvP --ignore-existing rootfs/ ${CONTAINER_PATH}/
+rsync_rootfs
+
 #chown -Rv root:root ${CONTAINER_PATH}/ect/pki/ca-cert/*
-#find ${CONTAINER_ID}/ -type f -exec chmod -v 0755 {} \;
+#find ${CONTAINER_UUID}/ -type f -exec chmod -v 0755 {} \;
 
-#buildah run -t ${CONTAINER_ID} update-ca-trust
+#buildah run -t ${CONTAINER_UUID} update-ca-trust
 
-buildah run -t ${CONTAINER_ID} systemctl mask\
+buildah run -t ${CONTAINER_UUID} systemctl mask\
  console-getty.service\
  dev-hugepages.mount\
  dnf-makecache.timer\
@@ -35,7 +36,5 @@ buildah run -t ${CONTAINER_ID} systemctl mask\
 
 clean_files
 
-#buildah config --cmd '[ "/usr/bin/bash" ]' ${CONTAINER_ID}
-
-buildah commit ${CONTAINER_ID} ${REGISTRY}/base:$(date +'%Y.%m.%d')-1
+buildah commit ${CONTAINER_UUID} ${REGISTRY}/base:$(date +'%Y.%m.%d')-1
 buildah rm -a
