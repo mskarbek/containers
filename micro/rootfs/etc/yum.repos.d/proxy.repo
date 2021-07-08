@@ -53,3 +53,10 @@ baseurl=http://192.168.123.249:8081/repository/yum-proxy-chrome
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-google
+
+[hosted-jenkins]
+name=Jenkins LTS - Hosted
+baseurl=http://192.168.123.249:8081/repository/yum-hosted-jenkins
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-jenkins
