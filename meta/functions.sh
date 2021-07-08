@@ -1,14 +1,13 @@
 REGISTRY='10.88.0.252:8082'
 
 copy_repo () {
-    cp /etc/yum.repos.d/proxy.repo ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
+    cp -v ../meta/proxy.repo ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
 }
 
 dnf_install () {
     dnf -y \
     --disablerepo=* \
     --enablerepo=proxy-* \
-    --enablerepo=hosted-* \
     --installroot=${CONTAINER_PATH} \
     --releasever=8.4 \
     --setopt=module_platform_id=platform:el8 \
