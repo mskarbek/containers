@@ -6,7 +6,7 @@ CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 copy_repo
 
-dnf_install "systemd procps-ng"
+dnf_install "systemd procps-ng dbus-broker --nobest"
 
 dnf_clean
 
@@ -33,6 +33,9 @@ buildah run -t ${CONTAINER_UUID} systemctl mask\
  systemd-resolved.service\
  systemd-udev-trigger.service\
  systemd-udevd.service
+
+buildah run -t ${CONTAINER_UUID} systemctl enable\
+ dbus-broker.service
 
 clean_files
 
