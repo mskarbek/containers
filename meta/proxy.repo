@@ -47,6 +47,18 @@ enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8
 
+[proxy-hyperscale]
+name=CentOS 8 Stream - Hyperscale - Proxy
+baseurl=http://192.168.123.249:8081/repository/yum-proxy-hyperscale
+enabled=1
+gpgcheck=0
+
+[proxy-facebook]
+name=CentOS 8 Stream - Hyperscale Facebook - Proxy
+baseurl=http://192.168.123.249:8081/repository/yum-proxy-facebook
+enabled=1
+gpgcheck=0
+
 [proxy-google-chrome]
 name=Google Chrome - Proxy
 baseurl=http://192.168.123.249:8081/repository/yum-proxy-chrome
