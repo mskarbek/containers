@@ -60,3 +60,17 @@ baseurl=http://192.168.123.249:8081/repository/yum-proxy-jenkins
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-jenkins
+
+[proxy-rundeck]
+name=Rundeck - Proxy
+baseurl=http://192.168.123.249:8081/repository/yum-proxy-rundeck/x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rundeck
+
+[hosted-stuff]
+name=Stuff - Hosted
+baseurl=http://192.168.123.249:8081/repository/yum-hosted-stuff
+enabled=1
+gpgcheck=0

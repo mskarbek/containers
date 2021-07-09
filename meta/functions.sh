@@ -8,6 +8,7 @@ dnf_install () {
     dnf -y \
     --disablerepo=* \
     --enablerepo=proxy-* \
+    --enablerepo=hosted-* \
     --installroot=${CONTAINER_PATH} \
     --releasever=8.4 \
     --setopt=module_platform_id=platform:el8 \
