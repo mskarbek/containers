@@ -21,5 +21,7 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
  jenkins.service\
  jenkins-plugin-manager.service
 
+buildah config --volume /var/lib/jenkins ${CONTAINER_UUID}
+
 buildah commit ${CONTAINER_UUID} ${REGISTRY}/jenkins:$(date +'%Y.%m.%d')-1
 buildah rm -a
