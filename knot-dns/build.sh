@@ -10,10 +10,14 @@ dnf_install "knot knot-module-dnstap"
 
 dnf_clean
 
+rsync_rootfs
+
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  knot.service
 
 clean_files
+
+buildah config --volume /var/lib/knot ${CONTAINER_UUID}
 
 buildah commit ${CONTAINER_UUID} ${REGISTRY}/knot-dns:$(date +'%Y.%m.%d')-1
 buildah rm -a
