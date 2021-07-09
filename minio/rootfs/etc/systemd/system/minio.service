@@ -1,0 +1,21 @@
+[Unit]
+Description=MinIO
+Documentation=https://docs.min.io
+After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
+Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+AssertFileIsExecutable=/usr/local/bin/minio
+
+[Service]
+WorkingDirectory=/run/minio
+User=minio
+Group=minio
+EnvironmentFile=/etc/default/minio
+EnvironmentFile=-/etc/sysconfig/minio
+ExecStart=/usr/local/bin/minio server $MINIO_OPTS $MINIO_VOLUMES
+Restart=always
+LimitNOFILE=65536
+TimeoutStopSec=infinity
+SendSIGKILL=no
+
+[Install]
+WantedBy=multi-user.target

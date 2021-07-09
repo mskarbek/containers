@@ -1,0 +1,8 @@
+# Volume to be used for MinIO server.
+MINIO_VOLUMES="/var/lib/minio/data"
+# Use if you want to run MinIO on a custom port.
+MINIO_OPTS=""
+# Root user for the server.
+MINIO_ROOT_USER=Root-User
+# Root secret for the server.
+MINIO_ROOT_PASSWORD=Root-Pass
