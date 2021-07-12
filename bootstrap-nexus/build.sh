@@ -1,27 +1,53 @@
 . ../meta/functions.sh
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-buildah from --name=${CONTAINER_UUID} registry.fedoraproject.org/fedora:34
+buildah from --name=${CONTAINER_UUID} registry.access.redhat.com/ubi8/ubi:8.4
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 NEXUS_VERSION="3.32.0-03"
 
 TMPDIR=$(mktemp -d)
 
+cat << EOF > ${CONTAINER_PATH}/etc/yum.repos.d/hyperscale.repo
+[proxy-hyperscale]
+name=CentOS 8 Stream - Hyperscale
+baseurl=http://mirror.centos.org/centos/8-stream/hyperscale/x86_64/packages-main/
+enabled=1
+gpgcheck=0
+
+[proxy-facebook]
+name=CentOS 8 Stream - Hyperscale Facebook
+baseurl=http://mirror.centos.org/centos/8-stream/hyperscale/x86_64/packages-facebook/
+enabled=1
+gpgcheck=0
+EOF
+
 buildah run -t ${CONTAINER_UUID} dnf -y\
- --releasever=34\
+ --disablerepo=ubi*\
+ --releasever=8\
+ --setopt=module_platform_id=platform:el8\
  --setopt=install_weak_deps=false\
  --nodocs\
  update
 
 buildah run -t ${CONTAINER_UUID} dnf -y\
- --releasever=34\
+ --disablerepo=ubi*\
+ --releasever=8\
+ --setopt=module_platform_id=platform:el8\
  --setopt=install_weak_deps=false\
  --nodocs\
- install systemd procps-ng dbus-broker java-1.8.0-openjdk-headless tomcat-native apr
+ install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
 buildah run -t ${CONTAINER_UUID} dnf -y\
- --releasever=34\
+ --disablerepo=ubi*\
+ --releasever=8\
+ --setopt=module_platform_id=platform:el8\
+ --setopt=install_weak_deps=false\
+ --nodocs\
+ install apr dbus-broker java-1.8.0-openjdk-headless procps-ng systemd tomcat-native
+
+buildah run -t ${CONTAINER_UUID} dnf -y\
+ --releasever=8.4\
  clean all
 
 pushd ${TMPDIR}
