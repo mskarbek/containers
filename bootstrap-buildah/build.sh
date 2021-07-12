@@ -205,6 +205,7 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
 clean_files
 
 sed -i 's/driver = "overlay"/driver = "zfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
+sed -i 's/session    required     pam_loginuid.so/#session    required     pam_loginuid.so/' ${CONTAINER_PATH}/etc/pam.d/sshd
 
 buildah config --volume /var/lib/containers ${CONTAINER_UUID}
 
