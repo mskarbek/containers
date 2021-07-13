@@ -15,5 +15,7 @@ buildah run -t ${CONTAINER_UUID} systemctl unmask\
 
 clean_files
 
+sed -i 's/session    required     pam_loginuid.so/#session    required     pam_loginuid.so/' ${CONTAINER_PATH}/etc/pam.d/sshd
+
 buildah commit ${CONTAINER_UUID} ${REGISTRY}/openssh:$(date +'%Y.%m.%d')-1
 buildah rm -a
