@@ -204,6 +204,8 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
 
 clean_files
 
+rsync_rootfs
+
 sed -i 's/driver = "overlay"/driver = "zfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
 sed -i 's/session    required     pam_loginuid.so/#session    required     pam_loginuid.so/' ${CONTAINER_PATH}/etc/pam.d/sshd
 
