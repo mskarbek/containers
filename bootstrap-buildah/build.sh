@@ -9,8 +9,21 @@ KERNEL_VERSION="4.18.0-305.el8"
 
 TMPDIR=$(mktemp -d)
 
+clean_repos
+rsync_rootfs
+
 buildah run -t ${CONTAINER_UUID} dnf -y\
- --disablerepo=ubi*\
+ --releasever=8\
+ --setopt=module_platform_id=platform:el8\
+ --setopt=install_weak_deps=false\
+ --nodocs\
+ remove\
+ dnf-plugin-subscription-manager\
+ python3-subscription-manager-rhsm\
+ subscription-manager\
+ subscription-manager-rhsm-certificates
+
+buildah run -t ${CONTAINER_UUID} dnf -y\
  --releasever=8\
  --setopt=module_platform_id=platform:el8\
  --setopt=install_weak_deps=false\
@@ -18,8 +31,7 @@ buildah run -t ${CONTAINER_UUID} dnf -y\
  update
 
 buildah run -t ${CONTAINER_UUID} dnf -y\
- --disablerepo=ubi*\
- --enablerepo=codeready-builder-for-rhel-8-x86_64-rpms\
+ --enablerepo=proxy-codeready-builder-for-rhel-8-x86_64-rpms\
  --releasever=8\
  --setopt=module_platform_id=platform:el8\
  --setopt=install_weak_deps=false\
@@ -112,22 +124,21 @@ mkdir -pv ${CONTAINER_PATH}/var/cache/zfs
 mv ${TMPDIR}/*.rpm ${CONTAINER_PATH}/var/cache/zfs/
 rm -rf ${TMPDIR}
 
-cat << EOF > ${CONTAINER_PATH}/etc/yum.repos.d/hyperscale.repo
-[proxy-hyperscale]
-name=CentOS 8 Stream - Hyperscale
-baseurl=http://mirror.centos.org/centos/8-stream/hyperscale/x86_64/packages-main/
-enabled=1
-gpgcheck=0
-
-[proxy-facebook]
-name=CentOS 8 Stream - Hyperscale Facebook
-baseurl=http://mirror.centos.org/centos/8-stream/hyperscale/x86_64/packages-facebook/
-enabled=1
-gpgcheck=0
-EOF
+clean_repos
+rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} dnf -y\
- --disablerepo=ubi*\
+ --releasever=8\
+ --setopt=module_platform_id=platform:el8\
+ --setopt=install_weak_deps=false\
+ --nodocs\
+ remove\
+ dnf-plugin-subscription-manager\
+ python3-subscription-manager-rhsm\
+ subscription-manager\
+ subscription-manager-rhsm-certificates
+
+buildah run -t ${CONTAINER_UUID} dnf -y\
  --releasever=8\
  --setopt=module_platform_id=platform:el8\
  --setopt=install_weak_deps=false\
@@ -135,15 +146,6 @@ buildah run -t ${CONTAINER_UUID} dnf -y\
  update
 
 buildah run -t ${CONTAINER_UUID} dnf -y\
- --disablerepo=ubi*\
- --releasever=8\
- --setopt=module_platform_id=platform:el8\
- --setopt=install_weak_deps=false\
- --nodocs\
- install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-
-buildah run -t ${CONTAINER_UUID} dnf -y\
- --disablerepo=ubi*\
  --releasever=8\
  --setopt=module_platform_id=platform:el8\
  --setopt=install_weak_deps=false\
@@ -163,18 +165,6 @@ buildah run -t ${CONTAINER_UUID} dnf -y\
  /var/cache/zfs/libzpool5-${ZFS_VERSION}-1.el8.x86_64.rpm\
  /var/cache/zfs/zfs-${ZFS_VERSION}-1.el8.x86_64.rpm\
  /var/cache/zfs/zfs-kmod-${ZFS_VERSION}-1.dummy.el8.x86_64.rpm
-
-buildah run -t ${CONTAINER_UUID} dnf -y\
- --disablerepo=ubi*\
- --releasever=8\
- --setopt=module_platform_id=platform:el8\
- --setopt=install_weak_deps=false\
- --nodocs\
- remove\
- dnf-plugin-subscription-manager\
- python3-subscription-manager-rhsm\
- subscription-manager\
- subscription-manager-rhsm-certificates
 
 buildah run -t ${CONTAINER_UUID} dnf -y\
  --releasever=8\
@@ -203,8 +193,6 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
  dbus-broker.service
 
 clean_files
-
-rsync_rootfs
 
 sed -i 's/driver = "overlay"/driver = "zfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
 sed -i 's/session    required     pam_loginuid.so/#session    required     pam_loginuid.so/' ${CONTAINER_PATH}/etc/pam.d/sshd
