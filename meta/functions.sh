@@ -1,4 +1,4 @@
-REGISTRY='10.88.0.252:8082'
+REGISTRY='10.8.0.254:8082'
 
 copy_repo () {
     cp -v ../meta/proxy.repo ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
@@ -34,6 +34,10 @@ clean_files () {
     ${CONTAINER_PATH}/var/log/dnf* \
     ${CONTAINER_PATH}/var/log/yum* \
     ${CONTAINER_PATH}/var/log/hawkey* \
-    ${CONTAINER_PATH}/var/log/rhsm \
+    ${CONTAINER_PATH}/var/log/rhsm
+}
+
+clean_repos () {
+    rm -rvf \
     ${CONTAINER_PATH}/etc/yum.repos.d/*
 }
