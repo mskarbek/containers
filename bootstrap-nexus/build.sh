@@ -36,7 +36,8 @@ buildah run -t ${CONTAINER_UUID} dnf -y\
  --setopt=module_platform_id=platform:el8\
  --setopt=install_weak_deps=false\
  --nodocs\
- install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+ install\
+ https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
 buildah run -t ${CONTAINER_UUID} dnf -y\
  --disablerepo=ubi*\
@@ -44,10 +45,28 @@ buildah run -t ${CONTAINER_UUID} dnf -y\
  --setopt=module_platform_id=platform:el8\
  --setopt=install_weak_deps=false\
  --nodocs\
- install apr dbus-broker java-1.8.0-openjdk-headless procps-ng systemd tomcat-native
+ install\
+ apr\
+ dbus-broker\
+ java-1.8.0-openjdk-headless\
+ procps-ng\
+ systemd\
+ tomcat-native
 
 buildah run -t ${CONTAINER_UUID} dnf -y\
- --releasever=8.4\
+ --disablerepo=ubi*\
+ --releasever=8\
+ --setopt=module_platform_id=platform:el8\
+ --setopt=install_weak_deps=false\
+ --nodocs\
+ remove\
+ dnf-plugin-subscription-manager\
+ python3-subscription-manager-rhsm\
+ subscription-manager\
+ subscription-manager-rhsm-certificates
+
+buildah run -t ${CONTAINER_UUID} dnf -y\
+ --releasever=8\
  clean all
 
 pushd ${TMPDIR}
@@ -90,6 +109,7 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
  nexus.service
 
 clean_files
+clean_repos
 
 buildah config --cmd '[ "/usr/sbin/init" ]' ${CONTAINER_UUID}
 buildah config --stop-signal 'SIGRTMIN+3' ${CONTAINER_UUID}
