@@ -7,7 +7,7 @@ CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 curl -L -o ${CONTAINER_PATH}/usr/local/bin/minio https://dl.min.io/server/minio/release/linux-amd64/minio
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/*
 
-rsync -hrvP --ignore-existing rootfs/ ${CONTAINER_PATH}/
+rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  minio.service

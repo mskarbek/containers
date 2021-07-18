@@ -4,9 +4,7 @@ CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 buildah from --name=${CONTAINER_UUID} ${REGISTRY}/systemd:$(date +'%Y.%m.%d')-1
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-copy_repo
-
-dnf_install "openssh-server openssh-clients rsync"
+dnf_install "openssh-server openssh-clients"
 
 dnf_clean
 

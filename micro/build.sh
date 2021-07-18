@@ -8,8 +8,6 @@ dnf_install "glibc-minimal-langpack coreutils-single"
 
 dnf_clean
 
-clean_repos
-
 rsync_rootfs
 
 #chown -Rv root:root ${CONTAINER_PATH}/ect/pki/ca-cert/*

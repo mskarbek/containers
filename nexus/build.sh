@@ -9,7 +9,7 @@ NEXUS_VERSION="3.32.0-03"
 TMPDIR=$(mktemp -d)
 
 pushd ${TMPDIR}
-curl -L https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz|tar xzv
+curl -L http://10.88.0.249:8081/repository/raw-hosted-stuff/nexus/${NEXUS_VERSION}/nexus-${NEXUS_VERSION}-unix.tar.gz|tar xzv
 popd
 
 mkdir ${CONTAINER_PATH}/usr/lib/sonatype
