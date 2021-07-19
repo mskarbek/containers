@@ -1,3 +1,4 @@
 */.git
 **/keystore.p12
 **/nexus.vmoptions
+bootstrap/zfs/
