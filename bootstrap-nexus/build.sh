@@ -9,13 +9,13 @@ NEXUS_VERSION="3.32.0-03"
 TMPDIR=$(mktemp -d)
 
 cat << EOF > ${CONTAINER_PATH}/etc/yum.repos.d/hyperscale.repo
-[proxy-hyperscale]
+[hyperscale]
 name=CentOS 8 Stream - Hyperscale
 baseurl=http://mirror.centos.org/centos/8-stream/hyperscale/x86_64/packages-main/
 enabled=1
 gpgcheck=0
 
-[proxy-facebook]
+[hyperscale-facebook]
 name=CentOS 8 Stream - Hyperscale Facebook
 baseurl=http://mirror.centos.org/centos/8-stream/hyperscale/x86_64/packages-facebook/
 enabled=1

@@ -18,15 +18,17 @@ dnf -y\
  update
 
 cat << EOF > ${CONTAINER_PATH}/etc/yum.repos.d/hyperscale.repo
-[proxy-hyperscale]
+[hyperscale]
 name=CentOS 8 Stream - Hyperscale
-baseurl=http://mirror.centos.org/centos/8-stream/hyperscale/x86_64/packages-main/
+#baseurl=file:///tmp/d5a37706-e8c9-11eb-89e2-c8d9d235d84b/hyperscale
+baseurl=http://mirror.centos.org/centos/8-stream/hyperscale/x86_64/packages-main
 enabled=1
 gpgcheck=0
 
-[proxy-facebook]
+[hyperscale-facebook]
 name=CentOS 8 Stream - Hyperscale Facebook
-baseurl=http://mirror.centos.org/centos/8-stream/hyperscale/x86_64/packages-facebook/
+#baseurl=file:///tmp/d5a37706-e8c9-11eb-89e2-c8d9d235d84b/hyperscale-facebook
+baseurl=http://mirror.centos.org/centos/8-stream/hyperscale/x86_64/packages-facebook
 enabled=1
 gpgcheck=0
 EOF
@@ -92,6 +94,7 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
  dbus-broker.service
 
 clean_files
+rm -vf /etc/yum.repos.d/hyperscale.repo
 
 sed -i 's/driver = "overlay"/driver = "zfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
 sed -i 's/session    required     pam_loginuid.so/#session    required     pam_loginuid.so/' ${CONTAINER_PATH}/etc/pam.d/sshd
