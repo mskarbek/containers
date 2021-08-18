@@ -18,7 +18,7 @@ dnf_clean () {
 }
 
 rsync_rootfs () {
-    rsync -hrvP --ignore-existing rootfs/ ${CONTAINER_PATH}/
+    rsync -hrvP --exclude '.gitkeep' --ignore-existing rootfs/ ${CONTAINER_PATH}/
 }
 
 clean_files () {
