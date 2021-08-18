@@ -1,7 +1,11 @@
 . ../meta/functions.sh
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-buildah from --name=${CONTAINER_UUID} ${REGISTRY}/micro:$(date +'%Y.%m.%d')-1
+if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
+    buildah from --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/micro:$(date +'%Y.%m.%d')-1
+else
+    buildah from --name=${CONTAINER_UUID} ${REGISTRY}/micro:$(date +'%Y.%m.%d')-1
+fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
@@ -41,5 +45,9 @@ fi
 
 clean_files
 
-buildah commit ${CONTAINER_UUID} ${REGISTRY}/base:$(date +'%Y.%m.%d')-1
+if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/base:$(date +'%Y.%m.%d')-1
+else
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/base:$(date +'%Y.%m.%d')-1
+fi
 buildah rm -a

@@ -16,5 +16,9 @@ clean_files
 
 buildah config --cmd '[ "/usr/bin/bash" ]' ${CONTAINER_UUID}
 
-buildah commit ${CONTAINER_UUID} ${REGISTRY}/micro:$(date +'%Y.%m.%d')-1
+if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/micro:$(date +'%Y.%m.%d')-1
+else
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/micro:$(date +'%Y.%m.%d')-1
+fi
 buildah rm -a
