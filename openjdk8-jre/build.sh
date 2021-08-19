@@ -2,9 +2,9 @@
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/base:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/base:$(date +'%Y.%m.%d')-1
 else
-    buildah from --name=${CONTAINER_UUID} ${REGISTRY}/base:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/base:$(date +'%Y.%m.%d')-1
 fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
@@ -33,9 +33,9 @@ buildah rm -a
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/base/openjdk8-jre:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/base/openjdk8-jre:$(date +'%Y.%m.%d')-1
 else
-    buildah from --name=${CONTAINER_UUID} ${REGISTRY}/base/openjdk8-jre:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/base/openjdk8-jre:$(date +'%Y.%m.%d')-1
 fi
 
 buildah config --cmd '[ "/usr/sbin/init" ]' ${CONTAINER_UUID}
