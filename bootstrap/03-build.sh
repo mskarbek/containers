@@ -43,6 +43,8 @@ dnf -y\
  install\
  https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
+cp -v ${CONTAINER_PATH}/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8 /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8
+
 dnf -y\
  --installroot=${CONTAINER_PATH} \
  --enablerepo=codeready-builder-for-rhel-8-x86_64-rpms\
@@ -94,9 +96,14 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
  dbus-broker.service
 
 clean_files
-rm -vf /etc/yum.repos.d/hyperscale.repo
+rm -vf /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8
+#rm -vf /etc/yum.repos.d/hyperscale.repo
 
-sed -i 's/driver = "overlay"/driver = "zfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
+if [ -c /dev/zfs ]; then
+    sed -i 's/driver = "overlay"/driver = "zfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
+else
+    sed -i 's/#mount_program = "\/usr\/bin\/fuse-overlayfs"/mount_program = "\/usr\/bin\/fuse-overlayfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
+fi
 sed -i 's/session    required     pam_loginuid.so/#session    required     pam_loginuid.so/' ${CONTAINER_PATH}/etc/pam.d/sshd
 
 buildah config --volume /var/lib/containers ${CONTAINER_UUID}
