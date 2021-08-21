@@ -21,7 +21,7 @@ rsync_rootfs
 buildah run -t ${CONTAINER_UUID} update-ca-trust
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    rm -v ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+    rm -v ${CONTAINER_PATH}/etc/yum.repos.d/*.repo
 fi
 clean_files
 

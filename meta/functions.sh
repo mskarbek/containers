@@ -10,6 +10,16 @@ dnf_install () {
     install ${1}
 }
 
+dnf_module () {
+    dnf -y \
+    --installroot=${CONTAINER_PATH} \
+    --releasever=8.4 \
+    --setopt=module_platform_id=platform:el8 \
+    --setopt=install_weak_deps=false \
+    --nodocs \
+    module ${1}
+}
+
 dnf_clean () {
     dnf -y \
     --installroot=${CONTAINER_PATH} \
