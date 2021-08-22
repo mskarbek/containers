@@ -8,6 +8,8 @@ else
 fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
+dnf_cache
+
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
     REPODIR="$(pwd)/files"
 

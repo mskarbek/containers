@@ -8,6 +8,8 @@ else
 fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
+dnf_cache
+
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
     cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
     dnf_install "files/tinyproxy-1.11.0-1.el8.x86_64.rpm"

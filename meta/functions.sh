@@ -1,5 +1,12 @@
 REGISTRY='10.88.0.249:8082'
 
+dnf_cache () {
+    UPPERDIR=$(mktemp -d)
+    WORKDIR=$(mktemp -d)
+    mkdir -vp ${CONTAINER_PATH}/var/cache/dnf
+    mount -t overlay overlay -o lowerdir=/tmp/dnf_cache/var/cache/dnf,upperdir=${UPPERDIR},workdir=${WORKDIR} ${CONTAINER_PATH}/var/cache/dnf
+}
+
 dnf_install () {
     dnf -y \
     --installroot=${CONTAINER_PATH} \
@@ -25,6 +32,8 @@ dnf_clean () {
     --installroot=${CONTAINER_PATH} \
     --releasever=8.4 \
     clean all
+    umount ${CONTAINER_PATH}/var/cache/dnf
+    rm -rvf ${UPPERDIR} ${WORKDIR}
 }
 
 rsync_rootfs () {

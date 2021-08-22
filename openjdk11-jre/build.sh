@@ -4,6 +4,8 @@ CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 buildah from --name=${CONTAINER_UUID} ${REGISTRY}/base:$(date +'%Y.%m.%d')-1
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
+dnf_cache
+
 dnf_install "java-11-openjdk-headless tomcat-native apr"
 
 dnf_clean
