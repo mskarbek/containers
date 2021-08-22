@@ -9,6 +9,7 @@ dnf_cache
 dnf_install "java-11-openjdk-headless tomcat-native apr"
 
 dnf_clean
+dnf_clean_cache
 
 clean_files
 

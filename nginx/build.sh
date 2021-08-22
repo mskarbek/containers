@@ -19,6 +19,7 @@ dnf_module "enable nginx:1.18"
 dnf_install "nginx"
 
 dnf_clean
+dnf_clean_cache
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
     rm -v ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo

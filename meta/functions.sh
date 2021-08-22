@@ -32,6 +32,9 @@ dnf_clean () {
     --installroot=${CONTAINER_PATH} \
     --releasever=8.4 \
     clean all
+}
+
+dnf_clean_cache () {
     umount ${CONTAINER_PATH}/var/cache/dnf
     rm -rvf ${UPPERDIR} ${WORKDIR}
 }

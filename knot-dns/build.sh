@@ -9,6 +9,7 @@ dnf_cache
 dnf_install "knot knot-module-dnstap"
 
 dnf_clean
+dnf_clean_cache
 
 rsync_rootfs
 

@@ -9,6 +9,7 @@ dnf_cache
 dnf_install "knot-resolver knot-resolver-module-dnstap knot-resolver-module-http"
 
 dnf_clean
+dnf_clean_cache
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  kresd@1.service

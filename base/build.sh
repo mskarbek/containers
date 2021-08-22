@@ -36,6 +36,7 @@ else
 fi
 
 dnf_clean
+dnf_clean_cache
 
 rsync_rootfs
 

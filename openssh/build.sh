@@ -9,6 +9,7 @@ dnf_cache
 dnf_install "openssh-server openssh-clients"
 
 dnf_clean
+dnf_clean_cache
 
 buildah run -t ${CONTAINER_UUID} systemctl unmask\
  systemd-logind.service
