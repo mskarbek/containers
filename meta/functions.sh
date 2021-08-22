@@ -1,4 +1,4 @@
-REGISTRY='10.88.0.249:8082'
+REGISTRY='registry.lab.skarbek.name'
 
 dnf_cache () {
     UPPERDIR=$(mktemp -d)

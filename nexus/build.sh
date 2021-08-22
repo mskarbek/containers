@@ -9,7 +9,7 @@ else
 fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-NEXUS_VERSION="3.33.0-01"
+NEXUS_VERSION="3.33.1-01"
 
 TMPDIR=$(mktemp -d)
 
