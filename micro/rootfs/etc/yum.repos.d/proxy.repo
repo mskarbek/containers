@@ -1,90 +1,90 @@
 [rhel-8-for-x86_64-baseos-rpms]
 name = Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs) - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-rhel8-8.4/baseos/os
+baseurl = http://<REPO>/repository/yum-proxy-rhel8-8.4/baseos/os
 enabled = 1
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
 [rhel-8-for-x86_64-appstream-rpms]
 name = Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs) - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-rhel8-8.4/appstream/os
+baseurl = http://<REPO>/repository/yum-proxy-rhel8-8.4/appstream/os
 enabled = 1
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
 [rhel-8-for-x86_64-highavailability-rpms]
 name = Red Hat Enterprise Linux 8 for x86_64 - High Availability (RPMs) - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-rhel8-8.4/highavailability/os
+baseurl = http://<REPO>/repository/yum-proxy-rhel8-8.4/highavailability/os
 enabled = 0
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
 [codeready-builder-for-rhel-8-x86_64-rpms]
 name = Red Hat CodeReady Linux Builder for RHEL 8 x86_64 (RPMs) - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-rhel8-8.4/codeready-builder/os
+baseurl = http://<REPO>/repository/yum-proxy-rhel8-8.4/codeready-builder/os
 enabled = 0
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
 [openstack-16-tools-for-rhel-8-x86_64-rpms]
 name = Red Hat OpenStack Platform 16 Tools for RHEL 8 x86_64 (RPMs) - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-rhel8-layered/openstack-tools/16/os
+baseurl = http://<REPO>/repository/yum-proxy-rhel8-layered/openstack-tools/16/os
 enabled = 0
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
 [ansible-2-for-rhel-8-x86_64-rpms]
 name = Red Hat Ansible Engine 2 for RHEL 8 x86_64 (RPMs) - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-rhel8-layered/ansible/2/os
+baseurl = http://<REPO>/repository/yum-proxy-rhel8-layered/ansible/2/os
 enabled = 0
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
 [epel-everything]
 name = Extra Packages for Enterprise Linux $releasever - x86_64 - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-epel/Everything/x86_64
-enabled=1
+baseurl = http://<REPO>/repository/yum-proxy-epel/Everything/x86_64
+enabled = 1
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8
 
 [epel-modular]
 name = Extra Packages for Enterprise Linux Modular $releasever - x86_64 - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-epel/Modular/x86_64
-enabled=1
+baseurl = http://<REPO>/repository/yum-proxy-epel/Modular/x86_64
+enabled = 1
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8
 
 [hyperscale-main]
 name = CentOS 8 Stream - Hyperscale - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-hyperscale/packages-main
-enabled=1
+baseurl = http://<REPO>/repository/yum-proxy-hyperscale/packages-main
+enabled = 1
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-HyperScale
 
 [hyperscale-facebook]
 name = CentOS 8 Stream - Hyperscale Facebook - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-hyperscale/packages-facebook
-enabled=1
+baseurl = http://<REPO>/repository/yum-proxy-hyperscale/packages-facebook
+enabled = 1
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-HyperScale
 
 [google-chrome]
 name = Google Chrome - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-chrome
+baseurl = http://<REPO>/repository/yum-proxy-chrome
 enabled = 0
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Google
 
 [jenkins-lts]
 name = Jenkins LTS - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-jenkins
+baseurl = http://<REPO>/repository/yum-proxy-jenkins
 enabled = 0
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-jenkins
 
 [rundeck]
 name = Rundeck - Proxy
-baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-rundeck/x86_64
+baseurl = http://<REPO>/repository/yum-proxy-rundeck/x86_64
 enabled = 0
 gpgcheck = 0
 repo_gpgcheck = 0
@@ -92,6 +92,6 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rundeck
 
 [stuff]
 name = Stuff - Hosted
-baseurl = http://repo.lab.skarbek.name/repository/yum-hosted-stuff
+baseurl = http://<REPO>/repository/yum-hosted-stuff
 enabled = 0
 gpgcheck = 0

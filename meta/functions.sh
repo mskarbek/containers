@@ -1,4 +1,5 @@
-REGISTRY='registry.lab.skarbek.name'
+REGISTRY=$(cat ../meta/files/registry)
+REPO=$(cat ../meta/files/repo)
 
 dnf_cache () {
     UPPERDIR=$(mktemp -d)

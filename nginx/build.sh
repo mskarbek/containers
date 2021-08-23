@@ -28,6 +28,8 @@ fi
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  nginx.service
 
+clean_files
+
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
     buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/nginx:$(date +'%Y.%m.%d')-1
 else
