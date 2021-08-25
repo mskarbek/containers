@@ -4,7 +4,7 @@ REPO=$(cat ../meta/files/repo)
 dnf_cache () {
     UPPERDIR=$(mktemp -d)
     WORKDIR=$(mktemp -d)
-    mkdir -vp ${CONTAINER_PATH}/var/cache/dnf
+    mkdir -vp ${CONTAINER_PATH}/var/cache/dnf /tmp/dnf_cache/var/cache/dnf
     mount -t overlay overlay -o lowerdir=/tmp/dnf_cache/var/cache/dnf,upperdir=${UPPERDIR},workdir=${WORKDIR} ${CONTAINER_PATH}/var/cache/dnf
 }
 
