@@ -13,6 +13,7 @@ sed -i "s/<REPO>/${REPO}/" ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
 # TODO: for some unknow reason `info` scriptlet for post-installation s(t)ucks if instaled in one transaction with above packages
 # need to debug and fix to drop multiple dnf_install instances in script
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
+    rm -v ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
     cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
     dnf_install "ca-certificates"
 else
