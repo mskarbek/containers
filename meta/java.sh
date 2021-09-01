@@ -1,5 +1,7 @@
-VERSION=16.0.2.0.7
-RELEASE=1
+#!/usr/bin/env bash
+
+VERSION="16.0.2.0.7"
+RELEASE="1"
 
 curl -L -O https://kojipkgs.fedoraproject.org//packages/java-latest-openjdk/${VERSION}/${RELEASE}.rolling.el8/x86_64/java-latest-openjdk-${VERSION}-${RELEASE}.rolling.el8.x86_64.rpm
 
