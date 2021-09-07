@@ -8,7 +8,7 @@ dnf_install "glibc-minimal-langpack coreutils-single"
 
 rsync_rootfs
 
-sed -i "s/<REPO>/${REPO}/" ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
+#sed -i "s/<REPO>/${REPO}/" ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
 
 # TODO: for some unknow reason `info` scriptlet for post-installation s(t)ucks if instaled in one transaction with above packages
 # need to debug and fix to drop multiple dnf_install instances in script
