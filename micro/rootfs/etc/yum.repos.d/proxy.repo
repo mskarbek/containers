@@ -99,13 +99,13 @@ gpgcheck = 1
 repo_gpgcheck = 0
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
 
-[pgAdmin4]
+[pgadmin4]
 name = pgadmin4 - Proxy
 baseurl = http://repo.lab.skarbek.name/repository/yum-proxy-pgadmin
 enabled = 0
 gpgcheck = 1
 repo_gpgcheck = 0
-gpgkey = file:///etc/pki/rpm-gpg/RPM-PKG-KEY-PGADMIN
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGADMIN
 
 [google-chrome]
 name = Google Chrome - Proxy
