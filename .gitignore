@@ -1,5 +1,3 @@
-*/.git
-**/keystore.p12
-bootstrap/zfs/
+**/.git
 **/files/
-
+**/keystore.p12
