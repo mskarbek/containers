@@ -1,5 +1,11 @@
 # RHEL8-based set of container images
 
+## Idea
+
+RHEL8-based containers leveraging `systemd` and its potential including `sysusers.d`, `tmpfiles.d`, eliminating shell scripts inside containers as much as possible. Strongly opinionated and totally biased.
+
+`buildah` as a build tool.
+
 ## Images
 
 Final state:
@@ -17,7 +23,8 @@ Working state:
 - systemd
 - tinyproxy
 
-WPI state:
+WIP state:
+- fake-service
 - jenkins
 - knot-dns
 - knot-resolver
