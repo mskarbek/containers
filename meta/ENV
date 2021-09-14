@@ -1,0 +1,4 @@
+#example ENV file, copy to ./file/ENV and modify accordingly
+
+REPO=repo.lab.skarbek.name
+REGISTRY=registry.lab.skarbek.name

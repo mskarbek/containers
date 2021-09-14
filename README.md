@@ -6,37 +6,40 @@ Final state:
 - nothing
 
 Working state:
-- micro
 - base
-- systemd
+- micro
 - minio
 - nexus
-- openjdk8-jre
-- openjdk11-jre
-- tinyproxy
 - nginx
+- openjdk11-jre
+- openjdk8-jre
 - openssh
+- systemd
+- tinyproxy
 
 WPI state:
 - jenkins
-- python36
-- python39
 - knot-dns
 - knot-resolver
 - nodejs10
 - nodejs14
 - pgadmin4
 - postgresql13
+- python36
+- python39
 
 Placeholder:
 - ara
 - buildah
-- locust
+- consul
 - kea
-- openjdk16-jre
-- openjdk8-jdk
+- locust
+- mysql8
 - openjdk11-jdk
 - openjdk16-jdk
+- openjdk16-jre
+- openjdk8-jdk
 - python36-devel
 - python39-devel
-- mysql8
+- step-ca
+- vault
