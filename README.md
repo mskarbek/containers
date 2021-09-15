@@ -2,7 +2,7 @@
 
 ## Idea
 
-RHEL8-based containers leveraging `systemd` and its potential including `sysusers.d`, `tmpfiles.d`, eliminating shell scripts inside containers as much as possible. Strongly opinionated and totally biased.
+RHEL8-based containers leveraging `systemd` and its potential including `sysusers.d`, `tmpfiles.d`, eliminating shell scripts inside containers as much as possible. Strongly opinionated and totally biased. Heavily suffers from NIH syndrome.
 
 ## Build process
 
@@ -48,6 +48,7 @@ Placeholder:
 - buildah
 - consul
 - fleet
+- gitea
 - grafana
 - kafka
 - kea
