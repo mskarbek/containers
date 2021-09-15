@@ -20,9 +20,8 @@ else
 fi
 ln -s /opt/kafka_2.13-2.8.0 ${CONTAINER_PATH}/opt/kafka
 
-sed -i 's/#listeners=PLAINTEXT:\/\/:9092/listeners=PLAINTEXT:\/\/0\.0\.0\.0:9092/' ${CONTAINER_PATH}/opt/kafka_2.13-2.8.0/config/server.properties
-
 rsync_rootfs
+chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/*
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  kafka.service\

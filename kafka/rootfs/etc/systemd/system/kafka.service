@@ -8,6 +8,7 @@ Requires=systemd-sysusers.service systemd-tmpfiles-setup.service zookeeper.servi
 WorkingDirectory=/run/kafka
 User=kafka
 Group=kafka
+ExecStartPre=/usr/bin/bash /usr/local/bin/kafka-update-ip.sh
 ExecStart=/opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties
 ExecStop=/opt/kafka/bin/kafka-server-stop.sh
 LimitNOFILE=65535
