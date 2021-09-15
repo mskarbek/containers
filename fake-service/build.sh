@@ -21,14 +21,12 @@ else
     popd
     rm -rfv ${TMP_DIR}
 fi
-chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/minio
+chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/fake-service
 
 rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  fake-service.service
-
-buildah config --volume /var/lib/minio ${CONTAINER_UUID}
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
     buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/fake-service:$(date +'%Y.%m.%d')-1

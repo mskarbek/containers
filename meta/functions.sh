@@ -1,5 +1,4 @@
-REGISTRY=$(cat ../meta/files/registry)
-REPO=$(cat ../meta/files/repo)
+. ../meta/files/ENV
 
 dnf_cache () {
     UPPERDIR=$(mktemp -d)
