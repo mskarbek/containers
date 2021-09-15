@@ -36,6 +36,7 @@ WIP state:
 - python39
 
 Placeholder:
+- ansible
 - ara
 - buildah
 - consul
