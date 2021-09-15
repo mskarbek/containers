@@ -64,6 +64,7 @@ Placeholder:
 - python36-devel
 - python39-devel
 - rabbitmq
+- rekor
 - step-ca
 - tempo
 - vault
