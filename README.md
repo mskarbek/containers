@@ -8,6 +8,10 @@ RHEL8-based containers leveraging `systemd` and its potential including `sysuser
 
 Build requires RHEL 8 with valid subscription as a host and `buildah` as a build tool.
 
+## Meta
+
+## Infra
+
 ## Images
 
 Final state:
@@ -28,6 +32,7 @@ Working state:
 
 WIP state:
 - jenkins
+- kafka
 - knot-dns
 - knot-resolver
 - nodejs10
@@ -42,14 +47,23 @@ Placeholder:
 - ara
 - buildah
 - consul
+- fleet
+- grafana
 - kea
 - locust
+- loki
+- nats
 - mysql8
 - openjdk11-jdk
 - openjdk16-jdk
 - openjdk16-jre
 - openjdk8-jdk
+- prometheus
 - python36-devel
 - python39-devel
+- rabbitmq
 - step-ca
+- tempo
 - vault
+- vector
+- zookeeper
