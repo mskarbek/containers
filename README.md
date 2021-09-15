@@ -13,6 +13,7 @@ Final state:
 
 Working state:
 - base
+- fake-service
 - micro
 - minio
 - nexus
@@ -24,7 +25,6 @@ Working state:
 - tinyproxy
 
 WIP state:
-- fake-service
 - jenkins
 - knot-dns
 - knot-resolver

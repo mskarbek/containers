@@ -1,0 +1,83 @@
+#Comma separated URIs of the upstream services to call
+#UPSTREAM_URIS=
+#Number of parallel workers for calling upstreams, defualt is 1 which is sequential operation
+UPSTREAM_WORKERS='1'
+#Service type: [http or grpc], default:http. Determines the type of service HTTP or gRPC
+SERVER_TYPE='http'
+#Message to be returned from service, can either be a string or valid JSON
+MESSAGE='Hello World'
+#Name of the service
+NAME='Service'
+#IP address and port to bind service to
+LISTEN_ADDR='0.0.0.0:9090'
+#Comma separated list of allowed origins for CORS requests
+ALLOWED_ORIGINS='*'
+#Comma separated list of allowed headers for CORS requests
+ALLOWED_HEADERS='Accept,Accept-Language,Content-Language,Origin,Content-Type'
+#Are credentials allowed for CORS requests
+ALLOW_CREDENTIALS='false'
+#Enable HTTP connection keep alives for upstream calls
+HTTP_CLIENT_KEEP_ALIVES='false'
+#Maximum duration for upstream service requests
+HTTP_CLIENT_REQUEST_TIMEOUT='30s'
+#When true the path, querystring, and any headers sent to the service will be appended to any upstream calls
+HTTP_CLIENT_APPEND_REQUEST='true'
+#Median duration for a request
+TIMING_50_PERCENTILE='0s'
+#90 percentile duration for a request, if no value is set, will use value from TIMING_50_PERCENTILE
+TIMING_90_PERCENTILE='0s'
+#99 percentile duration for a request, if no value is set, will use value from TIMING_90_PERCENTILE
+TIMING_99_PERCENTILE='0s'
+#Percentage variance for each request, every request will vary by a random amount to a maximum of a percentage of the total request time
+TIMING_VARIANCE='0'
+#Decimal percentage of request where handler will report an error. e.g. 0.1 = 10% of all requests will result in an error
+ERROR_RATE='0'
+#Type of error [http_error, delay]
+ERROR_TYPE='http_error'
+#Error code to return on error
+ERROR_CODE='500'
+#Error delay [1s,100ms]
+ERROR_DELAY='0s'
+#Rate in req/second after which service will return an error code
+RATE_LIMIT='0'
+#Code to return when service call is rate limited
+RATE_LIMIT_CODE='503'
+#MHz of a single logical core, default 1000Mhz
+LOAD_CPU_CLOCK_SPEED='1000'
+#Number of logical cores to generate fake CPU load over, by default fake-service will use all cores
+LOAD_CPU_CORES='-1'
+#Percentage of CPU cores to consume as a percentage. I.e: 50, 50% load for LOAD_CPU_CORES. If LOAD_CPU_ALLOCATED 
+#is not specified CPU percentage is based on the Total CPU available
+LOAD_CPU_PERCENTAGE='0'
+#Memory in bytes consumed per request
+LOAD_MEMORY_PER_REQUEST='0'
+#Percentage variance of the memory consumed per request, i.e with a value of 50 = 50%, and given a LOAD_MEMORY_PER_REQUEST of 1024 bytes, actual consumption per request would be in the range 516 - 1540 bytes
+LOAD_MEMORY_VARIANCE='0'
+#Location of Zipkin tracing collector
+#TRACING_ZIPKIN=
+#Hostname or IP for Datadog tracing collector
+#TRACING_DATADOG_HOST=
+#Port for Datadog tracing collector
+#TRACING_DATADOG_PORT='8126'
+#Hostname or IP for Datadog metrics collector
+#METRICS_DATADOG_HOST=
+#Port for Datadog metrics collector
+#METRICS_DATADOG_PORT='8125'
+#Log file format. [text|json]
+LOG_FORMAT='text'
+#Log level for output. [info|debug|trace|warn|error]
+LOG_LEVEL='info'
+#Location to write log output, default is stdout, e.g. /var/log/web.log
+LOG_OUTPUT='stdout'
+#Location of PEM encoded x.509 certificate for securing server
+#TLS_CERT_LOCATION
+#Location of PEM encoded private key for securing server
+#TLS_KEY_LOCATION=
+#Response code returned from the HTTP health check at /health
+HEALTH_CHECK_RESPONSE_CODE='200'
+#Response code returned from the HTTP readiness handler `/ready` after the response delay has elapsed
+READY_CHECK_RESPONSE_SUCCESS_CODE='200'
+#Response code returned from the HTTP readiness handler `/ready` before the response delay has elapsed, this simulates the response code a service would return while starting
+READY_CHECK_RESPONSE_FAILURE_CODE='503'
+#Delay before the readyness check returns the READY_CHECK_RESPONSE_CODE
+READY_CHECK_RESPONSE_DELAY='0s'
