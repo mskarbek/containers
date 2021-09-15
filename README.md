@@ -10,7 +10,11 @@ Build requires RHEL 8 with valid subscription as a host and `buildah` as a build
 
 ## Meta
 
+`meta` directory contains a set of helper scripts, currently in complete mess.
+
 ## Infra
+
+`infra` directory contains deployment playbooks/scripts.
 
 ## Images
 
@@ -32,6 +36,7 @@ Working state:
 - tinyproxy
 
 WIP state:
+- golang
 - jenkins
 - knot-dns
 - knot-resolver
@@ -52,10 +57,14 @@ Placeholder:
 - grafana
 - kafka
 - kea
+- kong
+- kowl
+- kuma-cp
+- kuma-dp
 - locust
 - loki
-- nats
 - mysql8
+- nats
 - openjdk11-jdk
 - openjdk16-jdk
 - openjdk16-jre
@@ -64,8 +73,11 @@ Placeholder:
 - python36-devel
 - python39-devel
 - rabbitmq
+- redis
 - rekor
+- rundeck
 - step-ca
+- svn
 - tempo
 - vault
 - vector
