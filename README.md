@@ -20,6 +20,7 @@ Final state:
 Working state:
 - base
 - fake-service
+- kafka-all-in-one - temporary image, will be removed in favor of images with separate components
 - micro
 - minio
 - nexus
@@ -32,7 +33,6 @@ Working state:
 
 WIP state:
 - jenkins
-- kafka
 - knot-dns
 - knot-resolver
 - nodejs10
@@ -49,6 +49,7 @@ Placeholder:
 - consul
 - fleet
 - grafana
+- kafka
 - kea
 - locust
 - loki
