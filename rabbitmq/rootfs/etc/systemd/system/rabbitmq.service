@@ -1,0 +1,13 @@
+[Unit]
+Description=RabbitMq configuration
+After=rabbitmq-server.service
+Requires=rabbitmq-server.service
+ConditionPathExists=!/var/lib/rabbitmq/.lock
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local.bin/rabbitmq-config
+RemainAfterExit=false
+
+[Install]
+WantedBy=multi-user.target

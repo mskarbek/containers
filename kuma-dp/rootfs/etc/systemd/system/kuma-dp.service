@@ -1,0 +1,16 @@
+[Unit]
+Description=Kuma
+Documentation=https://kuma.io/docs/
+After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
+Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+
+[Service]
+WorkingDirectory=/run/kuma
+EnvironmentFile=/etc/sysconfig/kuma
+User=kuma
+Group=kuma
+ExecStart=/usr/local/bin/kuma-dp run --config-dir=/run/envoy --cp-address=$CONTROLPLANE_ADDRESS --dataplane-file=/run/kuma/dataplane.yml --dataplane-token-file=/run/kuma/dataplane.token --dns-server-config-dir=/run/coredns --mesh=$MESH --name=$NAME --proxy-type=$PROXY_TYPE
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

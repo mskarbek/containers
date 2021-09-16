@@ -1,0 +1,16 @@
+[Unit]
+Description=Kuma
+Documentation=https://kuma.io/docs/
+After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
+Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+
+[Service]
+WorkingDirectory=/run/kuma
+Environment="KUMA_GENERAL_WORK_DIR=/run/kuma"
+User=kuma
+Group=kuma
+ExecStart=/usr/local/bin/kuma-cp run
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

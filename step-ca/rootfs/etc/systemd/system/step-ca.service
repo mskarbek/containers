@@ -1,0 +1,27 @@
+[Unit]
+Description=step-ca service
+Documentation=https://smallstep.com/docs/step-ca
+Documentation=https://smallstep.com/docs/step-ca/certificate-authority-server-production
+After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
+Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+StartLimitIntervalSec=30
+StartLimitBurst=3
+ConditionFileNotEmpty=/etc/step-ca/config.json
+ConditionFileNotEmpty=/etc/step-ca/password.txt
+
+[Service]
+Type=simple
+User=step
+Group=step
+Environment=STEPPATH=/var/lib/step-ca
+WorkingDirectory=/var/lib/step-ca
+ExecStart=/usr/local/bin/step-ca /etc/step-ca/config.json --password-file password.txt
+ExecReload=/bin/kill --signal HUP $MAINPID
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+StartLimitInterval=30
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+for e in $(tr "\000" "\n" < /proc/1/environ); do
+    eval "export ${e}"
+done
+
+rabbitmq-plugins enable rabbitmq_managment
+rabbitmqctl add_user ${RABBITMQ_USER} ${RABBITMQ_PASS}
+rabbitmqctl set_permissions -p "/" ${RABBITMQ_USER} ".*" ".*" ".*"
+rabbitmqctl set_user_tags ${RABBITMQ_USER} administrator
+
+touch /var/lib/rabbitmq/.lock

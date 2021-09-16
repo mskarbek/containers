@@ -1,0 +1,17 @@
+[rabbitmq_rabbitmq-server]
+name=rabbitmq_rabbitmq-server
+baseurl=https://packagecloud.io/rabbitmq/rabbitmq-server/el/8/$basearch
+repo_gpgcheck=1
+gpgcheck=0
+enable=1
+gpgkey=https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
+metadata_expire=300
+
+[rabbitmq_erlang]
+name=rabbitmq_erlang
+baseurl=https://packagecloud.io/rabbitmq/erlang/el/8/$basearch
+repo_gpgcheck=1
+gpgcheck=0
+enable=1
+gpgkey=https://packagecloud.io/rabbitmq/erlang/gpgkey
+metadata_expire=300

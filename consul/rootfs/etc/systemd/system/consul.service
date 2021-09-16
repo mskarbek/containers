@@ -1,0 +1,15 @@
+[Unit]
+Description=Consul
+Documentation=https://consul.io/docs/
+After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
+Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+
+[Service]
+WorkingDirectory=/var/lib/consul
+User=consul
+Group=consul
+ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
