@@ -1,4 +1,9 @@
 #example ENV file, copy to ./file/ENV and modify accordingly
 
-REPO=repo.lab.skarbek.name
-REGISTRY=registry.lab.skarbek.name
+REPO=
+REGISTRY=
+
+RHEL_USER=
+RHEL_PASS=
+
+ZFS_POOL=
