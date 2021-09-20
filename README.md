@@ -46,6 +46,7 @@ Working state:
 - openssh
 - systemd
 - tinyproxy
+- toolbox
 
 WIP state:
 - golang
