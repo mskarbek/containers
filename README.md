@@ -41,6 +41,7 @@ Working state:
 - minio
 - nexus
 - nginx
+- openjdk17-jre
 - openjdk11-jre
 - openjdk8-jre
 - openssh
@@ -79,8 +80,7 @@ Placeholder:
 - mysql8
 - nats
 - openjdk11-jdk
-- openjdk16-jdk
-- openjdk16-jre
+- openjdk17-jdk
 - openjdk8-jdk
 - prometheus
 - python36-devel
