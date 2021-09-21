@@ -41,8 +41,11 @@ Working state:
 - minio
 - nexus
 - nginx
-- openjdk17-jre
+- openjdk11-jdk
 - openjdk11-jre
+- openjdk17-jdk
+- openjdk17-jre
+- openjdk8-jdk
 - openjdk8-jre
 - openssh
 - systemd
@@ -62,15 +65,19 @@ WIP state:
 - python39
 
 Placeholder:
+- 389ds
 - ansible
 - ara
 - buildah
+- concourse
 - consul
 - fleet
 - gitea
 - grafana
+- harbor
 - kafka
 - kea
+- keycloak
 - kong
 - kowl
 - kuma-cp
@@ -79,9 +86,6 @@ Placeholder:
 - loki
 - mysql8
 - nats
-- openjdk11-jdk
-- openjdk17-jdk
-- openjdk8-jdk
 - prometheus
 - python36-devel
 - python39-devel
@@ -89,8 +93,10 @@ Placeholder:
 - redis6
 - rekor
 - rundeck
+- rust
 - step-ca
 - svn
+- synth
 - tempo
 - vault
 - vector
