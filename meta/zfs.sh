@@ -2,7 +2,7 @@ CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 buildah from --name=${CONTAINER_UUID} registry.access.redhat.com/ubi8/ubi:8.4
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-ZFS_VERSION="2.1.0"
+ZFS_VERSION="2.1.1"
 KERNEL_VERSION="4.18.0-305.el8"
 
 TMPDIR=$(mktemp -d)
