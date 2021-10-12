@@ -1,7 +1,7 @@
 . ../meta/functions.sh
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-buildah from --name=${CONTAINER_UUID} ${REGISTRY}/systemd:$(date +'%Y.%m.%d')-1
+buildah from --name=${CONTAINER_UUID} ${REGISTRY}/systemd:latest
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
@@ -16,5 +16,5 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
 
 clean_files
 
-buildah commit ${CONTAINER_UUID} ${REGISTRY}/knot-resolver:$(date +'%Y.%m.%d')-1
+buildah commit ${CONTAINER_UUID} ${REGISTRY}/knot-resolver:latest
 buildah rm -a

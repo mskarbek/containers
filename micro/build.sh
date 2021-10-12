@@ -21,7 +21,6 @@ else
 fi
 
 dnf_clean
-
 buildah run -t ${CONTAINER_UUID} update-ca-trust
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
@@ -32,8 +31,8 @@ clean_files
 buildah config --cmd '[ "/usr/bin/bash" ]' ${CONTAINER_UUID}
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/micro:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/micro:latest
 else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/micro:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/micro:latest
 fi
 buildah rm -a

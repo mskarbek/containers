@@ -1,7 +1,7 @@
 . ../meta/functions.sh
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/systemd:$(date +'%Y.%m.%d')-1
+buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/systemd:latest
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
@@ -17,5 +17,5 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
 
 clean_files
 
-buildah commit ${CONTAINER_UUID} ${REGISTRY}/postgres13:$(date +'%Y.%m.%d')-1
+buildah commit ${CONTAINER_UUID} ${REGISTRY}/postgres13:latest
 buildah rm -a

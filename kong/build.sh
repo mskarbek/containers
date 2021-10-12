@@ -1,4 +1,4 @@
-CONTAINER_ID=$(buildah from 10.88.0.2:8082/systemd:$(date +'%Y.%m.%d')-1)
+CONTAINER_ID=$(buildah from 10.88.0.2:8082/systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_ID})
 
 ln -s /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/host.repo
@@ -26,5 +26,5 @@ rm -rvf\
  ${CONTAINER_PATH}/var/log/rhsm\
  ${CONTAINER_PATH}/etc/yum.repos.d/host.repo
 
-buildah commit ${CONTAINER_ID} 10.88.0.2:8082/kong:$(date +'%Y.%m.%d')-1
+buildah commit ${CONTAINER_ID} 10.88.0.2:8082/kong:latest
 buildah rm -a

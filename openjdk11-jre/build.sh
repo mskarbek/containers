@@ -2,9 +2,9 @@
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/base:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/base:latest
 else
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/base:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/base:latest
 fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
@@ -27,26 +27,26 @@ fi
 clean_files
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/base/openjdk11-jre:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/base/openjdk11-jre:latest
 else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/base/openjdk11-jre:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/base/openjdk11-jre:latest
 fi
 buildah rm -a
 
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/base/openjdk11-jre:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/base/openjdk11-jre:latest
 else
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/base/openjdk11-jre:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/base/openjdk11-jre:latest
 fi
 
 buildah config --cmd '[ "/usr/sbin/init" ]' ${CONTAINER_UUID}
 buildah config --stop-signal 'SIGRTMIN+3' ${CONTAINER_UUID}
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/openjdk11-jre:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/openjdk11-jre:latest
 else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/openjdk11-jre:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/openjdk11-jre:latest
 fi
 buildah rm -a

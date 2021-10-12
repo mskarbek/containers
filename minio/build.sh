@@ -2,9 +2,9 @@
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/systemd:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/systemd:latest
 else
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/systemd:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/systemd:latest
 fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
@@ -23,8 +23,8 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
 buildah config --volume /var/lib/minio ${CONTAINER_UUID}
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/minio:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/minio:latest
 else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/minio:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/minio:latest
 fi
 buildah rm -a

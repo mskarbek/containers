@@ -2,9 +2,9 @@
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/openjdk8-jre:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/openjdk8-jre:latest
 else
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/openjdk8-jre:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/openjdk8-jre:latest
 fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
@@ -28,8 +28,8 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
  zookeeper.service
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/kafka:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/kafka:latest
 else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/kafka:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/kafka:latest
 fi
 buildah rm -a

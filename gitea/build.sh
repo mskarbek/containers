@@ -1,6 +1,6 @@
 REGISTRY='10.88.0.1:8082'
 
-CONTAINER_ID=$(buildah from ${REGISTRY}/openssh:$(date +'%Y.%m.%d')-1)
+CONTAINER_ID=$(buildah from ${REGISTRY}/openssh:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_ID})
 
 ln -s /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/host.repo
@@ -42,5 +42,5 @@ rsync -hrvP --ignore-existing rootfs/ ${CONTAINER_PATH}/
 
 buildah run -t ${CONTAINER_ID} systemctl enable gitea.service
 
-buildah commit ${CONTAINER_ID} ${REGISTRY}/gitea:$(date +'%Y.%m.%d')-1
+buildah commit ${CONTAINER_ID} ${REGISTRY}/gitea:latest
 buildah rm -a

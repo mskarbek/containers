@@ -1,7 +1,7 @@
 . ../meta/functions.sh
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-buildah from --name=${CONTAINER_UUID} ${REGISTRY}/openjdk11-jre:$(date +'%Y.%m.%d')-1
+buildah from --name=${CONTAINER_UUID} ${REGISTRY}/openjdk11-jre:latest
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 copy_repo
@@ -23,5 +23,5 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
 
 buildah config --volume /var/lib/jenkins ${CONTAINER_UUID}
 
-buildah commit ${CONTAINER_UUID} ${REGISTRY}/jenkins:$(date +'%Y.%m.%d')-1
+buildah commit ${CONTAINER_UUID} ${REGISTRY}/jenkins:latest
 buildah rm -a

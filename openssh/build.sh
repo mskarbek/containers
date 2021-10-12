@@ -2,9 +2,9 @@
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/systemd:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/systemd:latest
 else
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/systemd:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/systemd:latest
 fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
@@ -31,8 +31,8 @@ sed -i 's/session    required     pam_loginuid.so/#session    required     pam_l
 clean_files
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/openssh:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/openssh:latest
 else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/openssh:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/openssh:latest
 fi
 buildah rm -a

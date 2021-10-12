@@ -2,9 +2,9 @@
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/systemd:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/systemd:latest
 else
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/systemd:$(date +'%Y.%m.%d')-1
+    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/systemd:latest
 fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
@@ -28,8 +28,8 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
  tinyproxy.service
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/tinyproxy:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/tinyproxy:latest
 else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/tinyproxy:$(date +'%Y.%m.%d')-1
+    buildah commit ${CONTAINER_UUID} ${REGISTRY}/tinyproxy:latest
 fi
 buildah rm -a

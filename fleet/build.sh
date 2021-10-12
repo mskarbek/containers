@@ -1,6 +1,6 @@
 . ../meta/functions.sh
 
-CONTAINER_ID=$(buildah from ${REGISTRY}/systemd:$(date +'%Y.%m.%d')-1)
+CONTAINER_ID=$(buildah from ${REGISTRY}/systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_ID})
 
 TMP_DIR=$(mktemp -d)
@@ -20,5 +20,5 @@ rsync -hrvP --ignore-existing rootfs/ ${CONTAINER_PATH}/
 buildah run -t ${CONTAINER_ID} systemctl enable\
  fleet.service
 
-buildah commit ${CONTAINER_ID} ${REGISTRY}/fleet:$(date +'%Y.%m.%d')-1
+buildah commit ${CONTAINER_ID} ${REGISTRY}/fleet:latest
 buildah rm -a

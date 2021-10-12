@@ -1,6 +1,6 @@
 . ../meta/functions.sh
 
-CONTAINER_ID=$(buildah from ${REGISTRY}/systemd:$(date +'%Y.%m.%d')-1)
+CONTAINER_ID=$(buildah from ${REGISTRY}/systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_ID})
 
 ln -s /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/host.repo
@@ -14,5 +14,5 @@ buildah run -t ${CONTAINER_ID} systemctl enable\
 
 clean_files
 
-buildah commit ${CONTAINER_ID} ${REGISTRY}/mysql:$(date +'%Y.%m.%d')-1
+buildah commit ${CONTAINER_ID} ${REGISTRY}/mysql:latest
 buildah rm -a

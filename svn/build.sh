@@ -1,6 +1,6 @@
 REGISTRY='10.88.0.1:8082'
 
-CONTAINER_ID=$(buildah from ${REGISTRY}/systemd:$(date +'%Y.%m.%d')-1)
+CONTAINER_ID=$(buildah from ${REGISTRY}/systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_ID})
 
 ln -s /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/host.repo
@@ -28,5 +28,5 @@ rm -rvf\
  ${CONTAINER_PATH}/var/log/rhsm\
  ${CONTAINER_PATH}/etc/yum.repos.d/host.repo
 
-buildah commit ${CONTAINER_ID} ${REGISTRY}/subversion:$(date +'%Y.%m.%d')-1
+buildah commit ${CONTAINER_ID} ${REGISTRY}/subversion:latest
 buildah rm -a

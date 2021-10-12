@@ -1,7 +1,7 @@
 . ../meta/functions.sh
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-buildah from --name=${CONTAINER_UUID} ${REGISTRY}/systemd:$(date +'%Y.%m.%d')-1
+buildah from --name=${CONTAINER_UUID} ${REGISTRY}/systemd:latest
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 TMPDIR=$(mktemp -d)
@@ -24,5 +24,5 @@ rsync -hrvP --ignore-existing rootfs/ ${CONTAINER_PATH}/
 
 buildah run -t ${CONTAINER_UUID} systemctl enable kuma-dp.service
 
-buildah commit ${CONTAINER_UUID} ${REGISTRY}/kuma-dp:$(date +'%Y.%m.%d')-1
+buildah commit ${CONTAINER_UUID} ${REGISTRY}/kuma-dp:latest
 buildah rm -a
