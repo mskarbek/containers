@@ -1,24 +1,32 @@
 . ../meta/functions.sh
 
-CONTAINER_ID=$(buildah from ${REGISTRY}/systemd:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_ID})
+CONTAINER_UUID=$(create_container systemd:latest)
+CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-TMP_DIR=$(mktemp -d)
-pushd ${TMP_DIR}
-curl -L https://github.com/smallstep/certificates/releases/download/v0.15.15/step-ca_linux_0.15.15_amd64.tar.gz|tar xzv
-popd
+STEPCA_VERSION="0.17.4"
+STEPCLI_VERSION="0.17.6"
 
-mv -v ${TMP_DIR}/*/bin/step-ca ${CONTAINER_PATH}/usr/local/bin/
+if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
+    cp -v files/step-ca ${CONTAINER_PATH}/usr/local/bin/step-ca
+    cp -v files/step ${CONTAINER_PATH}/usr/local/bin/step
+else
+    TMP_DIR=$(mktemp -d)
+    pushd ${TMP_DIR}
+        curl -L https://github.com/smallstep/cli/releases/download/v0.17.6/step_linux_${STEPCLI_VERSION}_amd64.tar.gz|tar xzv
+        curl -L https://github.com/smallstep/certificates/releases/download/v0.17.4/step-ca_linux_${STEPCA_VERSION}_amd64.tar.gz|tar xzv
+    popd
+    mv -v ${TMP_DIR}/step-ca_${STEPCA_VERSION}/bin/step-ca ${CONTAINER_PATH}/usr/local/bin/step-ca
+    mv -v ${TMP_DIR}/step_${STEPCA_VERSION}/bin/step ${CONTAINER_PATH}/usr/local/bin/step
+    rm -rf ${TMP_DIR}
+fi
 
-rm -rf ${TMP_DIR}
+chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/step*
 
-chown -v root:root ${CONTAINER_PATH}/usr/local/bin/*
-chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/*
+rsync_rootfs
 
-rsync -hrvP --ignore-existing rootfs/ ${CONTAINER_PATH}/
-
-buildah run -t ${CONTAINER_ID} systemctl enable\
+buildah run -t ${CONTAINER_UUID} systemctl enable\
  step-ca.service
 
-buildah commit ${CONTAINER_ID} ${REGISTRY}/step-ca:latest
-buildah rm -a
+buildah config --volume /var/lib/step-ca ${CONTAINER_UUID}
+
+commit_container step-ca:latest
