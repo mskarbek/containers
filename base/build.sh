@@ -1,11 +1,6 @@
 . ../meta/functions.sh
 
-CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/micro:latest
-else
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/micro:latest
-fi
+CONTAINER_UUID=$(create_container micro:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
@@ -68,9 +63,4 @@ fi
 
 clean_files
 
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/base:latest
-else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/base:latest
-fi
-buildah rm -a
+commit_container base:latest
