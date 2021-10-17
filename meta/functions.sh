@@ -1,5 +1,23 @@
 . ../meta/files/ENV
 
+create_container () {
+    CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
+    if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
+        buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/${1}
+    else
+        buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/${1}
+    fi    
+}
+
+commit_container () {
+    if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
+        buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/${1}
+    else
+        buildah commit ${CONTAINER_UUID} ${REGISTRY}/${1}
+    fi
+    buildah rm -a
+}
+
 dnf_cache () {
     UPPERDIR=$(mktemp -d)
     WORKDIR=$(mktemp -d)
