@@ -9,16 +9,16 @@ openssl pkcs12\
  -in /etc/pki/entitlement/${PEM}.pem\
  -inkey /etc/pki/entitlement/${PEM}-key.pem\
  -name certificate_and_key\
- -out /root/certificate_and_key.p12\
+ -out ./certificate_and_key.p12\
  -passout pass:${PASS}
 
 keytool\
  -importkeystore\
- -srckeystore /root/certificate_and_key.p12\
+ -srckeystore ./certificate_and_key.p12\
  -srcstoretype PKCS12\
  -srcstorepass ${PASS}\
  -deststorepass ${PASS}\
- -destkeystore /root/keystore.p12\
+ -destkeystore ./keystore.p12\
  -deststoretype PKCS12
 
-echo ${PASS} > /root/keystore.pass
+echo ${PASS} > ./keystore.pass
