@@ -15,7 +15,7 @@ if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
 
     cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         cat << EOF > ${CONTAINER_PATH}/etc/yum.repos.d/hyperscale.repo
-[hyperscale]
+[hyperscale-main]
 name=CentOS 8 Stream - Hyperscale Main
 baseurl=file://${REPODIR}/hyperscale-main
 enabled=1

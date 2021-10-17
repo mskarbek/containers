@@ -30,9 +30,4 @@ clean_files
 
 buildah config --cmd '[ "/usr/bin/bash" ]' ${CONTAINER_UUID}
 
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/micro:latest
-else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/micro:latest
-fi
-buildah rm -a
+commit_container micro:latest
