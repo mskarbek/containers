@@ -41,11 +41,7 @@ Working state:
 - minio
 - nexus
 - nginx
-- openjdk11-jdk
 - openjdk11-jre
-- openjdk17-jdk
-- openjdk17-jre
-- openjdk8-jdk
 - openjdk8-jre
 - openssh
 - systemd
@@ -55,14 +51,18 @@ Working state:
 WIP state:
 - golang
 - jenkins
+- kea
 - knot-dns
 - knot-resolver
 - nodejs10
 - nodejs14
+- openjdk11-jdk
+- openjdk8-jdk
 - pgadmin4
 - postgresql13
 - python36
 - python39
+- stork
 
 Placeholder:
 - 389ds
@@ -76,7 +76,6 @@ Placeholder:
 - grafana
 - harbor
 - kafka
-- kea
 - keycloak
 - kong
 - kowl
@@ -86,6 +85,8 @@ Placeholder:
 - loki
 - mysql8
 - nats
+- openjdk17-jdk
+- openjdk17-jre
 - prometheus
 - python36-devel
 - python39-devel
