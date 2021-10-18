@@ -1,35 +1,25 @@
 . ../meta/functions.sh
 
-CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/openjdk8-jre:latest
-else
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/openjdk8-jre:latest
-fi
+CONTAINER_UUID=$(create_container openjdk8-jre:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-NEXUS_VERSION="3.34.0-01"
+NEXUS_VERSION="3.34.1-01"
 
-TMPDIR=$(mktemp -d)
-
+TMP_DIR=$(mktemp -d)
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    tar xvf files/nexus-${NEXUS_VERSION}-unix.tar.gz -C ${TMPDIR}
+    tar xvf files/nexus-${NEXUS_VERSION}-unix.tar.gz -C ${TMP_DIR}
 else
-    pushd ${TMPDIR}
-    curl -L https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz|tar xzv
-    #curl -L http://10.88.0.249:8081/repository/raw-hosted-stuff/nexus/${NEXUS_VERSION}/nexus-${NEXUS_VERSION}-unix.tar.gz|tar xzv
+    pushd ${TMP_DIR}
+        curl -L https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz|tar xzv
     popd
 fi
-
 mkdir ${CONTAINER_PATH}/usr/lib/sonatype
 pushd ${CONTAINER_PATH}/usr/lib/sonatype
-mv -v ${TMPDIR}/nexus-${NEXUS_VERSION} ./
-mv -v ${TMPDIR}/sonatype-work ./
-ln -s nexus-${NEXUS_VERSION} nexus
+    mv -v ${TMP_DIR}/nexus-${NEXUS_VERSION} ./
+    mv -v ${TMP_DIR}/sonatype-work ./
+    ln -s nexus-${NEXUS_VERSION} nexus
 popd
-
-rm -rf ${TMPDIR}
+rm -rf ${TMP_DIR}
 
 rsync_rootfs
 
@@ -43,9 +33,4 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
 
 buildah config --volume /var/lib/sonatype-work ${CONTAINER_UUID}
 
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/nexus:latest
-else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/nexus:latest
-fi
-buildah rm -a
+commit_container nexus:latest
