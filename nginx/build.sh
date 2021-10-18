@@ -1,11 +1,6 @@
 . ../meta/functions.sh
 
-CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/systemd:latest
-else
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/systemd:latest
-fi
+CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
@@ -30,9 +25,4 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
 
 clean_files
 
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/nginx:latest
-else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/nginx:latest
-fi
-buildah rm -a
+commit_container nginx:latest
