@@ -17,7 +17,7 @@ mkdir ${CONTAINER_PATH}/usr/lib/hazelcast
 pushd ${CONTAINER_PATH}/usr/lib/hazelcast
     mv -v ${TMP_DIR}/hazelcast-management-center-${MC_VERSION} ./
     ln -s hazelcast-management-center-${MC_VERSION} management-center
-    ln -s hazelcast-management-center-4.2021.06.jar management-center/hazelcast-management-center.jar
+    ln -s hazelcast-management-center-${MC_VERSION}.jar management-center/hazelcast-management-center.jar
 popd
 rm -rf ${TMP_DIR}
 
