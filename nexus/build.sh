@@ -3,7 +3,9 @@
 CONTAINER_UUID=$(create_container openjdk8-jre:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-NEXUS_VERSION="3.34.1-01"
+if [[ -z ${NEXUS_VERSION} ]]; then
+    NEXUS_VERSION="3.34.1-01"
+fi
 
 TMP_DIR=$(mktemp -d)
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
