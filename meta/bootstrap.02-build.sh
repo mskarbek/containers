@@ -8,6 +8,7 @@ KERNEL_VERSION="4.18.0-305.el8"
 
 TMP_DIR=$(mktemp -d)
 mkdir -vp ${TMP_DIR}/{zfs,images}
+mkdir -vp ./files/zfs
 
 cat << EOF > ${TMP_DIR}/zfs/zfs-kmod.spec
 Name:           zfs-kmod
@@ -38,6 +39,20 @@ This package fakes ZFS kernel modules package as installation dependency for ZFS
 - Initial package
 EOF
 
+cat << EOF > ${TMP_DIR}/hyperscale.repo
+[hyperscale-main]
+name=CentOS Stream 8 - Hyperscale Main
+baseurl=file:///root/containers/base/files/hyperscale-main/
+enabled=1
+gpgcheck=0
+
+[hyperscale-facebook]
+name=CentOS Stream 8 - Hyperscale Facebook
+baseurl=file:///root/containers/base/files/hyperscale-facebook/
+enabled=1
+gpgcheck=0
+EOF
+
 cp ./files/zfs-${ZFS_VERSION}.tar.gz ${TMP_DIR}/zfs/
 
 VOL1_UUID=$(cat /proc/sys/kernel/random/uuid)
@@ -52,7 +67,7 @@ podman volume create --opt type=zfs --opt device=${ZFS_POOL}/datafs/var/lib/volu
 podman load -i ./files/ubi-init.tar
 podman run -d --name=${CONTAINER_UUID}\
  -v ${VOL1_UUID}:/var/lib/containers:z\
- -v $(pwd)/..:/root/projects/containers:z\
+ -v $(pwd)/..:/root/containers:z\
  -v ${TMP_DIR}:/root/tmp:z\
  --privileged registry.access.redhat.com/ubi8/ubi-init:8.4
 # -v ${VOL2_UUID}:/var/lib/volumes:z\
@@ -62,8 +77,6 @@ if [[ -z ${OFFLINE_BOOTSTRAP} ]]; then
     podman exec ${CONTAINER_UUID} subscription-manager register --auto-attach --release=8.4 --username=${RHEL_USER} --password=${RHEL_PASS}
 else
     podman exec ${CONTAINER_UUID} rm -vf /etc/yum.repos.d/ubi.repo
-    #podman cp /etc/pki/ca-trust/source/anchors/katello-server-ca.pem ${CONTAINER_UUID}:/etc/pki/ca-trust/source/anchors/katello-server-ca.pem
-    #podman exec ${CONTAINER_UUID} update-ca-trust
 fi
 podman exec ${CONTAINER_UUID} dnf -y update
 podman exec ${CONTAINER_UUID} dnf -y install\
@@ -109,3 +122,23 @@ podman exec -w /home/mock ${CONTAINER_UUID} dnf -y install\
  ./zfs-${ZFS_VERSION}/libzpool5-${ZFS_VERSION}-1.el8.x86_64.rpm\
  ./zfs-${ZFS_VERSION}/zfs-${ZFS_VERSION}-1.el8.x86_64.rpm\
  ./rpmbuild/RPMS/x86_64/zfs-kmod-${ZFS_VERSION}-1.fake.el8.x86_64.rpm
+podman exec -w /home/mock ${CONTAINER_UUID} bash -exc "mv -v ./zfs-${ZFS_VERSION}/*.rpm /root/tmp/zfs/"
+podman exec -w /home/mock ${CONTAINER_UUID} bash -exc "mv -v ./rpmbuild/RPMS/x86_64/*.rpm /root/tmp/zfs/"
+podman exec ${CONTAINER_UUID} cp -v /root/tmp/hyperscale.repo /etc/yum.repos.d/
+podman exec ${CONTAINER_UUID} dnf -y install\
+ --exclude=container-selinux\
+ buildah\
+ java-1.8.0-openjdk-headless\
+ podman\
+ rsync
+podman exec ${CONTAINER_UUID} sed -i 's/driver = "overlay"/driver = "zfs"/' /etc/containers/storage.conf
+podman exec -w /root/containers/nexus/files ${CONTAINER_UUID} bash -ex ../../meta/gen_keystore.sh
+for IMGAGE in {micro,base,systemd,minio,nginx,step-ca,openjdk8-jre,nexus};
+do
+    podman exec -e IMAGE_BOOTSTRAP=1 -w /root/containers/${IMGAGE} ${CONTAINER_UUID} bash -ex build.sh
+    podman exec ${CONTAINER_UUID} podman save -o /root/tmp/images/${IMGAGE}.tar ${REGISTRY}/bootstrap/${IMGAGE}:latest
+    podman load -i ${TMP_DIR}/images/${IMGAGE}.tar
+done
+
+mv -v ${TMP_DIR}/zfs/*.rpm ./files/zfs/
+rm -rf ${TMP_DIR}
