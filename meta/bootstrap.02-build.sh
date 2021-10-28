@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 . ./files/ENV
 
+umask 0022
+
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 KERNEL_VERSION="4.18.0-305.el8"
 
