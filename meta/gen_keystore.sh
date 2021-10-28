@@ -21,4 +21,6 @@ keytool\
  -destkeystore ./keystore.p12\
  -deststoretype PKCS12
 
+rm -f ./certificate_and_key.p12
+
 echo ${PASS} > ./keystore.pass
