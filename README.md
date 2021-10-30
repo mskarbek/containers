@@ -5,11 +5,22 @@
 RHEL8-based containers leveraging `systemd` and its potential including `sysusers.d`, `tmpfiles.d`, eliminating shell scripts inside containers as much as possible.
 - Strongly opinionated and totally biased.
 - Heavily suffers from NIH syndrome.
-- Consul as a config server, `consul-template` as a configuration tool.
+- Consul as a config server, `consul-template` as a configuration tool (not yet ;)).
 
 ## Build process
 
-Build requires RHEL 8 with valid subscription as a host and `buildah` as a build tool.
+Build requires RHEL 8 with valid [subscription](https://developers.redhat.com/) as a host, `buildah` as a build tool and [ZFS](https://github.com/openzfs/zfs/) as a storage solution for containers and volumes.
+
+To bootstrap a whole set `cd` to the `./meta` dir, copy `ENV` to `./files`, update `./files/ENV` accordingly and run through `bootstrap.0+-.*.sh` scripts.
+- `bootstrap.00-host.sh` - makes sure that the host have required ZFS datasets setup properly
+- `bootstrap.01-download.sh` - downloads binaries for the minimal set required to properly rebuild the rest
+- `bootstrap.02-build.sh` - builds the minimal set using minimal repos set
+- `bootstrap.03-start.sh` - starts the minimal set
+- `bootstrap.04-rebuild.sh` - rebuilds the minimal set using local proxy (Nexus) with additional repos enabled
+- `bootstrap.05-restart.sh` - restarts the minimal set
+- `bootstrap.06-all.sh` - builds rest of the set
+
+In the future, this will be converted to the proper Ansible roles/playbooks.
 
 ## Meta
 
@@ -32,22 +43,21 @@ Long-term:
 ## Images
 
 Stable state:
-- nothing
+- `micro` - the beginning of everything else
+- `base` - expands `micro` with reasonable set of packages
+- `systemd` - `base` with systemd as a container command
 
 Working state:
-- `base` - expands `micro` with reasonable set of packages
 - `fake-service`
 - `kafka-all-in-one` - temporary image, will be removed in favor of images with separate components
 - `knot-dns`
 - `knot-resolver`
-- `micro` - the beginning of everything else
 - `minio`
 - `nexus`
 - `nginx`
 - `openjdk11-jre`
 - `openjdk8-jre`
 - `openssh`
-- `systemd` - `base` with systemd as a container command
 - `tinyproxy`
 - `toolbox`
 
@@ -55,6 +65,8 @@ WIP state:
 - `golang`
 - `hazelcast-mc4`
 - `hazelcast-mc5`
+- `hazelcast4`
+- `hazelcast5`
 - `jenkins`
 - `kea`
 - `nodejs10`
