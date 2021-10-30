@@ -1,6 +1,6 @@
 #example ENV file, copy to ./file/ENV and modify accordingly
 #Bootstrap versions
-NEXUS_VERSION="3.34.1-01"
+NEXUS_VERSION="3.36.0-01"
 ZFS_VERSION="2.1.1"
 STEPCA_VERSION="0.17.6"
 STEPCLI_VERSION="0.17.7"
