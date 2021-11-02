@@ -20,6 +20,7 @@ enabled=1
 gpgcheck=0
 EOF
     dnf_install "java-17-openjdk-headless"
+    rm -f ${CONTAINER_PATH}/etc/yum.repos.d/beta.repo
 else
     dnf_install "java-17-openjdk-headless tomcat-native apr"
 fi
