@@ -15,9 +15,11 @@ pushd ${TMP_DIR}
     curl -L -O https://github.com/smallstep/certificates/releases/download/v${STEPCA_VERSION}/step-ca_linux_${STEPCA_VERSION}_amd64.tar.gz
 popd
 
-rm -vf ./files/ubi-init.tar
+rm -vf ./files/ubi-init.tar ./files/pause.tar
 podman pull registry.access.redhat.com/ubi8/ubi-init:8.4
 podman save -o ./files/ubi-init.tar registry.access.redhat.com/ubi8/ubi-init:8.4
+podman pull registry.access.redhat.com/ubi8/pause:8.4
+podman save -o ./files/pause.tar registry.access.redhat.com/ubi8/pause:8.4
 
 cat << EOF > ${TMP_DIR}/etc/yum.repos.d/hyperscale.repo
 [hyperscale-main]
