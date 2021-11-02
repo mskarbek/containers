@@ -74,7 +74,6 @@ WIP state:
 - `hazelcast5`
 - `jenkins`
 - `kea`
-- `nodejs10`
 - `nodejs14`
 - `pgadmin4`
 - `postgresql13`
