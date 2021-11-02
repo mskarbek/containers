@@ -1,29 +1,32 @@
 . ../meta/functions.sh
 
-CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-buildah from --name=${CONTAINER_UUID} ${REGISTRY}/base:latest
+CONTAINER_UUID=$(create_container base:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
 
-dnf_module "enable nodejs:14"
-
-dnf_install "nodejs npm"
+if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
+    cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+    dnf_module "enable nodejs:14"
+    dnf_install "nodejs npm"
+    rm -v ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+else
+    dnf_module "enable nodejs:14"
+    dnf_install "nodejs npm"
+fi
 
 dnf_clean
 dnf_clean_cache
 
 clean_files
 
-buildah commit ${CONTAINER_UUID} ${REGISTRY}/base/nodejs14:latest
-buildah rm -a
+commit_container base/nodejs14:latest
 
 
-CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-buildah from --name=${CONTAINER_UUID} ${REGISTRY}/base/nodejs14:latest
+CONTAINER_UUID=$(create_container base/nodejs14:latest)
+CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 buildah config --cmd '[ "/usr/sbin/init" ]' ${CONTAINER_UUID}
 buildah config --stop-signal 'SIGRTMIN+3' ${CONTAINER_UUID}
 
-buildah commit ${CONTAINER_UUID} ${REGISTRY}/nodejs14:latest
-buildah rm -a
+commit_container nodejs14:latest
