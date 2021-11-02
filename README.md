@@ -9,7 +9,7 @@ RHEL8-based containers leveraging `systemd` and its potential including `sysuser
 
 ## Build process
 
-Build requires RHEL 8 with valid [subscription](https://developers.redhat.com/) as a host, `buildah` as a build tool and [ZFS](https://github.com/openzfs/zfs/) as a storage solution for containers and volumes.
+Build requires valid Red Hat [subscription](https://developers.redhat.com/) or RHEL 8 as a host, [`podman`](https://github.com/containers/podman/) and [OpenZFS](https://github.com/openzfs/zfs/) as a storage solution for containers and volumes.
 
 To bootstrap a whole set `cd` to the `./meta` dir, copy `ENV` to `./files`, update `./files/ENV` accordingly and run through `bootstrap.0+-.*.sh` scripts.
 - `bootstrap.00-host.sh` - makes sure that the host have required ZFS datasets setup properly
@@ -55,9 +55,14 @@ Working state:
 - `minio`
 - `nexus`
 - `nginx`
+- `openjdk11-jdk`
 - `openjdk11-jre`
+- `openjdk17-jdk` - requires RHEL 8.5 Beta repo, script assumes that ISO is mounted on `/mnt`, `maven` drags `java-11-openjdk` with itself, there is no `maven-openjdk17` package yet to prevent that
+- `openjdk17-jre` - requires RHEL 8.5 Beta repo, script assumes that ISO is mounted on `/mnt`
+- `openjdk8-jdk`
 - `openjdk8-jre`
 - `openssh`
+- `step-ca`
 - `tinyproxy`
 - `toolbox`
 
@@ -71,8 +76,6 @@ WIP state:
 - `kea`
 - `nodejs10`
 - `nodejs14`
-- `openjdk11-jdk`
-- `openjdk8-jdk`
 - `pgadmin4`
 - `postgresql13`
 - `python36`
@@ -100,8 +103,6 @@ Placeholder:
 - `loki`
 - `mysql8`
 - `nats`
-- `openjdk17-jdk`
-- `openjdk17-jre`
 - `prometheus`
 - `python36-devel`
 - `python39-devel`
@@ -110,7 +111,6 @@ Placeholder:
 - `rekor`
 - `rundeck`
 - `rust`
-- `step-ca`
 - `svn`
 - `synth`
 - `tempo`
