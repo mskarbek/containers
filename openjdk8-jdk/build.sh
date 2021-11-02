@@ -8,11 +8,11 @@ dnf_cache
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
     cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
     dnf_module "enable maven:3.6"
-    dnf_install "java-11-openjdk-devel maven maven-openjdk8"
+    dnf_install "java-1.8.0-openjdk-devel maven maven-openjdk8"
     rm -v ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
 else
     dnf_module "enable maven:3.6"
-    dnf_install "java-11-openjdk-devel maven maven-openjdk8"
+    dnf_install "java-1.8.0-openjdk-devel maven maven-openjdk8"
 fi
 
 dnf_clean
