@@ -57,7 +57,7 @@ Working state:
 - `nginx`
 - `openjdk11-jdk`
 - `openjdk11-jre`
-- `openjdk17-jdk` - requires RHEL 8.5 Beta repo, script assumes that ISO is mounted on `/mnt`, `maven` drags `java-11-openjdk` with itself, there is no `maven-openjdk17` package yet to prevent that
+- `openjdk17-jdk` - requires RHEL 8.5 Beta repo, script assumes that ISO is mounted on `/mnt`, `maven` drags `java-11-openjdk` with itself, there is no `maven-openjdk17` package yet to prevent that ([#1991521](https://bugzilla.redhat.com/show_bug.cgi?id=1991521))
 - `openjdk17-jre` - requires RHEL 8.5 Beta repo, script assumes that ISO is mounted on `/mnt`
 - `openjdk8-jdk`
 - `openjdk8-jre`
