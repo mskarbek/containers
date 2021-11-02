@@ -140,5 +140,8 @@ do
     podman load -i ${TMP_DIR}/images/${IMGAGE}.tar
 done
 
+#podman rm -f ${CONTAINER_UUID}
+#podman volume rm ${VOL1_UUID}
+#zfs destroy -R ${ZFS_POOL}/datafs/var/lib/volumes/${VOL1_UUID}
 mv -v ${TMP_DIR}/zfs/*.rpm ./files/zfs/
-rm -rf ${TMP_DIR}
+#rm -rf ${TMP_DIR}
