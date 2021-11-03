@@ -133,7 +133,7 @@ podman exec ${CONTAINER_UUID} dnf -y install\
  rsync
 podman exec ${CONTAINER_UUID} sed -i 's/driver = "overlay"/driver = "zfs"/' /etc/containers/storage.conf
 podman exec -w /root/containers/nexus/files ${CONTAINER_UUID} bash -ex ../../meta/gen_keystore.sh
-for IMGAGE in {micro,base,systemd,minio,nginx,step-ca,openjdk8-jre,nexus};
+for IMGAGE in {micro,base,systemd,minio,nginx1.18,step-ca,openjdk8-jre,nexus};
 do
     podman exec -e IMAGE_BOOTSTRAP=1 -w /root/containers/${IMGAGE} ${CONTAINER_UUID} bash -ex build.sh
     podman exec ${CONTAINER_UUID} podman save -o /root/tmp/images/${IMGAGE}.tar ${REGISTRY}/bootstrap/${IMGAGE}:latest
