@@ -1,47 +1,41 @@
 . ../meta/functions.sh
 
-CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/openssh:latest
-else
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/openssh:latest
-fi
+CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-    dnf_install "buildah git-core rsync"
+    cat << EOF > ${CONTAINER_PATH}/etc/yum.repos.d/beta.repo
+[rhel-8-beta-for-x86_64-baseos-rpms]
+name=Red Hat Enterprise Linux 8 Beta for x86_64 - BaseOS (RPMs)
+baseurl=file:///mnt/BaseOS/
+enabled=1
+gpgcheck=0
+
+[rhel-8-beta-for-x86_64-appstream-rpms]
+name=Red Hat Enterprise Linux 8 Beta for x86_64 - AppStream (RPMs)
+baseurl=file:///mnt/AppStream/
+enabled=1
+gpgcheck=0
+EOF
+    dnf_install "buildah skopeo git-core rsync zfs"
+    rm -f ${CONTAINER_PATH}/etc/yum.repos.d/beta.repo
 else
-    dnf_install "buildah git-core rsync zfs"
+    dnf_install "buildah skopeo git-core rsync zfs"
 fi
 
 dnf_clean
 dnf_clean_cache
 
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    rm -v ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-else
-    buildah run -t ${CONTAINER_UUID} systemctl mask\
-     zfs.target\
-     zfs-import.target\
-     zfs-volumes.target
-fi
-
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    sed -i 's/#mount_program = "\/usr\/bin\/fuse-overlayfs"/mount_program = "\/usr\/bin\/fuse-overlayfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
-else
-    sed -i 's/driver = "overlay"/driver = "zfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
-fi
-
 clean_files
 
-buildah config --volume /var/lib/containers ${CONTAINER_UUID}
+#sed -i 's/#mount_program = "\/usr\/bin\/fuse-overlayfs"/mount_program = "\/usr\/bin\/fuse-overlayfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
+sed -i 's/driver = "overlay"/driver = "zfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
 
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/buildah:latest
-else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/buildah:latest
-fi
-buildah rm -a
+buildah run -t ${CONTAINER_UUID} systemctl mask\
+ zfs.target\
+ zfs-import.target\
+ zfs-volumes.target
+
+commit_container buildah:latest
