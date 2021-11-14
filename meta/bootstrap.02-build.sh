@@ -4,7 +4,7 @@
 umask 0022
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-KERNEL_VERSION="4.18.0-305.el8"
+KERNEL_VERSION="4.18.0-348.el8"
 
 TMP_DIR=$(mktemp -d)
 mkdir -vp ${TMP_DIR}/{zfs,images}
@@ -58,23 +58,23 @@ cp ./files/zfs-${ZFS_VERSION}.tar.gz ${TMP_DIR}/zfs/
 VOL1_UUID=$(cat /proc/sys/kernel/random/uuid)
 #VOL2_UUID=$(cat /proc/sys/kernel/random/uuid)
 
-zfs create -o mountpoint=legacy ${ZFS_POOL}/datafs/var/lib/volumes/${VOL1_UUID}
-#zfs create -o mountpoint=legacy ${ZFS_POOL}/datafs/var/lib/volumes/${VOL2_UUID}
+zfs create -o mountpoint=legacy ${ZFS_POOL}/datafs/var/lib/volumes/storage/${VOL1_UUID}
+#zfs create -o mountpoint=legacy ${ZFS_POOL}/datafs/var/lib/volumes/storage/${VOL2_UUID}
 
-podman volume create --opt type=zfs --opt device=${ZFS_POOL}/datafs/var/lib/volumes/${VOL1_UUID} ${VOL1_UUID}
-#podman volume create --opt type=zfs --opt device=${ZFS_POOL}/datafs/var/lib/volumes/${VOL2_UUID} ${VOL2_UUID}
+podman volume create --opt type=zfs --opt device=${ZFS_POOL}/datafs/var/lib/volumes/storage/${VOL1_UUID} ${VOL1_UUID}
+#podman volume create --opt type=zfs --opt device=${ZFS_POOL}/datafs/var/lib/volumes/storage/${VOL2_UUID} ${VOL2_UUID}
 
-podman load -i ./files/ubi-init.tar
+skopeo copy dir://$(pwd)/files/ubi-init containers-storage:registry.access.redhat.com/ubi8/ubi-init:8.5
 podman run -d --name=${CONTAINER_UUID}\
  -v ${VOL1_UUID}:/var/lib/containers:z\
  -v $(pwd)/..:/root/containers:z\
  -v ${TMP_DIR}:/root/tmp:z\
- --privileged registry.access.redhat.com/ubi8/ubi-init:8.4
+ --privileged registry.access.redhat.com/ubi8/ubi-init:8.5
 # -v ${VOL2_UUID}:/var/lib/volumes:z\
 
 if [[ -z ${OFFLINE_BOOTSTRAP} ]]; then
     podman exec ${CONTAINER_UUID} rm -vf /etc/rhsm-host /etc/pki/entitlement-host /etc/yum.repos.d/ubi.repo
-    podman exec ${CONTAINER_UUID} subscription-manager register --auto-attach --release=8.4 --username=${RHEL_USER} --password=${RHEL_PASS}
+    podman exec ${CONTAINER_UUID} subscription-manager register --auto-attach --release=8.5 --username=${RHEL_USER} --password=${RHEL_PASS}
 else
     podman exec ${CONTAINER_UUID} rm -vf /etc/yum.repos.d/ubi.repo
 fi
@@ -129,15 +129,20 @@ podman exec ${CONTAINER_UUID} dnf -y install\
  --exclude=container-selinux\
  buildah\
  java-1.8.0-openjdk-headless\
- podman\
+ skopeo\
  rsync
 podman exec ${CONTAINER_UUID} sed -i 's/driver = "overlay"/driver = "zfs"/' /etc/containers/storage.conf
 podman exec -w /root/containers/nexus/files ${CONTAINER_UUID} bash -ex ../../meta/gen_keystore.sh
-for IMGAGE in {micro,base,systemd,minio,nginx1.18,step-ca,openjdk8-jre,nexus};
+for IMGAGE in {micro,base,systemd,minio,nginx,step-ca,openjdk8-jre,nexus};
 do
     podman exec -e IMAGE_BOOTSTRAP=1 -w /root/containers/${IMGAGE} ${CONTAINER_UUID} bash -ex build.sh
-    podman exec ${CONTAINER_UUID} podman save -o /root/tmp/images/${IMGAGE}.tar ${REGISTRY}/bootstrap/${IMGAGE}:latest
-    podman load -i ${TMP_DIR}/images/${IMGAGE}.tar
+    podman exec ${CONTAINER_UUID} mkdir -vp /root/tmp/images/${IMGAGE}
+    podman exec ${CONTAINER_UUID} skopeo copy --format=oci containers-storage:${REGISTRY}/bootstrap/${IMGAGE}:latest dir:///root/tmp/images/${IMGAGE}
+done
+
+for IMGAGE in {micro,base,systemd,minio,nginx,step-ca,openjdk8-jre,nexus};
+do
+    skopeo copy --format=oci dir://${TMP_DIR}/images/${IMGAGE} containers-storage:${REGISTRY}/bootstrap/${IMGAGE}:latest
 done
 
 #podman rm -f ${CONTAINER_UUID}
