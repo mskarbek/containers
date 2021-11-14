@@ -54,14 +54,14 @@ Working state:
 - `knot-resolver`
 - `minio`
 - `nexus`
+- `nginx`
 - `nginx1.18`
-- `nginx1.20` - requires RHEL 8.5 Beta repo, script assumes that ISO is mounted on `/mnt`
 - `nodejs14`
 - `nodejs16`
 - `openjdk11-jdk`
 - `openjdk11-jre`
-- `openjdk17-jdk` - requires RHEL 8.5 Beta repo, script assumes that ISO is mounted on `/mnt`, `maven` drags `java-11-openjdk` with itself, there is no `maven-openjdk17` package yet to prevent that ([#1991521](https://bugzilla.redhat.com/show_bug.cgi?id=1991521))
-- `openjdk17-jre` - requires RHEL 8.5 Beta repo, script assumes that ISO is mounted on `/mnt`
+- `openjdk17-jdk` - `maven` drags `java-11-openjdk` with itself, there is no `maven-openjdk17` package yet to prevent that ([rhbz#1991521](https://bugzilla.redhat.com/show_bug.cgi?id=1991521))
+- `openjdk17-jre`
 - `openjdk8-jdk`
 - `openjdk8-jre`
 - `openssh`
@@ -75,7 +75,6 @@ WIP state:
 - `hazelcast-mc5`
 - `hazelcast4`
 - `hazelcast5`
-- `jenkins`
 - `kea`
 - `pgadmin4`
 - `postgresql13`
@@ -89,10 +88,8 @@ Placeholder:
 - `ansible`
 - `ara`
 - `buildah`
-- `concourse`
 - `consul`
 - `fleet`
-- `gitea`
 - `grafana`
 - `harbor`
 - `kafka`
