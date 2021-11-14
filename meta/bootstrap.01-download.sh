@@ -15,11 +15,10 @@ pushd ${TMP_DIR}
     curl -L -O https://github.com/smallstep/certificates/releases/download/v${STEPCA_VERSION}/step-ca_linux_${STEPCA_VERSION}_amd64.tar.gz
 popd
 
-rm -vf ./files/ubi-init.tar ./files/pause.tar
-podman pull registry.access.redhat.com/ubi8/ubi-init:8.4
-podman save -o ./files/ubi-init.tar registry.access.redhat.com/ubi8/ubi-init:8.4
-podman pull registry.access.redhat.com/ubi8/pause:8.4
-podman save -o ./files/pause.tar registry.access.redhat.com/ubi8/pause:8.4
+rm -vrf ./files/{ubi-init,pause}
+mkdir -vp ./files/{ubi-init,pause}
+skopeo copy docker://registry.access.redhat.com/ubi8/ubi-init:8.5 dir://$(pwd)/files/ubi-init
+skopeo copy docker://registry.access.redhat.com/ubi8/pause:8.5 dir://$(pwd)/files/pause
 
 cat << EOF > ${TMP_DIR}/etc/yum.repos.d/hyperscale.repo
 [hyperscale-main]
@@ -35,10 +34,8 @@ enabled=1
 gpgcheck=0
 EOF
 
-reposync --installroot=${TMP_DIR} --releasever=8 --download-path=../base/files/ --download-metadata --repo=hyperscale-main
-reposync --installroot=${TMP_DIR} --releasever=8 --download-path=../base/files/ --download-metadata --repo=hyperscale-facebook
-
-rm -vf /etc/yum.repos.d/hyperscale.repo
+dnf reposync --installroot=${TMP_DIR} --releasever=8 --delete --download-path=../base/files/ --download-metadata --repo=hyperscale-main
+dnf reposync --installroot=${TMP_DIR} --releasever=8 --delete --download-path=../base/files/ --download-metadata --repo=hyperscale-facebook
 
 cp -v ${TMP_DIR}/mcli ../minio/files/
 cp -v ${TMP_DIR}/minio ../minio/files/
@@ -47,4 +44,4 @@ cp -v ${TMP_DIR}/step_linux_${STEPCLI_VERSION}_amd64.tar.gz ../step-ca/files/
 cp -v ${TMP_DIR}/step-ca_linux_${STEPCA_VERSION}_amd64.tar.gz ../step-ca/files/
 cp -v ${TMP_DIR}/zfs-${ZFS_VERSION}.tar.gz ./files/
 
-rm -rfv ${TMP_DIR}
+rm -vrf ${TMP_DIR}
