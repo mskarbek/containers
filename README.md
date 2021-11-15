@@ -1,8 +1,9 @@
-# RHEL8-based set of container images
+# RHEL-based set of container images
 
 ## Idea
 
-RHEL8-based containers leveraging `systemd` and its potential including `sysusers.d`, `tmpfiles.d`, eliminating shell scripts inside containers as much as possible.
+RHEL-based containers leveraging `systemd` and its potential including `sysusers.d`, `tmpfiles.d`, eliminating shell scripts inside containers as much as possible.
+- Always latest stable RHEL release - currently 8.5, will switch to RHEL 9.0 ASAP.
 - Strongly opinionated and totally biased.
 - Heavily suffers from NIH syndrome.
 - Consul as a config server, `consul-template` as a configuration tool (not yet ;)).
