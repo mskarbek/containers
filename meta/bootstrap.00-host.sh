@@ -23,5 +23,17 @@ zfs list ${ZFS_POOL}/datafs/var/lib/volumes &> /dev/null || {
 restorecon -Rv /var/lib/volumes
 
 cp -v /usr/share/containers/containers.conf /etc/containers/containers.conf
-sed -i 's/driver = "overlay"/driver = "zfs"/' /etc/containers/storage.conf
 sed -i 's/#volume_path = "\/var\/lib\/containers\/storage\/volumes"/volume_path = "\/var\/lib\/volumes\/storage"/' /etc/containers/containers.conf
+sed -i 's/driver = "overlay"/driver = "zfs"/' /etc/containers/storage.conf
+
+setsebool container_manage_cgroup on
+
+grep "systemd.unified_cgroup_hierarchy=1" /etc/sysconfig/grub || {
+    sed -i 's/\(GRUB_CMDLINE_LINUX="\)\(.*\)\("\)/\1\2systemd.unified_cgroup_hierarchy=1 \3/' /etc/sysconfig/grub
+    grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+}
+
+grep "psi=1" /etc/sysconfig/grub || {
+    sed -i 's/\(GRUB_CMDLINE_LINUX="\)\(.*\)\("\)/\1\2 psi=1 \3/' /etc/sysconfig/grub
+    grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+}
