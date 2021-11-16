@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 . ./files/ENV
 
-rpm -q zfs &> /dev/null && rpm -q skopeo &> /dev/null && rpm -q podman &> /dev/null || {
-    echo "Missing packages. Make sure that you have installed zfs, skopeo and podman."
+rpm -q zfs &> /dev/null && rpm -q skopeo &> /dev/null && rpm -q podman &> /dev/null && rpm -q ansible &> /dev/null || {
+    echo "Missing packages. Make sure that you have installed zfs, skopeo and podman, ansible."
     exit 1
 }
 
@@ -18,14 +18,14 @@ zfs list ${ZFS_POOL}/datafs/var/lib/containers &> /dev/null || {
     }
     zfs create ${ZFS_POOL}/datafs/var/lib/containers
     zfs create ${ZFS_POOL}/datafs/var/lib/containers/storage
+    restorecon -Rv /var/lib/containers
 }
-restorecon -Rv /var/lib/containers
 
 zfs list ${ZFS_POOL}/datafs/var/lib/volumes &> /dev/null || {
     zfs create ${ZFS_POOL}/datafs/var/lib/volumes
     zfs create ${ZFS_POOL}/datafs/var/lib/volumes/storage
+    restorecon -Rv /var/lib/volumes
 }
-restorecon -Rv /var/lib/volumes
 
 cp -v /usr/share/containers/containers.conf /etc/containers/containers.conf
 sed -i 's/#volume_path = "\/var\/lib\/containers\/storage\/volumes"/volume_path = "\/var\/lib\/volumes\/storage"/' /etc/containers/containers.conf
