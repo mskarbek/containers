@@ -3,7 +3,7 @@
 
 umask 0022
 
-TMP_DIR=$(mktemp -d)
+#TMP_DIR=$(mktemp -d)
 #tar xvf ../step-ca/files/step_linux_${STEPCLI_VERSION}_amd64.tar.gz -C ${TMP_DIR}
 #
 #mkdir -vp ${TMP_DIR}/step-ca
@@ -42,7 +42,7 @@ TMP_DIR=$(mktemp -d)
 
 #POD_ID=$(date +%y%m%d%H%M)
 #podman pod create\
-# --infra-image=registry.access.redhat.com/ubi8/pause:8.4\
+# --infra-image=registry.access.redhat.com/ubi8/pause:8.5\
 # --infra-name=step-ca-${POD_ID}-infra\
 # --name=step-ca-${POD_ID}\
 # --dns-search=lab.skarbek.name\
@@ -58,7 +58,7 @@ TMP_DIR=$(mktemp -d)
 
 POD_ID=$(date +%y%m%d%H%M)
 podman pod create\
- --infra-image=registry.access.redhat.com/ubi8/pause:8.4\
+ --infra-image=registry.access.redhat.com/ubi8/pause:8.5\
  --infra-name=tinyproxy-${POD_ID}-infra\
  --name=tinyproxy-${POD_ID}\
  --dns-search=lab.skarbek.name\
@@ -82,7 +82,7 @@ podman volume create\
 
 POD_ID=$(date +%y%m%d%H%M)
 podman pod create\
- --infra-image=registry.access.redhat.com/ubi8/pause:8.4\
+ --infra-image=registry.access.redhat.com/ubi8/pause:8.5\
  --infra-name=minio-${POD_ID}-infra\
  --name=minio-${POD_ID}\
  --dns-search=lab.skarbek.name\
@@ -108,7 +108,7 @@ podman volume create\
 
 POD_ID=$(date +%y%m%d%H%M)
 podman pod create\
- --infra-image=registry.access.redhat.com/ubi8/pause:8.4\
+ --infra-image=registry.access.redhat.com/ubi8/pause:8.5\
  --infra-name=nexus-${POD_ID}-infra\
  --name=nexus-${POD_ID}\
  --dns-search=lab.skarbek.name\
@@ -125,7 +125,7 @@ ln -s /var/lib/volumes/storage/${VOL_UUID}/data_ /var/lib/volumes/nexus-${POD_ID
 
 POD_ID=$(date +%y%m%d%H%M)
 podman pod create\
- --infra-image=registry.access.redhat.com/ubi8/pause:8.4\
+ --infra-image=registry.access.redhat.com/ubi8/pause:8.5\
  --infra-name=nginx-${POD_ID}-infra\
  --name=nginx-${POD_ID}\
  --dns-search=lab.skarbek.name\
