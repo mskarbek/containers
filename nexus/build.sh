@@ -27,6 +27,7 @@ rsync_rootfs
 
 if [[ -f ./files/keystore.p12 && -f ./files/keystore.pass ]]; then
     cp -v ./files/keystore.p12 ${CONTAINER_PATH}/usr/lib/sonatype/sonatype-work/nexus3/keystores/keystore.p12
+    sed -i 's/=\.\.\/sonatype-work/=\/var\/lib\/sonatype-work/' ${CONTAINER_PATH}/usr/lib/sonatype/nexus/bin/nexus.vmoptions
     echo "-Djavax.net.ssl.keyStore=/var/lib/sonatype-work/nexus3/keystores/keystore.p12" >> ${CONTAINER_PATH}/usr/lib/sonatype/nexus/bin/nexus.vmoptions
     echo "-Djavax.net.ssl.keyStorePassword=$(cat ./files/keystore.pass)" >> ${CONTAINER_PATH}/usr/lib/sonatype/nexus/bin/nexus.vmoptions
 fi
