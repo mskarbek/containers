@@ -524,3 +524,35 @@ curl -X 'POST'\
   "routingRuleName": null,
   "yumSigning": null
 }'
+
+curl -X 'POST'\
+ "${URL_NEXUS}/service/rest/v1/repositories/yum/proxy"\
+ -u admin:${NEW_PASS}\
+ -H 'accept: application/json'\
+ -H 'Content-Type: application/json'\
+ -d '{
+  "name": "yum-proxy-pgdg",
+  "online": true,
+  "storage": {
+    "blobStoreName": "minio-yum-proxy-pgdg",
+    "strictContentTypeValidation": true
+  },
+  "cleanup": null,
+  "proxy": {
+    "remoteUrl": "https://download.postgresql.org/pub/repos/yum/",
+    "contentMaxAge": 1440,
+    "metadataMaxAge": 180
+  },
+  "negativeCache": {
+    "enabled": true,
+    "timeToLive": 1440
+  },
+  "httpClient": {
+    "blocked": false,
+    "autoBlock": true,
+    "connection": null,
+    "authentication": null
+  },
+  "routingRuleName": null,
+  "yumSigning": null
+}'
