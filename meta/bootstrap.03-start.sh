@@ -38,7 +38,7 @@ TMP_DIR=$(mktemp -d)
 #
 #umount ${TMP_DIR}/step-ca
 
-podman load -i ./files/pause.tar
+#podman load -i ./files/pause.tar
 
 #POD_ID=$(date +%y%m%d%H%M)
 #podman pod create\
@@ -56,13 +56,28 @@ podman load -i ./files/pause.tar
 # --volume=${VOL_UUID}:/var/lib/step-ca:z\
 # registry.lab.skarbek.name/bootstrap/step-ca:latest
 
+POD_ID=$(date +%y%m%d%H%M)
+podman pod create\
+ --infra-image=registry.access.redhat.com/ubi8/pause:8.4\
+ --infra-name=tinyproxy-${POD_ID}-infra\
+ --name=tinyproxy-${POD_ID}\
+ --dns-search=lab.skarbek.name\
+ --hostname=minio\
+ --ip=10.88.0.253\
+ --label=deployment=tinyproxy\
+ --label=bootstrap=true
+podman create\
+ --pod=tinyproxy-${POD_ID}\
+ --name=tinyproxy-${POD_ID}-tinyproxy\
+ registry.lab.skarbek.name/bootstrap/tinyproxy:latest
+
 VOL_UUID=$(cat /proc/sys/kernel/random/uuid)
-zfs create -o mountpoint=legacy ${ZFS_POOL}/datafs/var/lib/volumes/${VOL_UUID}
+zfs create -o mountpoint=legacy ${ZFS_POOL}/datafs/var/lib/volumes/storage/${VOL_UUID}
 podman volume create\
  --label=deployment=minio\
  --label=mountpoint=/var/lib/minio\
  --opt=type=zfs\
- --opt=device=${ZFS_POOL}/datafs/var/lib/volumes/${VOL_UUID}\
+ --opt=device=${ZFS_POOL}/datafs/var/lib/volumes/storage/${VOL_UUID}\
  ${VOL_UUID}
 
 POD_ID=$(date +%y%m%d%H%M)
@@ -78,14 +93,47 @@ podman pod create\
 podman create\
  --pod=minio-${POD_ID}\
  --name=minio-${POD_ID}-minio\
- --volume=${VOL_UUID}:/var/lib/minioa:z\
+ --volume=${VOL_UUID}:/var/lib/minio:z\
  registry.lab.skarbek.name/bootstrap/minio:latest
+ln -s /var/lib/volumes/storage/${VOL_UUID}/data_ /var/lib/volumes/minio-${POD_ID}-minio_var-lib-minio
 
 VOL_UUID=$(cat /proc/sys/kernel/random/uuid)
-zfs create -o mountpoint=legacy ${ZFS_POOL}/datafs/var/lib/volumes/${VOL_UUID}
+zfs create -o mountpoint=legacy ${ZFS_POOL}/datafs/var/lib/volumes/storage/${VOL_UUID}
 podman volume create\
  --label=deployment=nexus\
- --label=mountpoint=/var/lib/step-ca\
+ --label=mountpoint=/var/lib/sonatype-work\
  --opt=type=zfs\
- --opt=device=${ZFS_POOL}/datafs/var/lib/volumes/${VOL_UUID}\
+ --opt=device=${ZFS_POOL}/datafs/var/lib/volumes/storage/${VOL_UUID}\
  ${VOL_UUID}
+
+POD_ID=$(date +%y%m%d%H%M)
+podman pod create\
+ --infra-image=registry.access.redhat.com/ubi8/pause:8.4\
+ --infra-name=nexus-${POD_ID}-infra\
+ --name=nexus-${POD_ID}\
+ --dns-search=lab.skarbek.name\
+ --hostname=nexus\
+ --ip=10.88.0.251\
+ --label=deployment=nexus\
+ --label=bootstrap=true
+podman create\
+ --pod=nexus-${POD_ID}\
+ --name=nexus-${POD_ID}-nexus\
+ --volume=${VOL_UUID}:/var/lib/sonatype-work:z\
+ registry.lab.skarbek.name/bootstrap/nexus:latest
+ln -s /var/lib/volumes/storage/${VOL_UUID}/data_ /var/lib/volumes/nexus-${POD_ID}-nexus_var-lib-sonatype-work
+
+POD_ID=$(date +%y%m%d%H%M)
+podman pod create\
+ --infra-image=registry.access.redhat.com/ubi8/pause:8.4\
+ --infra-name=nginx-${POD_ID}-infra\
+ --name=nginx-${POD_ID}\
+ --dns-search=lab.skarbek.name\
+ --hostname=nginx\
+ --ip=10.88.0.250\
+ --label=deployment=nginx\
+ --label=bootstrap=true
+podman create\
+ --pod=nginx-${POD_ID}\
+ --name=nginx-${POD_ID}-nginx\
+ registry.lab.skarbek.name/bootstrap/nginx1.18:latest
