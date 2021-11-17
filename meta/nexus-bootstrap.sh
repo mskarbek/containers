@@ -127,6 +127,32 @@ curl -X 'POST'\
  -H 'accept: application/json'\
  -H 'Content-Type: application/json'\
  -d '{
+  "name": "minio-raw-hosted-common",
+  "softQuota": null,
+  "bucketConfiguration": {
+    "bucket": {
+      "region": "eu-central-1",
+      "name": "nexus-raw-hosted-common",
+      "prefix": null,
+      "expiration": 3
+    },
+    "bucketSecurity": {
+      "accessKeyId": "'${MINIO_USER}'",
+      "secretAccessKey": "'${MINIO_PASS}'"
+    },
+    "advancedBucketConnection": {
+      "endpoint": "'${URL_MINIO}'",
+      "forcePathStyle": true
+    }
+  }
+}'
+
+curl -X 'POST'\
+ "${URL_NEXUS}/service/rest/v1/blobstores/s3"\
+ -u admin:${NEW_PASS}\
+ -H 'accept: application/json'\
+ -H 'Content-Type: application/json'\
+ -d '{
   "name": "minio-yum-hosted-common",
   "softQuota": null,
   "bucketConfiguration": {
@@ -323,6 +349,25 @@ curl -X 'POST'\
     "httpPort": 8082,
     "httpsPort": null
   },
+  "component": {
+    "proprietaryComponents": false
+  }
+}'
+
+curl -X 'POST'\
+ "${URL_NEXUS}/service/rest/v1/repositories/docker/hosted"\
+ -u admin:${NEW_PASS}\
+ -H 'accept: application/json'\
+ -H 'Content-Type: application/json'\
+ -d '{
+  "name": "raw-hosted-common",
+  "online": true,
+  "storage": {
+    "blobStoreName": "minio-raw-hosted-common",
+    "strictContentTypeValidation": true,
+    "writePolicy": "ALLOW_ONCE"
+  },
+  "cleanup": null,
   "component": {
     "proprietaryComponents": false
   }
