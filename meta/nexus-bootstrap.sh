@@ -27,7 +27,7 @@ curl -s -X 'PUT' \
  -H 'accept: application/json'\
  -H 'Content-Type: application/json'\
  -d '{
-  "enabled": true,
+  "enabled": false,
   "userId": "anonymous",
   "realmName": "NexusAuthorizingRealm"
 }'
@@ -83,17 +83,17 @@ curl -s -X 'DELETE'\
  -u admin:${NEW_PASS}\
  -H 'accept: application/json'
 
-REDHAT_PEM=$(curl -s -X 'GET'\
-  "${URL_NEXUS}/service/rest/v1/security/ssl?host=cdn.redhat.com&port=443"\
-  -u admin:${NEW_PASS}\
-  -H 'accept: application/json'|jq -r .pem)
-
-curl -vX 'POST' \
-  "${URL_NEXUS}/service/rest/v1/security/ssl/truststore"\
-  -u admin:${NEW_PASS}\
-  -H 'accept: application/json'\
-  -H 'Content-Type: text/plain'\
-  -d "${REDHAT_PEM}"
+#REDHAT_PEM=$(curl -s -X 'GET'\
+#  "${URL_NEXUS}/service/rest/v1/security/ssl?host=cdn.redhat.com&port=443"\
+#  -u admin:${NEW_PASS}\
+#  -H 'accept: application/json'|jq -r .pem)
+#
+#curl -vX 'POST' \
+#  "${URL_NEXUS}/service/rest/v1/security/ssl/truststore"\
+#  -u admin:${NEW_PASS}\
+#  -H 'accept: application/json'\
+#  -H 'Content-Type: text/plain'\
+#  -d "${REDHAT_PEM}"
 
 curl -X 'POST'\
  "${URL_NEXUS}/service/rest/v1/blobstores/s3"\
@@ -159,6 +159,32 @@ curl -X 'POST'\
     "bucket": {
       "region": "eu-central-1",
       "name": "nexus-yum-hosted-common",
+      "prefix": null,
+      "expiration": 3
+    },
+    "bucketSecurity": {
+      "accessKeyId": "'${MINIO_USER}'",
+      "secretAccessKey": "'${MINIO_PASS}'"
+    },
+    "advancedBucketConnection": {
+      "endpoint": "'${URL_MINIO}'",
+      "forcePathStyle": true
+    }
+  }
+}'
+
+curl -X 'POST'\
+ "${URL_NEXUS}/service/rest/v1/blobstores/s3"\
+ -u admin:${NEW_PASS}\
+ -H 'accept: application/json'\
+ -H 'Content-Type: application/json'\
+ -d '{
+  "name": "minio-yum-proxy-rhel8-8.4",
+  "softQuota": null,
+  "bucketConfiguration": {
+    "bucket": {
+      "region": "eu-central-1",
+      "name": "nexus-yum-proxy-rhel8-8.4",
       "prefix": null,
       "expiration": 3
     },
@@ -402,6 +428,45 @@ curl -X 'POST'\
  -H 'accept: application/json'\
  -H 'Content-Type: application/json'\
  -d '{
+  "name": "yum-proxy-rhel8-8.4",
+  "online": true,
+  "storage": {
+    "blobStoreName": "minio-yum-proxy-rhel8-8.4",
+    "strictContentTypeValidation": true
+  },
+  "cleanup": null,
+  "proxy": {
+    "remoteUrl": "https://cdn.redhat.com/content/dist/rhel8/8.4/x86_64/",
+    "contentMaxAge": 1440,
+    "metadataMaxAge": 180
+  },
+  "negativeCache": {
+    "enabled": true,
+    "timeToLive": 1440
+  },
+  "httpClient": {
+    "blocked": false,
+    "autoBlock": true,
+    "connection": {
+      "retries": null,
+      "userAgentSuffix": null,
+      "timeout": null,
+      "enableCircularRedirects": false,
+      "enableCookies": false,
+      "useTrustStore": true
+    },
+    "authentication": null
+  },
+  "routingRuleName": null,
+  "yumSigning": null
+}'
+
+curl -X 'POST'\
+ "${URL_NEXUS}/service/rest/v1/repositories/yum/proxy"\
+ -u admin:${NEW_PASS}\
+ -H 'accept: application/json'\
+ -H 'Content-Type: application/json'\
+ -d '{
   "name": "yum-proxy-rhel8-8.5",
   "online": true,
   "storage": {
@@ -421,14 +486,7 @@ curl -X 'POST'\
   "httpClient": {
     "blocked": false,
     "autoBlock": true,
-    "connection": {
-      "retries": null,
-      "userAgentSuffix": null,
-      "timeout": null,
-      "enableCircularRedirects": false,
-      "enableCookies": false,
-      "useTrustStore": true
-    },
+    "connection": null,
     "authentication": null
   },
   "routingRuleName": null,
@@ -460,14 +518,7 @@ curl -X 'POST'\
   "httpClient": {
     "blocked": false,
     "autoBlock": true,
-    "connection": {
-      "retries": null,
-      "userAgentSuffix": null,
-      "timeout": null,
-      "enableCircularRedirects": false,
-      "enableCookies": false,
-      "useTrustStore": true
-    },
+    "connection": null,
     "authentication": null
   },
   "routingRuleName": null,
