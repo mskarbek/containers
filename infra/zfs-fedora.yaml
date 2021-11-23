@@ -1,0 +1,105 @@
+---
+- hosts: local
+  gather_facts: no
+  tasks:
+    - ansible.builtin.file:
+        dest: "{{ playbook_dir }}/zfs"
+        state: directory
+    - containers.podman.podman_container:
+        name: builder
+        state: started
+        image: "{{ builder_image }}"
+        command: "sleep 60m"
+        volume:
+          - "{{ playbook_dir }}/zfs:/root/zfs:z"
+- hosts: builder
+  gather_facts: no
+  vars:
+    version_kernel: "5.14.18-200.fc34"
+    version_zfs: "2.1.1"
+  tasks:
+    - ansible.builtin.dnf:
+        name: "*"
+        state: latest
+      tags: never
+    - ansible.builtin.dnf:
+        name:
+          - autoconf
+          - automake
+          - dkms
+          - elfutils-libelf-devel
+          - gcc
+          - "kernel-devel-{{ version_kernel }}"
+          - kernel-rpm-macros
+          - kmod
+          - libaio-devel
+          - libattr-devel
+          - libblkid-devel
+          - libffi-devel
+          - libtirpc-devel
+          - libtool
+          - libudev-devel
+          - libuuid-devel
+          - make
+          - ncompress
+          - openssl-devel
+          - python3
+          - python3-cffi
+          - python3-devel
+          - python3-packaging
+          - python3-setuptools
+          - rpm-build
+          - zlib-devel
+        state: present
+      tags: never
+    - ansible.builtin.user:
+        name: mockbuild
+    - ansible.builtin.get_url:
+        url: "https://github.com/openzfs/zfs/releases/download/zfs-{{ version_zfs }}/zfs-{{ version_zfs }}.tar.gz"
+        dest: "/home/mockbuild/zfs-{{ version_zfs }}.tar.gz"
+      become: yes
+      become_user: mockbuild
+      tags: never
+    - ansible.builtin.unarchive:
+        src: "/home/mockbuild/zfs-{{ version_zfs }}.tar.gz"
+        dest: "/home/mockbuild"
+        remote_src: yes
+      become: yes
+      become_user: mockbuild
+      tags: never
+    - ansible.builtin.command:
+        cmd: ./configure
+        chdir: "/home/mockbuild/zfs-{{ version_zfs }}"
+      become: yes
+      become_user: mockbuild
+      tags: never
+    - ansible.builtin.command:
+        cmd: make -j1 rpm-utils
+        chdir: "/home/mockbuild/zfs-{{ version_zfs }}"
+      become: yes
+      become_user: mockbuild
+      tags: never
+    - ansible.builtin.command:
+        cmd: make -j1 rpm-kmod
+        chdir: "/home/mockbuild/zfs-{{ version_zfs }}"
+      become: yes
+      become_user: mockbuild
+      tags: never
+    - ansible.builtin.find:
+        paths: "/home/mockbuild/zfs-{{ version_zfs }}/"
+        patterns: "*.rpm"
+        file_type: file
+        recurse: no
+      register: rpms
+    - ansible.builtin.copy:
+        src: "{{ item.path }}"
+        dest: /root/zfs/
+        remote_src: yes
+      loop: "{{ rpms.files }}"
+- hosts: local
+  gather_facts: no
+  tasks:
+    - containers.podman.podman_container:
+        name: builder
+        state: absent
+      tags: never

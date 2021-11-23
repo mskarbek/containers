@@ -1,0 +1,41 @@
+---
+all:
+  children:
+    local:
+      hosts:
+        localhost:
+          ansible_connection: local
+    podman:
+      hosts:
+        builder-fc34:
+          ansible_connection: podman
+          ansible_python_interpreter: /usr/bin/python3
+          ansible_user: root
+          #builder_image: registry.fedoraproject.org/fedora:34
+        builder-fc35:
+          ansible_connection: podman
+          ansible_python_interpreter: /usr/bin/python3
+          ansible_user: root
+          #builder_image: registry.fedoraproject.org/fedora:35
+        builder-el7:
+          ansible_connection: podman
+          ansible_python_interpreter: /usr/bin/python3
+          ansible_user: root
+          #builder_image: registry.fedoraproject.org/fedora:34
+        builder-el8:
+          ansible_connection: podman
+          ansible_python_interpreter: /usr/libexec/platform-python
+          ansible_user: root
+        builder-al8:
+          ansible_connection: podman
+          ansible_python_interpreter: /usr/libexec/platform-python
+          ansible_user: root
+  vars:
+    ansible_connection: ssh
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_user: <USER>
+    ansible_become: yes
+    ansible_become_method: sudo
+    ansible_become_user: root
+    ansible_become_password: <PASSWORD>
+    version_zfs: "2.1.1"
