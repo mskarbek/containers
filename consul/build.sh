@@ -3,7 +3,7 @@
 CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-CONSUL_VERSION="1.10.3"
+CONSUL_VERSION="1.10.4"
 
 if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
     cp -v files/consul ${CONTAINER_PATH}/usr/local/bin/consul
@@ -23,5 +23,7 @@ rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  consul.service
+
+buildah config --volume /var/lib/consul ${CONTAINER_UUID}
 
 commit_container consul:latest

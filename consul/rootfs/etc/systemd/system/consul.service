@@ -1,15 +1,20 @@
 [Unit]
-Description=Consul
-Documentation=https://consul.io/docs/
+Description="HashiCorp Consul"
+Documentation=https://www.consul.io/
 After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
 Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+ConditionFileNotEmpty=/etc/consul.d/consul.hcl
 
 [Service]
-WorkingDirectory=/var/lib/consul
+EnvironmentFile=/etc/consul.d/consul.env
 User=consul
 Group=consul
-ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul
-Restart=always
+ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d
+ExecReload=/bin/kill --signal HUP $MAINPID
+KillMode=process
+KillSignal=SIGTERM
+Restart=on-failure
+LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target
