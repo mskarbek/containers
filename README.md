@@ -56,3 +56,25 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [redis](./redis/README.md)
 * [tinyproxy](./tinyproxy/README.md)
 * [yugabytedb](./yugabytedb/README.md)
+
+## TODO
+* 389ds
+* ara
+* grafana
+* harbor
+* kafka
+* keycloak
+* kowl
+* locust
+* loki
+* nats
+* prometheus
+* python36-devel
+* python39-devel
+* rekor
+* synth
+* tempo
+* tidb
+* vault
+* vector
+* zookeeper

@@ -1,1 +1,0 @@
-https://github.com/getsynth/synth/archive/refs/tags/v0.5.5.tar.gz
