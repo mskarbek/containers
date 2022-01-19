@@ -1,19 +1,25 @@
-. ../meta/functions.sh
+. ../meta/common.sh
 
 CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
+if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    cp -v ./files/pgdg-redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgdg-redhat.repo
+    cp -v ./files/RPM-GPG-KEY-PGDG /etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+fi
+
 dnf_cache
-
 dnf_module "disable postgresql"
-dnf_install "--enablerepo=pgdg-common --enablerepo=pgdg14 postgresql14-server postgresql14-contrib citus_14 pg_auto_failover_14 pg_qualstats_14 pg_stat_kcache_14 pg_wait_sampling_14 pg_track_settings_14"
-
-dnf_clean
+dnf_install "postgresql14-server postgresql14-contrib citus_14 pg_auto_failover_14 pg_qualstats_14 pg_stat_kcache_14 pg_wait_sampling_14 pg_track_settings_14"
 dnf_clean_cache
+dnf_clean
+
+rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
+ postgresql-initdb.service\
  postgresql-14.service
 
-clean_files
+buildah config --volume /var/lib/pgsql/14/data ${CONTAINER_UUID}
 
 commit_container postgres14:latest
