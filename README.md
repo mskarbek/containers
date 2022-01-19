@@ -20,6 +20,8 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 
 ### runtime-related
 * [base/ansible](./ansible/README.md)
+* [base/nodejs14](./nodejs14/README.md)
+* [base/nodejs16](./nodejs16/README.md)
 * [base/openjdk11-jre](./openjdk10-jre/README.md)
 * [base/openjdk17-jre](./openjdk17-jre/README.md)
 * [base/openjdk8-jre](./openjdk8-jre/README.md)
@@ -56,6 +58,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [redis](./redis/README.md)
 * [tinyproxy](./tinyproxy/README.md)
 * [yugabytedb](./yugabytedb/README.md)
+* [vsftpd](./vsftpd/README.md)
 
 ## TODO
 * 389ds

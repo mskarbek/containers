@@ -8,9 +8,6 @@ dnf_install "vsftpd passwd"
 dnf_clean_cache
 dnf_clean
 
-rm -vf ${CONTAINER_PATH}/usr/share/nginx/html/index.html
-touch ${CONTAINER_PATH}/usr/share/nginx/html/index.html
-
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  vsftpd.service
 
