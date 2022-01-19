@@ -1,15 +1,18 @@
 [Unit]
-Description=Kuma
+Description=Kuma Data Plane
 Documentation=https://kuma.io/docs/
 After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
 Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+AssertFileNotEmpty=/etc/kuma/dataplane.yaml
+AssertFileNotEmpty=/run/secrets/kuma-config
+AssertFileNotEmpty=/run/secrets/kuma-token
 
 [Service]
 WorkingDirectory=/run/kuma
-EnvironmentFile=/etc/sysconfig/kuma
+EnvironmentFile=/run/secrets/kuma-config
 User=kuma
 Group=kuma
-ExecStart=/usr/local/bin/kuma-dp run --config-dir=/run/envoy --cp-address=$CONTROLPLANE_ADDRESS --dataplane-file=/run/kuma/dataplane.yml --dataplane-token-file=/run/kuma/dataplane.token --dns-server-config-dir=/run/coredns --mesh=$MESH --name=$NAME --proxy-type=$PROXY_TYPE
+ExecStart=/usr/local/bin/kuma-dp run --log-output-path=/var/log/kuma/kuma-dp.log --cp-address=${KUMA_CP_ADDRESS} --dns-enabled=false --dataplane-file=/etc/kuma/dataplane.yaml --dataplane-token-file=/run/secrets/kuma-token --config-dir=/run/kuma/envoy/ --dns-server-config-dir=/run/kuma/coredns/
 Restart=always
 
 [Install]
