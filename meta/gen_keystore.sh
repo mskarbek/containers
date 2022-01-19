@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ -f ./keystore.p12 ]]
+if [ -f ./keystore.p12 ]
 then
     exit 0
 fi
@@ -12,7 +12,7 @@ echo ${PASS} > ./keystore.pass
 
 for PEM in ${PEMS}
 do
-    if [[ -f /etc/pki/entitlement-host/${PEM}.pem ]]
+    if [ -f /etc/pki/entitlement-host/${PEM}.pem ]
     then
         ENTITLEMENT_PATH=/etc/pki/entitlement-host
     else
