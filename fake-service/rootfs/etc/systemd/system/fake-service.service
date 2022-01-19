@@ -10,7 +10,7 @@ WorkingDirectory=/run/fake-service
 User=fake-service
 Group=fake-service
 EnvironmentFile=/etc/default/fake-service
-EnvironmentFile=-/etc/sysconfig/fake-service
+EnvironmentFile=-/etc/fake-service/env
 ExecStart=/usr/local/bin/fake-service
 Restart=always
 
