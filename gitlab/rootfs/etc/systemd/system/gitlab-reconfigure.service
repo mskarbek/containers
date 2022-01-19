@@ -1,0 +1,16 @@
+[Unit]
+Description=GitLab Reconfigure
+ConditionPathExists=!/etc/gitlab/.lock
+AssertFileNotEmpty=/run/secrets/gitlab-password
+AssertFileNotEmpty=/etc/gitlab.rb
+After=syslog.target network.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/run/secrets/gitlab-password
+ExecStart=/opt/gitlab/bin/gitlab-ctl reconfigure
+ExecStartPost=/usr/bin/touch /etc/gitlab/.lock
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target

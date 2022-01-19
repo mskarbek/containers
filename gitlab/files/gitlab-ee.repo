@@ -1,0 +1,6 @@
+[gitlab-ee]
+name=Gitlab EE
+baseurl=https://packages.gitlab.com/gitlab/gitlab-ee/el/8/$basearch
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Gitlab
