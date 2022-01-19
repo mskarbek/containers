@@ -1,33 +1,26 @@
-. ../meta/functions.sh
+. ../meta/common.sh
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 buildah from --name=${CONTAINER_UUID} scratch
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_install "glibc-minimal-langpack coreutils-single"
-
-rsync_rootfs
-
-#sed -i "s/<REPO>/${REPO}/" ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
-
 # TODO: for some unknow reason `info` scriptlet for post-installation s(t)ucks if instaled in one transaction with above packages
 # need to debug and fix to drop multiple dnf_install instances in script
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    rm -v ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
-    cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-    dnf_install "ca-certificates"
-else
-    dnf_install "ca-certificates"
-fi
-
+dnf_install "ca-certificates"
 dnf_clean
-buildah run -t ${CONTAINER_UUID} update-ca-trust
 
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    rm -v ${CONTAINER_PATH}/etc/yum.repos.d/*.repo
+if [ -z ${IMAGE_BOOTSTRAP} ] && [ -f ./files/proxy.repo ]; then
+    cp -v ./files/proxy.repo ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
+    sed -i "s/REPOSITORY_URL/${REPOSITORY_URL}/g" ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
 fi
-clean_files
 
-buildah config --cmd '[ "/usr/bin/bash" ]' ${CONTAINER_UUID}
+if [ -f ./files/*.pem ]; then
+    cp -v ./files/*.pem ${CONTAINER_PATH}/etc/pki/ca-trust/source/anchors/
+fi
+
+buildah run -t ${CONTAINER_UUID} update-ca-trust
+buildah config --env='container=oci' ${CONTAINER_UUID}
+buildah config --cmd='[ "/usr/bin/bash" ]' ${CONTAINER_UUID}
 
 commit_container micro:latest
