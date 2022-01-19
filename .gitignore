@@ -1,3 +1,4 @@
 **/.git
-**/files/
+**/files/**
 **/keystore.p12
+**/build.log
