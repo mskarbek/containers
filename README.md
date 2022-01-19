@@ -1,119 +1,50 @@
 # RHEL-based set of container images
-
 ## Idea
-
-RHEL-based containers leveraging `systemd` and its potential including `sysusers.d`, `tmpfiles.d`, eliminating shell scripts inside containers as much as possible.
-- Always latest stable RHEL release - currently 8.5, will switch to RHEL 9.0 ASAP.
-- Strongly opinionated and totally biased.
-- Heavily suffers from NIH syndrome.
-- Consul as a config server, `consul-template` as a configuration tool (not yet ;)).
+RHEL-based containers leveraging `systemd` and its potential including `sysusers.d`, `tmpfiles.d`, eliminating shell scripts inside containers as much as possible. Strongly opinionated. I do not intend to extend support to RHEL rebuilds (AmaLinux/Rocky/whatever). Pretty much every script provided in this repo should "just work" and build a fully functional image based on those RHEL rebuilds (with small adjustments in `meta/common.sh`) but I don't have need nor time to validate that.
 
 ## Build process
+Build requires valid Red Hat [subscription](https://developers.redhat.com/), RHEL 8 as a host and [`buildah`](https://buildah.io/).
+Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, some images take advantage of ZFS and require it to be used as containers (podman, buildah, based on them GitLab runners).
 
-Build requires valid Red Hat [subscription](https://developers.redhat.com/) or RHEL 8 as a host, [`podman`](https://github.com/containers/podman/) and [OpenZFS](https://github.com/openzfs/zfs/) as a storage solution for containers and volumes.
+# Images
+## Foundation
+* [micro](./micro/README.md)
+* [base](./base/README.md)
+* [systemd](./systemd/README.md)
 
-To bootstrap a whole set `cd` to the `./meta` dir, copy `ENV` to `./files`, update `./files/ENV` accordingly and run through `bootstrap.0+-.*.sh` scripts.
-- `bootstrap.00-host.sh` - makes sure that the host have required ZFS datasets setup properly
-- `bootstrap.01-download.sh` - downloads binaries for the minimal set required to properly rebuild the rest
-- `bootstrap.02-build.sh` - builds the minimal set using minimal repos set
-- `bootstrap.03-start.sh` - starts the minimal set
-- `bootstrap.04-rebuild.sh` - rebuilds the minimal set using local proxy (Nexus) with additional repos enabled
-- `bootstrap.05-restart.sh` - restarts the minimal set
-- `bootstrap.06-all.sh` - builds rest of the set
+## base-based
+### build-related
+* [base/openjdk8-jdk](./openjdk8-jdk/README.md)
+* [base/openjdk10-jdk](./openjdk10-jdk/README.md)
+* [base/openjdk17-jdk](./openjdk17-jdk/README.md)
 
-In the future, this will be converted to the proper Ansible roles/playbooks.
+### runtime-related
+* [base/openjdk8-jre](./openjdk8-jre/README.md)
+* [base/openjdk10-jre](./openjdk10-jre/README.md)
+* [base/openjdk17-jre](./openjdk17-jre/README.md)
+* [base/toolbox](./toolbox/README.md)
 
-## Meta
+## systemd-based
+### build-related
+* [buildah](./buildah/README.md)
+* [gitlab-runner-buildah](./gitlab-runner-buildah/README.md)
+* [gitlab-runner-podman](./gitlab-runner-podman/README.md)
 
-`meta` directory contains a set of helper scripts, currently in complete mess.
+### runtime-related
+* [openjdk8-jre](./openjdk8-jre/README.md)
+* [openjdk10-jre](./openjdk10-jre/README.md)
+* [openjdk17-jre](./openjdk17-jre/README.md)
+* [podman](./podman/README.md)
+* [toolbox](./toolbox/README.md)
 
-## Infra
-
-`infra` directory contains deployment playbooks/scripts.
-
-## TODO
-
-Short-term:
-- working boostrap script
-- proper image versioning
-- `consul-template`-based configuration
-
-Long-term:
-- self-sufficient CI from bootstrap
-
-## Images
-
-Stable state:
-- `micro` - the beginning of everything else
-- `base` - expands `micro` with reasonable set of packages
-- `systemd` - `base` with systemd as a container command
-
-Working state:
-- `fake-service`
-- `kafka-all-in-one` - temporary image, will be removed in favor of images with separate components
-- `knot-dns`
-- `knot-resolver`
-- `minio`
-- `nexus`
-- `nginx`
-- `nginx1.18`
-- `nodejs14`
-- `nodejs16`
-- `openjdk11-jdk`
-- `openjdk11-jre`
-- `openjdk17-jdk` - `maven` drags `java-11-openjdk` with itself, there is no `maven-openjdk17` package yet to prevent that ([rhbz#1991521](https://bugzilla.redhat.com/show_bug.cgi?id=1991521))
-- `openjdk17-jre`
-- `openjdk8-jdk`
-- `openjdk8-jre`
-- `openssh`
-- `step-ca`
-- `tinyproxy`
-- `toolbox`
-
-WIP state:
-- `golang`
-- `hazelcast-mc4`
-- `hazelcast-mc5`
-- `hazelcast4`
-- `hazelcast5`
-- `kea`
-- `pgadmin4`
-- `postgresql13`
-- `postgresql14`
-- `python36`
-- `python39`
-- `stork`
-
-Placeholder:
-- `389ds`
-- `ansible`
-- `ara`
-- `buildah`
-- `consul`
-- `fleet`
-- `grafana`
-- `harbor`
-- `kafka`
-- `keycloak`
-- `kong`
-- `kowl`
-- `kuma-cp`
-- `kuma-dp`
-- `locust`
-- `loki`
-- `mysql8`
-- `nats`
-- `prometheus`
-- `python36-devel`
-- `python39-devel`
-- `rabbitmq`
-- `redis6`
-- `rekor`
-- `rundeck`
-- `rust`
-- `svn`
-- `synth`
-- `tempo`
-- `vault`
-- `vector`
-- `zookeeper`
+### services
+* [openssh](./openssh/README.md)
+* [kuma-cp](./kuma-cp/README.md)
+* [kuma-dp](./kuma-dp/README.md)
+* [knot-dns](./knot-dns/README.md)
+* [knot-resolver](./knot-resolver/README.md)
+* [gitlab](./gitlab/README.md)
+* [yugabytedb](./yugabytedb/README.md)
+* [redis](./redis/README.md)
+* [postgresql14](./postgresql14/README.md)
+* [nexus](./nexus/README.md)
