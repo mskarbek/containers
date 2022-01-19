@@ -1,35 +1,22 @@
-. ../meta/functions.sh
+. ../meta/common.sh
 
-CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/bootstrap/systemd:latest
-else
-    buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/systemd:latest
-fi
+CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-    dnf_install "files/tinyproxy-1.11.0-1.el8.x86_64.rpm"
+if [ -f ./files/tinyproxy-1.11.0-1.el8.x86_64.rpm ] && [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    dnf_install "./files/tinyproxy-1.11.0-1.el8.x86_64.rpm"
+elif [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    dnf_install "https://download.copr.fedorainfracloud.org/results/mskarbek/tinyproxy/epel-8-x86_64/02320604-tinyproxy/tinyproxy-1.11.0-1.el8.x86_64.rpm"
 else
     dnf_install "tinyproxy"
 fi
-
-dnf_clean
 dnf_clean_cache
-
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    rm -v ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-fi
+dnf_clean
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  tinyproxy.service
 
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/bootstrap/tinyproxy:latest
-else
-    buildah commit ${CONTAINER_UUID} ${REGISTRY}/tinyproxy:latest
-fi
-buildah rm -a
+buildah config --volume /etc/tinyproxy ${CONTAINER_UUID}
+
+commit_container tinyproxy:latest
