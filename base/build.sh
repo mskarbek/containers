@@ -1,37 +1,18 @@
-. ../meta/functions.sh
+. ../meta/common.sh
 
 CONTAINER_UUID=$(create_container micro:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    REPODIR="$(pwd)/files"
-
-    cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        cat << EOF > ${CONTAINER_PATH}/etc/yum.repos.d/hyperscale.repo
-[hyperscale-main]
-name=CentOS 8 Stream - Hyperscale Main
-baseurl=file://${REPODIR}/hyperscale-main
-enabled=1
-gpgcheck=0
-
-[hyperscale-facebook]
-name=CentOS 8 Stream - Hyperscale Facebook
-baseurl=file://${REPODIR}/hyperscale-facebook
-enabled=1
-gpgcheck=0
-EOF
-
+if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    #cp -v ./files/centos-hyperscale.repo ${CONTAINER_PATH}/etc/yum.repos.d/centos-hyperscale.repo
+    #cp -v ./files/RPM-GPG-KEY-CentOS-SIG-HyperScale /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-HyperScale
     dnf_install "systemd procps-ng"
-    
-    rm -vf /etc/yum.repos.d/hyperscale.repo
 else
     dnf_install "systemd procps-ng dbus-broker"
 fi
-
-dnf_clean
 dnf_clean_cache
+dnf_clean
 
 rsync_rootfs
 
@@ -52,15 +33,9 @@ buildah run -t ${CONTAINER_UUID} systemctl mask\
  systemd-udev-trigger.service\
  systemd-udevd.service
 
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    rm -v\
-     ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo\
-     ${CONTAINER_PATH}/etc/yum.repos.d/hyperscale.repo
-else
+if [ -z ${IMAGE_BOOTSTRAP} ]; then
     buildah run -t ${CONTAINER_UUID} systemctl enable\
      dbus-broker.service
 fi
-
-clean_files
 
 commit_container base:latest
