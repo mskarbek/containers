@@ -9,7 +9,7 @@ else
     curl -L -o ${CONTAINER_PATH}/usr/local/bin/minio https://dl.min.io/server/minio/release/linux-amd64/minio
     curl -L -o ${CONTAINER_PATH}/usr/local/bin/mcli https://dl.min.io/client/mc/release/linux-amd64/mc
 fi
-chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/*
+chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/{minio,mcli}
 
 rsync_rootfs
 

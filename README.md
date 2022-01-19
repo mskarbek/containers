@@ -8,20 +8,21 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 
 # Images
 ## Foundation
-* [micro](./micro/README.md)
 * [base](./base/README.md)
+* [micro](./micro/README.md)
 * [systemd](./systemd/README.md)
 
 ## base-based
 ### build-related
-* [base/openjdk8-jdk](./openjdk8-jdk/README.md)
-* [base/openjdk10-jdk](./openjdk10-jdk/README.md)
+* [base/openjdk11-jdk](./openjdk10-jdk/README.md)
 * [base/openjdk17-jdk](./openjdk17-jdk/README.md)
+* [base/openjdk8-jdk](./openjdk8-jdk/README.md)
 
 ### runtime-related
-* [base/openjdk8-jre](./openjdk8-jre/README.md)
-* [base/openjdk10-jre](./openjdk10-jre/README.md)
+* [base/ansible](./ansible/README.md)
+* [base/openjdk11-jre](./openjdk10-jre/README.md)
 * [base/openjdk17-jre](./openjdk17-jre/README.md)
+* [base/openjdk8-jre](./openjdk8-jre/README.md)
 * [base/toolbox](./toolbox/README.md)
 
 ## systemd-based
@@ -31,20 +32,23 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [gitlab-runner-podman](./gitlab-runner-podman/README.md)
 
 ### runtime-related
-* [openjdk8-jre](./openjdk8-jre/README.md)
-* [openjdk10-jre](./openjdk10-jre/README.md)
+* [openjdk11-jre](./openjdk10-jre/README.md)
 * [openjdk17-jre](./openjdk17-jre/README.md)
+* [openjdk8-jre](./openjdk8-jre/README.md)
 * [podman](./podman/README.md)
 * [toolbox](./toolbox/README.md)
 
 ### services
-* [openssh](./openssh/README.md)
-* [kuma-cp](./kuma-cp/README.md)
-* [kuma-dp](./kuma-dp/README.md)
+* [gitlab](./gitlab/README.md)
 * [knot-dns](./knot-dns/README.md)
 * [knot-resolver](./knot-resolver/README.md)
-* [gitlab](./gitlab/README.md)
-* [yugabytedb](./yugabytedb/README.md)
-* [redis](./redis/README.md)
-* [postgresql14](./postgresql14/README.md)
+* [kuma-cp](./kuma-cp/README.md)
+* [kuma-dp](./kuma-dp/README.md)
+* [kong](./kong/README.md)
+* [krakend](./krakend/README.md)
 * [nexus](./nexus/README.md)
+* [openssh](./openssh/README.md)
+* [postgresql14](./postgresql14/README.md)
+* [redis](./redis/README.md)
+* [yugabytedb](./yugabytedb/README.md)
+* [fake-service](./fake-service/README.md)

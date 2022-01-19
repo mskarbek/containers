@@ -10,7 +10,7 @@ dnf_install "glibc-minimal-langpack coreutils-single"
 dnf_install "ca-certificates"
 dnf_clean
 
-if [ -z ${IMAGE_BOOTSTRAP} ] && [ -f ./files/proxy.repo ]; then
+if [ -f ./files/proxy.repo ]; then
     cp -v ./files/proxy.repo ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
     sed -i "s/REPOSITORY_URL/${REPOSITORY_URL}/g" ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
 fi
