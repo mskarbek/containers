@@ -1,26 +1,26 @@
-. ../meta/functions.sh
+. ../meta/common.sh
+. ./files/VERSIONS
 
-CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-buildah from --name=${CONTAINER_UUID} ${REGISTRY}/systemd:latest
+CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-TMPDIR=$(mktemp -d)
-pushd ${TMPDIR}
-curl -L https://download.konghq.com/mesh-alpine/kuma-1.2.1-rhel-amd64.tar.gz|tar xzv
-popd
-
-mv -v ${TMPDIR}/kuma*/bin/kuma-cp ${CONTAINER_PATH}/usr/local/bin/
-
-rm -rf ${TMPDIR}
-
-chown -v root:root ${CONTAINER_PATH}/usr/local/bin/*
+TMP_DIR=$(mktemp -d)
+if [ -f "./files/kuma-${KUMA_VERSION}-rhel-amd64.tar.gz" ]; then
+    tar xvf ./files/kuma-${KUMA_VERSION}-rhel-amd64.tar.gz -C ${TMP_DIR}
+else
+    pushd ${TMP_DIR}
+        curl -L https://download.konghq.com/mesh-alpine/kuma-${KUMA_VERSION}-rhel-amd64.tar.gz|tar xzv
+    popd
+fi
+mv -v ${TMP_DIR}/kuma-${KUMA_VERSION}/bin/{kuma-cp,kumactl} ${CONTAINER_PATH}/usr/local/bin/
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/*
+rm -rf ${TMP_DIR}
 
-mkdir ${CONTAINER_PATH}/var/lib/kuma
+rsync_rootfs
 
-rsync -hrvP --ignore-existing rootfs/ ${CONTAINER_PATH}/
+buildah run -t ${CONTAINER_UUID} systemctl enable\
+ kuma-cp.service
 
-buildah run -t ${CONTAINER_UUID} systemctl enable kuma-cp.service
+buildah config --volume /var/log/kuma ${CONTAINER_UUID}
 
-buildah commit ${CONTAINER_UUID} ${REGISTRY}/kuma-cp:latest
-buildah rm -a
+commit_container kuma-cp:latest
