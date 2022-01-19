@@ -1,15 +1,15 @@
-. ../meta/functions.sh
+. ../meta/common.sh
 
 CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    cp -v files/{minio,mcli} ${CONTAINER_PATH}/usr/local/bin/
+if [ -f ./files/minio ] && [ -f ./files/mcli ]; then
+    cp -v ./files/{minio,mcli} ${CONTAINER_PATH}/usr/local/bin/
 else
     curl -L -o ${CONTAINER_PATH}/usr/local/bin/minio https://dl.min.io/server/minio/release/linux-amd64/minio
     curl -L -o ${CONTAINER_PATH}/usr/local/bin/mcli https://dl.min.io/client/mc/release/linux-amd64/mc
 fi
-chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/minio
+chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/*
 
 rsync_rootfs
 

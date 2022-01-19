@@ -1,8 +1,14 @@
-# Volume to be used for MinIO server.
-MINIO_VOLUMES="/var/lib/minio/data"
-# Use if you want to run MinIO on a custom port.
+# Bind to a specific ADDRESS:PORT, ADDRESS can be an IP or hostname (default: ":9000").
+MINIO_ADDRESS=":9000"
+# Bind N number of listeners per ADDRESS:PORT (default: 1).
+MINIO_LISTENERS="1"
+# Bind to a specific ADDRESS:PORT for embedded Console UI, ADDRESS can be an IP or hostname.
+MINIO_CONSOLE_ADDRESS=":9001"
+# Extra flags: --certs-dir </root/.minio/certs> --quiet --anonymous --json
 MINIO_OPTS=""
+# Volume to be used for MinIO server.
+MINIO_VOLUMES="/var/lib/minio"
 # Root user for the server.
-MINIO_ROOT_USER=Root-User
+MINIO_ROOT_USER="root"
 # Root secret for the server.
-MINIO_ROOT_PASSWORD=Root-Pass
+MINIO_ROOT_PASSWORD="password123"
