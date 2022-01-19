@@ -1,30 +1,27 @@
-CONTAINER_ID=$(buildah from 10.88.0.2:8082/systemd:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_ID})
+. ../meta/common.sh
 
-ln -s /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/host.repo
+CONTAINER_UUID=$(create_container systemd:latest)
+CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-dnf -y\
- --disablerepo=*\
- --enablerepo=rhel-8-for-x86_64-baseos-rpms\
- --enablerepo=rhel-8-for-x86_64-appstream-rpms\
- --installroot=${CONTAINER_PATH}\
- --releasever=8.4\
- --setopt=module_platform_id=platform:el8\
- --setopt=install_weak_deps=false\
- --nodocs\
- install https://download.konghq.com/gateway-2.x-rhel-8/Packages/k/kong-2.4.1.rhel8.amd64.rpm
-dnf -y\
- --installroot=${CONTAINER_PATH}\
- --releasever=8.4\
- clean all
+dnf_cache
+if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    cp -v ./files/kong-gateway.repo ${CONTAINER_PATH}/etc/yum.repos.d/kong-gateway.repo
+    cp -v ./files/RPM-GPG-KEY-Kong-Gateway /etc/pki/rpm-gpg/RPM-GPG-KEY-Kong-Gateway
+    dnf_install "kong hostname"
+else
+    dnf_install "kong hostname"
+fi
+dnf_clean_cache
+dnf_clean
 
-rm -rvf\
- ${CONTAINER_PATH}/var/cache/*\
- ${CONTAINER_PATH}/var/log/dnf*\
- ${CONTAINER_PATH}/var/log/yum*\
- ${CONTAINER_PATH}/var/log/hawkey*\
- ${CONTAINER_PATH}/var/log/rhsm\
- ${CONTAINER_PATH}/etc/yum.repos.d/host.repo
+cp -v ${CONTAINER_PATH}/etc/kong/kong.conf.default ${CONTAINER_PATH}/etc/kong/kong.conf
 
-buildah commit ${CONTAINER_ID} 10.88.0.2:8082/kong:latest
-buildah rm -a
+sed -i 's/#anonymous_reports = on/anonymous_reports = off/' ${CONTAINER_PATH}/etc/kong/kong.conf
+sed -i 's/#database = postgres/database = off      /' ${CONTAINER_PATH}/etc/kong/kong.conf
+sed -i 's/#declarative_config =          /declarative_config = \/etc\/kong\/kong\.yaml/' ${CONTAINER_PATH}/etc/kong/kong.conf
+
+buildah run -t ${CONTAINER_UUID} kong config init /etc/kong/kong.yaml
+buildah run -t ${CONTAINER_UUID} systemctl enable\
+ kong.service
+
+commit_container kong:latest
