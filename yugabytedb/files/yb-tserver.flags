@@ -1,0 +1,4 @@
+--tserver_master_addrs=127.0.0.1:7100
+--rpc_bind_addresses=127.0.0.1:9100
+--fs_data_dirs=/var/lib/yugabyte
+--log_dir=/var/log/yugabyte
