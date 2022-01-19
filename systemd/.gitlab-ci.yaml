@@ -1,0 +1,86 @@
+default:
+  tags:
+    - buildah
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+
+stages:
+  - build
+  - push
+  - trigger
+
+build-image:
+  stage: build
+  before_script:
+    - BASE_URL=`echo $CI_REPOSITORY_URL | sed "s;\/*$CI_PROJECT_PATH.*;;"`
+    - REPO_URL="$BASE_URL/cnt/meta.git"
+    - REPO_DIR=../meta
+    - rm -fr $REPO_DIR
+    - git clone $REPO_URL $REPO_DIR
+  script:
+    - bash -ex ./build.sh
+
+push-image:
+  stage: push
+  script:
+    - skopeo copy containers-storage:$REGISTRY_URL/systemd:latest oci:$REGISTRY_URL/systemd:latest
+  needs:
+    - build-image
+
+trigger-openssh:
+  stage: trigger
+  trigger: cnt/openssh
+  needs:
+    - push-image
+
+trigger-podman:
+  stage: trigger
+  trigger: cnt/podman
+  needs:
+    - push-image
+
+trigger-buildah:
+  stage: trigger
+  trigger: cnt/buildah
+  needs:
+    - push-image
+
+trigger-nginx:
+  stage: trigger
+  trigger: cnt/nginx
+  needs:
+    - push-image
+
+trigger-kong:
+  stage: trigger
+  trigger: cnt/kong
+  needs:
+    - push-image
+
+trigger-kuma-cp:
+  stage: trigger
+  trigger: cnt/kuma-cp
+  needs:
+    - push-image
+
+trigger-kuma-dp:
+  stage: trigger
+  trigger: cnt/kuma-dp
+  needs:
+    - push-image
+
+trigger-fake-service:
+  stage: trigger
+  trigger: cnt/fake-service
+  needs:
+    - push-image
+
+trigger-minio:
+  stage: trigger
+  trigger: cnt/minio
+  needs:
+    - push-image

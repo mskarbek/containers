@@ -1,4 +1,4 @@
-. ../meta/functions.sh
+. ../meta/common.sh
 
 CONTAINER_UUID=$(create_container base:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
