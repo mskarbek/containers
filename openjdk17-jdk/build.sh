@@ -12,10 +12,11 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
             curl -L -O https://koji.mbox.centos.org/pkgs/packages/maven/3.6.2/7.module_el8.6.0+1031+e2e9e02c/noarch/maven-openjdk17-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm
         popd
     fi
-    dnf_install "java-11-openjdk-devel ./files/maven-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm ./files/maven-lib-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm ./files/maven-openjdk17-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm"
+    dnf_module "enable maven:3.6"
+    dnf_install "java-17-openjdk-devel ./files/maven-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm ./files/maven-lib-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm ./files/maven-openjdk17-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm --exclude=java-1.8.0-openjdk-headless"
 else
-    #dnf_module "enable maven:3.6"
-    dnf_install "java-11-openjdk-devel maven maven-openjdk17"
+    dnf_module "enable maven:3.6"
+    dnf_install "java-17-openjdk-devel maven maven-openjdk17 --exclude=java-1.8.0-openjdk-headless"
 fi
 dnf_clean_cache
 dnf_clean
