@@ -1,0 +1,15 @@
+[Unit]
+Description=PostgreSQL 13 database init
+ConditionPathExists=!/var/lib/pgsql/13/.lock
+ConditionFileNotEmpty=/run/secrets/postgres-password
+After=syslog.target network.target
+
+[Service]
+Type=oneshot
+Environment="PGSETUP_INITDB_OPTIONS=--pwfile=/run/secrets/postgres-password"
+ExecStart=/usr/pgsql-13/bin/postgresql-13-setup initdb
+ExecStartPost=/usr/bin/touch /var/lib/pgsql/13/.lock
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
