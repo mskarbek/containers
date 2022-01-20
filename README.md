@@ -47,6 +47,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [toolbox](./toolbox/README.md)
 
 ### services
+* [alertmanager](./alertmanager/README.md)
 * [consul](./consul/README.md)
 * [fake-service](./fake-service/README.md)
 * [gitlab](./gitlab/README.md)
@@ -64,6 +65,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [pgadmin4](./pgadmin4/README.md)
 * [postgresql13](./postgresql13/README.md)
 * [postgresql14](./postgresql14/README.md)
+* [prometheus](./prometheus/README.md)
 * [rabbitmq](./rabbitmq/README.md)
 * [tinyproxy](./tinyproxy/README.md)
 * [vsftpd](./vsftpd/README.md)
@@ -89,7 +91,6 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [mssql](./mssql/README.md)
 * [mysql8](./mysql8/README.md)
 * [nats](./nats/README.md)
-* [prometheus](./prometheus/README.md)
 * [python36-devel](./python36-devel/README.md)
 * [python39-devel](./python39-devel/README.md)
 * [redis](./redis/README.md)

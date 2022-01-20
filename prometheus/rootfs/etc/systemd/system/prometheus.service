@@ -1,0 +1,22 @@
+[Unit]
+Description=Prometheus
+Documentation=https://prometheus.io/docs/prometheus/
+After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
+Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+AssertFileNotEmpty=/etc/prometheus/prometheus.yaml
+
+[Service]
+WorkingDirectory=/run/prometheus
+User=prometheus
+Group=prometheus
+ExecStart=/usr/local/bin/prometheus\
+ --storage.tsdb.path=/var/lib/prometheus\
+ --web.listen-address="0.0.0.0:9090"\
+ --web.console.libraries=/usr/share/prometheus/console_libraries\
+ --web.console.templates=/usr/share/prometheus/consoles\
+ --config.file=/etc/prometheus/prometheus.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
