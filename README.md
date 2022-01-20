@@ -14,17 +14,21 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 
 ## base-based
 ### build-related
+* [base/golang](./golang/README.md)
+* [base/nodejs14](./nodejs14/README.md)
+* [base/nodejs16](./nodejs16/README.md)
 * [base/openjdk11-jdk](./openjdk10-jdk/README.md)
 * [base/openjdk17-jdk](./openjdk17-jdk/README.md)
 * [base/openjdk8-jdk](./openjdk8-jdk/README.md)
+* [base/rust](./rust/README.md)
 
 ### runtime-related
 * [base/ansible](./ansible/README.md)
-* [base/nodejs14](./nodejs14/README.md)
-* [base/nodejs16](./nodejs16/README.md)
 * [base/openjdk11-jre](./openjdk10-jre/README.md)
 * [base/openjdk17-jre](./openjdk17-jre/README.md)
 * [base/openjdk8-jre](./openjdk8-jre/README.md)
+* [base/python36](./python36/README.md)
+* [base/python39](./python39/README.md)
 * [base/toolbox](./toolbox/README.md)
 
 ## systemd-based
@@ -38,9 +42,12 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [openjdk17-jre](./openjdk17-jre/README.md)
 * [openjdk8-jre](./openjdk8-jre/README.md)
 * [podman](./podman/README.md)
+* [python36](./python36/README.md)
+* [python39](./python39/README.md)
 * [toolbox](./toolbox/README.md)
 
 ### services
+* [consul](./consul/README.md)
 * [fake-service](./fake-service/README.md)
 * [gitlab](./gitlab/README.md)
 * [kea](./kea/README.md)
@@ -54,11 +61,13 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [nexus](./nexus/README.md)
 * [nginx](./nginx/README.md)
 * [openssh](./openssh/README.md)
+* [postgresql13](./postgresql13/README.md)
 * [postgresql14](./postgresql14/README.md)
+* [rabbitmq](./rabbitmq/README.md)
 * [redis](./redis/README.md)
 * [tinyproxy](./tinyproxy/README.md)
-* [yugabytedb](./yugabytedb/README.md)
 * [vsftpd](./vsftpd/README.md)
+* [yugabytedb](./yugabytedb/README.md)
 
 ## TODO
 * 389ds
