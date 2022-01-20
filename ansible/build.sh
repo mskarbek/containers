@@ -1,6 +1,6 @@
 . ../meta/common.sh
 
-CONTAINER_UUID=$(create_container base:latest)
+CONTAINER_UUID=$(create_container base/python36:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
