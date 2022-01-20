@@ -1,0 +1,36 @@
+---
+- name: Create nginx pod
+  containers.podman.podman_pod:
+    name: nginx-2201121344
+    infra_image: "{{ pause_image }}"
+    infra_name: nginx-2201121344-infra
+    state: started
+    ip: "10.88.1.6"
+    publish:
+      - 80:80
+      - 443:443
+- name: Create nginx volumes
+  containers.podman.podman_volume:
+    state: present
+    name: "nginx-2201121344-app-etc"
+  tags:
+    - never
+    - nginx
+- name: Create nginx config
+  ansible.builtin.copy:
+    src: "proxy.conf"
+    dest: "/var/lib/volumes/storage/nginx-2201121344-app-etc/_data/proxy.conf"
+  tags:
+    - never
+    - nginx
+- name: Create nginx containers
+  containers.podman.podman_container:
+    pod: nginx-2201121344
+    name: nginx-2201121344-app
+    image: "{{ registry_url }}/bootstrap/nginx:latest"
+    volumes:
+      - "nginx-2201121344-app-etc:/etc/nginx/conf.d:z"
+    state: started
+  tags:
+    - never
+    - nginx

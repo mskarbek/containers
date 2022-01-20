@@ -1,0 +1,45 @@
+---
+- name: Create tinyproxy pod
+  containers.podman.podman_pod:
+    name: tinyproxy-2201121344
+    infra_image: "{{ pause_image }}"
+    infra_name: tinyproxy-2201121344-infra
+    state: started
+    ip: "10.88.1.5"
+- name: Create tinyproxy volumes
+  containers.podman.podman_volume:
+    state: present
+    name: "tinyproxy-2201121344-app-etc"
+- name: Create tinyproxy config
+  ansible.builtin.copy:
+    src: "tinyproxy.conf"
+    dest: "/var/lib/volumes/storage/tinyproxy-2201121344-app-etc/_data/tinyproxy.conf"
+- name: Create tinyproxy containers
+  containers.podman.podman_container:
+    pod: tinyproxy-2201121344
+    name: tinyproxy-2201121344-app
+    image: "{{ registry_url }}/bootstrap/tinyproxy:latest"
+    volumes:
+      - "tinyproxy-2201121344-app-etc:/etc/tinyproxy:z"
+    state: started
+- name: Create mesh token
+  containers.podman.podman_secret:
+    name: tinyproxy-2201121344-token
+    state: absent
+- name: Create mesh token
+  ansible.builtin.shell:
+    cmd: "podman exec kuma-2201121344-app kumactl generate dataplane-token --mesh=infra --name=tinyproxy-2201121344|podman secret create tinyproxy-2201121344-token -"
+- name: Create mesh dataplanes
+  ansible.builtin.copy:
+    src: "dataplane.yaml"
+    dest: "/var/lib/volumes/storage/tinyproxy-2201121344-mesh-etc/_data/dataplane.yaml"
+- name: Create mesh containers
+  containers.podman.podman_container:
+    pod: "tinyproxy-2201121344"
+    name: "tinyproxy-2201121344-mesh"
+    image: "{{ registry_url }}/bootstrap/kuma-dp:latest"
+    secrets:
+      - "tinyproxy-2201121344-token,type=mount,target=kuma-token"
+    volumes:
+      - "tinyproxy-2201121344-mesh-etc:/etc/kuma:z"
+    state: started

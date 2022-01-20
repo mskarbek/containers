@@ -1,0 +1,15 @@
+- name: Create minio secret
+  containers.podman.podman_secret:
+    name: minio-root-password
+    data: |
+      MINIO_ROOT_USER=root
+      MINIO_ROOT_PASSWORD=password123
+    state: present
+- name: Create minio containers
+  containers.podman.podman_container:
+    pod: minio-2201121344
+    name: minio-2201121344-app
+    image: "{{ registry_url }}/bootstrap/minio:latest"
+    secrets:
+      - "minio-root-password,type=mount"
+    state: started

@@ -1,0 +1,28 @@
+- name: Create nexus volumes
+  containers.podman.podman_volume:
+    state: present
+    name: "nexus-2201121344-app-var"
+  tags:
+    - never
+    - nexus
+- name: Create nexus secret
+  containers.podman.podman_secret:
+    name: nexus-password
+    data: NEXUS_PASSWORD=password123
+    state: present
+  tags:
+    - never
+    - nexus
+- name: Create nexus containers
+  containers.podman.podman_container:
+    pod: nexus-2201121344
+    name: nexus-2201121344-app
+    image: "{{ registry_url }}/bootstrap/nexus:latest"
+    volumes:
+      - "nexus-2201121344-app-var:/var/lib/sonatype-work:z"
+    secrets:
+      - "nexus-password,type=mount"
+    state: started
+  tags:
+    - never
+    - nexus

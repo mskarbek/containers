@@ -1,0 +1,22 @@
+---
+- hosts: local
+  gather_facts: no
+  vars:
+    registry_url: registry.lab.skarbek.name
+    pause_image: registry.access.redhat.com/ubi8/pause:8.5
+  tasks:
+    - name: Create kuma
+      ansible.builtin.import_role:
+        name: kuma
+    - name: Create tinyproxy
+      ansible.builtin.import_role:
+        name: tinyproxy
+    - name: Create nginx
+      ansible.builtin.import_role:
+        name: nginx
+    - name: Create minio
+      ansible.builtin.import_role:
+        name: minio
+    - name: Create nexus
+      ansible.builtin.import_role:
+        name: nexus
