@@ -14,8 +14,8 @@ else
 fi
 mv -v ${TMP_DIR}/prometheus-${PROMETHEUS_VERSION}.linux-amd64/{prometheus,promtool} ${CONTAINER_PATH}/usr/local/bin/
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/*
-mkdir -vp /usr/share/prometheus
-mv -v ${TMP_DIR}/prometheus-${PROMETHEUS_VERSION}.linux-amd64/{consoles,console_libraries,prometheus.yml} /usr/share/prometheus/
+mkdir -vp ${CONTAINER_PATH}/usr/share/prometheus
+mv -v ${TMP_DIR}/prometheus-${PROMETHEUS_VERSION}.linux-amd64/{consoles,console_libraries,prometheus.yml} ${CONTAINER_PATH}/usr/share/prometheus/
 rm -rf ${TMP_DIR}
 
 rsync_rootfs
