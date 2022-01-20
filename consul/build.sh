@@ -15,7 +15,7 @@ else
         unzip consul_${CONSUL_VERSION}_linux_amd64.zip
     popd
 fi
-mv -v ${TMPDIR}/consul ${CONTAINER_PATH}/usr/local/bin/consul
+mv -v ${TMP_DIR}/consul ${CONTAINER_PATH}/usr/local/bin/consul
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/consul
 rm -rf ${TMP_DIR}
 
