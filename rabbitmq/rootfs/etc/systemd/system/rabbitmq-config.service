@@ -7,6 +7,7 @@ AssertFileNotEmpty=/run/secrets/rabbitmq-passowrd
 
 [Service]
 Type=oneshot
+Environment=LC_ALL=C.UTF-8
 EnvironmentFile=/run/secrets/rabbitmq-passowrd
 ExecStart=/usr/bin/bash /usr/local/bin/rabbitmq-config.sh
 ExecStartPost=/usr/bin/touch /var/lib/rabbitmq/.lock
