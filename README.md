@@ -77,14 +77,14 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [redis](./redis/README.md)
 * [rundeck](./rundeck/README.md)
 * [step-ca](./step-ca/README.md)
-* [stork](./stork/README.md)
-* [svn](./svn/README.md)
 * [tinyproxy](./tinyproxy/README.md)
 * [vsftpd](./vsftpd/README.md)
 * [yugabytedb](./yugabytedb/README.md)
 
 ## TODO
 * [base/openjdk17-jdk](./openjdk17-jdk/README.md) - maven needs rebuild
+* [stork](./stork/README.md)
+* [svn](./svn/README.md)
 * 389ds
 * ara
 * grafana
@@ -95,6 +95,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * locust
 * loki
 * nats
+* mssql
 * prometheus
 * python36-devel
 * python39-devel
