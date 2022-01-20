@@ -18,7 +18,6 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [base/nodejs14](./nodejs14/README.md)
 * [base/nodejs16](./nodejs16/README.md)
 * [base/openjdk11-jdk](./openjdk10-jdk/README.md)
-* [base/openjdk17-jdk](./openjdk17-jdk/README.md)
 * [base/openjdk8-jdk](./openjdk8-jdk/README.md)
 * [base/rust](./rust/README.md)
 
@@ -49,6 +48,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 ### services
 * [consul](./consul/README.md)
 * [fake-service](./fake-service/README.md)
+* [fleet](./fleet/README.md)
 * [gitlab](./gitlab/README.md)
 * [kea](./kea/README.md)
 * [knot-dns](./knot-dns/README.md)
@@ -58,6 +58,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [kuma-cp](./kuma-cp/README.md)
 * [kuma-dp](./kuma-dp/README.md)
 * [minio](./minio/README.md)
+* [mysql8](./mysql8/README.md)
 * [nexus](./nexus/README.md)
 * [nginx](./nginx/README.md)
 * [openssh](./openssh/README.md)
@@ -70,6 +71,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [yugabytedb](./yugabytedb/README.md)
 
 ## TODO
+* [base/openjdk17-jdk](./openjdk17-jdk/README.md) - maven needs rebuild
 * 389ds
 * ara
 * grafana
