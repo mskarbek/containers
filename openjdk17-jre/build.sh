@@ -4,7 +4,7 @@ CONTAINER_UUID=$(create_container base:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
+if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     dnf_install "java-17-openjdk-headless"
 else
     dnf_install "java-17-openjdk-headless tomcat-native apr"
