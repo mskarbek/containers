@@ -3,10 +3,13 @@ Description=RabbitMq configuration
 After=rabbitmq-server.service rabbitmq-password.service
 Requires=rabbitmq-server.service rabbitmq-password.service
 ConditionPathExists=!/var/lib/rabbitmq/.lock
+AssertFileNotEmpty=/run/secrets/rabbitmq-passowrd
 
 [Service]
 Type=oneshot
+EnvironmentFile=/run/secrets/rabbitmq-passowrd
 ExecStart=/usr/bin/bash /usr/local/bin/rabbitmq-config.sh
+ExecStartPost=/usr/bin/touch /var/lib/rabbitmq/.lock
 RemainAfterExit=false
 
 [Install]
