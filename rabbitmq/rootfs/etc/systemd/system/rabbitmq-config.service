@@ -1,7 +1,7 @@
 [Unit]
 Description=RabbitMq configuration
-After=rabbitmq-server.service rabbitmq-passowrd.service
-Requires=rabbitmq-server.service rabbitmq-passowrd.service
+After=rabbitmq-server.service rabbitmq-password.service
+Requires=rabbitmq-server.service rabbitmq-password.service
 ConditionPathExists=!/var/lib/rabbitmq/.lock
 
 [Service]

@@ -17,7 +17,7 @@ dnf_clean
 rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
- rabbitmq-passowrd.service\
+ rabbitmq-password.service\
  rabbitmq-config.service\
  rabbitmq-server.service
 
