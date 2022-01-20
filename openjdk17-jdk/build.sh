@@ -1,44 +1,23 @@
-. ../meta/functions.sh
+. ../meta/common.sh
 
 CONTAINER_UUID=$(create_container base/openjdk17-jre:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-
-if [[ ! -z ${IMAGE_BOOTSTRAP} ]]; then
-    cat << EOF > ${CONTAINER_PATH}/etc/yum.repos.d/beta.repo
-[rhel-8-beta-for-x86_64-baseos-rpms]
-name=Red Hat Enterprise Linux 8 Beta for x86_64 - BaseOS (RPMs)
-baseurl=file:///mnt/BaseOS/
-enabled=1
-gpgcheck=0
-
-[rhel-8-beta-for-x86_64-appstream-rpms]
-name=Red Hat Enterprise Linux 8 Beta for x86_64 - AppStream (RPMs)
-baseurl=file:///mnt/AppStream/
-enabled=1
-gpgcheck=0
-EOF
-    dnf_module "enable maven:3.6"
-    dnf_install "java-17-openjdk-devel maven"
-    rm -f ${CONTAINER_PATH}/etc/yum.repos.d/beta.repo
+if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    if [ ! -f ./files/maven-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm ] || [ ! -f ./files/maven-lib-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm ] || [ ! -f ./files/maven-openjdk17-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm ]; then
+        pushd ./files
+            curl -L -O https://koji.mbox.centos.org/pkgs/packages/maven/3.6.2/7.module_el8.6.0+1031+e2e9e02c/noarch/maven-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm
+            curl -L -O https://koji.mbox.centos.org/pkgs/packages/maven/3.6.2/7.module_el8.6.0+1031+e2e9e02c/noarch/maven-lib-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm
+            curl -L -O https://koji.mbox.centos.org/pkgs/packages/maven/3.6.2/7.module_el8.6.0+1031+e2e9e02c/noarch/maven-openjdk17-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm
+        popd
+    fi
+    dnf_install "java-11-openjdk-devel ./files/maven-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm ./files/maven-lib-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm ./files/maven-openjdk17-3.6.2-7.module_el8.6.0+1031+e2e9e02c.noarch.rpm"
 else
-    dnf_module "enable maven:3.6"
-    dnf_install "java-17-openjdk-devel maven"
+    #dnf_module "enable maven:3.6"
+    dnf_install "java-11-openjdk-devel maven maven-openjdk17"
 fi
-
-dnf_clean
 dnf_clean_cache
-
-clean_files
+dnf_clean
 
 commit_container base/openjdk17-jdk:latest
-
-
-CONTAINER_UUID=$(create_container base/openjdk17-jdk:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
-
-buildah config --cmd '[ "/usr/sbin/init" ]' ${CONTAINER_UUID}
-buildah config --stop-signal 'SIGRTMIN+3' ${CONTAINER_UUID}
-
-commit_container openjdk17-jdk:latest
