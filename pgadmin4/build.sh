@@ -1,18 +1,22 @@
-. ../meta/functions.sh
+. ../meta/common.sh
 
-CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY}/systemd:latest
+CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-
 dnf_module "disable postgresql"
-dnf_install "--enablerepo=pgdg-common --enablerepo=pgdg13 --enablerepo=pgadmin4 libstdc++ pgadmin4-web"
-
-dnf_clean
+if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    cp -v ./files/pgdg-redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgdg-redhat.repo
+    cp -v ./files/pgadmin4.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgadmin4.repo
+    cp -v ./files/RPM-GPG-KEY-PGDG /etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+    cp -v ./files/RPM-GPG-KEY-PGADMIN /etc/pki/rpm-gpg/RPM-GPG-KEY-PGADMIN
+    dnf_install "libstdc++ pgadmin4-web"
+else
+    dnf_install "libstdc++ pgadmin4-web"
+fi
 dnf_clean_cache
+dnf_clean
 
-clean_files
+#buildah run -t ${CONTAINER_UUID} /usr/pgadmin4/bin/setup-web.sh
 
-buildah commit ${CONTAINER_UUID} ${REGISTRY}/pgadmin4:latest
-buildah rm -a
+commit_container pgadmin4:latest
