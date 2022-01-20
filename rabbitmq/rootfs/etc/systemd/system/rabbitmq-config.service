@@ -6,7 +6,7 @@ ConditionPathExists=!/var/lib/rabbitmq/.lock
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local.bin/rabbitmq-config
+ExecStart=/usr/local/bin/rabbitmq-config
 RemainAfterExit=false
 
 [Install]
