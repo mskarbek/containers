@@ -1,0 +1,18 @@
+[Unit]
+Description=Standalone Jenkins Master server
+Documentation=https://www.jenkins.io/doc
+After=network.target nss-lookup.target systemd-tmpfiles-setup.service jenkins-plugin-manager.service
+Requires=systemd-tmpfiles-setup.service
+
+[Service]
+WorkingDirectory=/var/lib/jenkins
+User=jenkins
+Group=jenkins
+EnvironmentFile=/etc/sysconfig/jenkins
+Environment=JENKINS_WAR=/usr/lib/jenkins/jenkins.war
+Environment=JENKINS_LISTEN_ADDRESS=0.0.0.0
+LimitNOFILE=8192
+ExecStart=/usr/bin/java ${JENKINS_JAVA_OPTIONS} -DJENKINS_HOME=${JENKINS_HOME} -jar ${JENKINS_WAR} --logfile=/var/log/jenkins/jenkins.log --webroot=/var/cache/jenkins/war --httpPort=${JENKINS_PORT} --httpListenAddress=0.0.0.0 --debug=${JENKINS_DEBUG_LEVEL} --handlerCountMax=${JENKINS_HANDLER_MAX} --handlerCountMaxIdle=${JENKINS_HANDLER_IDLE}
+
+[Install]
+WantedBy=multi-user.target

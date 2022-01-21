@@ -85,6 +85,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [hazelcast-mc5](./hazelcast-mc5/README.md)
 * [hazelcast4](./hazelcast4/README.md)
 * [hazelcast5](./hazelcast5/README.md)
+* [jenkins](./jenkins/README.md)
 * [kafka-all-in-one](./kafka-all-in-one/README.md)
 * [kafka](./kafka/README.md)
 * [keycloak](./keycloak/README.md)
