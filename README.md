@@ -66,6 +66,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [postgresql13](./postgresql13/README.md)
 * [postgresql14](./postgresql14/README.md)
 * [prometheus](./prometheus/README.md)
+* [pushgateway](./pushgateway/README.md)
 * [rabbitmq](./rabbitmq/README.md)
 * [tinyproxy](./tinyproxy/README.md)
 * [vsftpd](./vsftpd/README.md)
