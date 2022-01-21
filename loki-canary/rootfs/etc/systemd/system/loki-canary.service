@@ -1,0 +1,38 @@
+[Unit]
+Description=Loki Canary
+Documentation=https://grafana.com/docs/loki/latest/operations/loki-canary/
+After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
+Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+AssertFileNotEmpty=/etc/sysconfig/loki-canary
+
+[Service]
+WorkingDirectory=/run/loki-canary
+EnvironmentFile=/etc/default/loki-canary
+EnvironmentFile=/etc/sysconfig/loki-canary
+User=loki-canary
+Group=loki-canary
+ExecStart=/usr/local/bin/loki-canary\
+ -addr $LOKI_CANARY_ADDR\
+ -buckets $LOKI_CANARY_BUCKETS\
+ -interval $LOKI_CANARY_INTERVAL\
+ -labelname $LOKI_CANARY_LABELNAME\
+ -labelvalue $LOKI_CANARY_LABELVALUE\
+ -metric-test-interval $LOKI_CANARY_METRIC_TEST_INTERVAL\
+ -metric-test-range $LOKI_CANARY_METRIC_TEST_RANGE\
+ -out-of-order-max $LOKI_CANARY_OUT_OF_ORDER_MAX\
+ -out-of-order-min $LOKI_CANARY_OUT_OF_ORDER_MIN\
+ -port $LOKI_CANARY_PORT\
+ -pruneinterval $LOKI_CANARY_PRUNEINTERVAL\
+ -query-timeout $LOKI_CANARY_QUERY_TIMEOUT\
+ -size $LOKI_CANARY_SIZE\
+ -spot-check-interval $LOKI_CANARY_SPOT_CHECK_INTERVAL\
+ -spot-check-max $LOKI_CANARY_SPOT_CHECK_MAX\
+ -spot-check-query-rate $LOKI_CANARY_SPOT_CHECK_QUERY_RATE\
+ -streamname $LOKI_CANARY_STREAMNAME\
+ -streamvalue $LOKI_CANARY_STREAMVALUE\
+ -wait $LOKI_CANARY_WAIT\
+ $LOKI_CANARY_OPTS
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
