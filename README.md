@@ -51,6 +51,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [consul](./consul/README.md)
 * [fake-service](./fake-service/README.md)
 * [gitlab](./gitlab/README.md)
+* [grafana](./grafana/README.md)
 * [influxdb](./influxdb/README.md)
 * [kea](./kea/README.md)
 * [knot-dns](./knot-dns/README.md)
@@ -79,7 +80,6 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [ara](./ara/README.md)
 * [base/openjdk17-jdk](./openjdk17-jdk/README.md) - needs maven from RHEL 8.6
 * [fleet](./fleet/README.md)
-* [grafana](./grafana/README.md)
 * [harbor](./harbor/README.md)
 * [hazelcast-mc4](./hazelcast-mc4/README.md)
 * [hazelcast-mc5](./hazelcast-mc5/README.md)
