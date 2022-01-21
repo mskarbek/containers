@@ -72,6 +72,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [pushgateway](./pushgateway/README.md)
 * [rabbitmq](./rabbitmq/README.md)
 * [tinyproxy](./tinyproxy/README.md)
+* [vector](./vector/README.md)
 * [vsftpd](./vsftpd/README.md)
 * [yugabytedb](./yugabytedb/README.md)
 
