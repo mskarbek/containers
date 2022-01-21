@@ -51,6 +51,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [consul](./consul/README.md)
 * [fake-service](./fake-service/README.md)
 * [gitlab](./gitlab/README.md)
+* [influxdb](./influxdb/README.md)
 * [kea](./kea/README.md)
 * [knot-dns](./knot-dns/README.md)
 * [knot-resolver](./knot-resolver/README.md)
