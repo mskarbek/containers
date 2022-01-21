@@ -14,6 +14,9 @@ fi
 dnf_clean_cache
 dnf_clean
 
+mkdir -v ${CONTAINER_PATH}/usr/share/vector
+mv -v ${CONTAINER_PATH}/etc/vector/* ${CONTAINER_PATH}/usr/share/vector/
+
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  vector.service
  
