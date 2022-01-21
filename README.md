@@ -63,6 +63,7 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 * [nexus](./nexus/README.md)
 * [nginx](./nginx/README.md)
 * [openssh](./openssh/README.md)
+* [openvscode](./openvscode/README.md)
 * [pgadmin4](./pgadmin4/README.md)
 * [postgresql13](./postgresql13/README.md)
 * [postgresql14](./postgresql14/README.md)

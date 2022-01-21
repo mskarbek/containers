@@ -1,0 +1,11 @@
+[Unit]
+Description=OpenVSCode connection token generator
+ConditionFileNotEmpty=!/run/secrets/connection-token
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -c 'printf "CONNECTION_TOKEN=$(cat /proc/sys/kernel/random/uuid)\n" > /run/secrets/connection-token'
+RemainAfterExit=false
+
+[Install]
+WantedBy=multi-user.target
