@@ -1,0 +1,19 @@
+[Unit]
+Description=ara
+Documentation=https://ara.readthedocs.io/
+After=systemd-sysusers.service systemd-tmpfiles-setup.service
+Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+ConditionPathExists=!/var/lib/ara/.lock
+
+[Service]
+Type=oneshot
+WorkingDirectory=/var/lib/ara
+Environment=ARA_BASE_DIR=/var/lib/ara
+User=ara
+Group=ara
+ExecStart=/usr/local/bin/ara-manage migrate
+ExecStartPost=/usr/bin/touch /var/lib/ara/.lock
+RemainAfterExit=false
+
+[Install]
+WantedBy=multi-user.target
