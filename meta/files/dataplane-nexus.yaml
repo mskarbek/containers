@@ -1,0 +1,26 @@
+---
+type: Dataplane
+mesh: inf
+name: inf-nexus-DEPLOYMENT_ID
+networking:
+  address: 10.88.0.5
+  inbound:
+    - port: 9090
+      servicePort: 8081
+      serviceAddress: 127.0.0.1
+      tags:
+        kuma.io/service: nexus-repo
+        kuma.io/protocol: http
+    - port: 9091
+      servicePort: 8082
+      serviceAddress: 127.0.0.1
+      tags:
+        kuma.io/service: nexus-registry
+        kuma.io/protocol: http
+  outbound:
+    - port: 9092
+      tags:
+        kuma.io/service: tinyproxy
+    - port: 9093
+      tags:
+        kuma.io/service: minio-api

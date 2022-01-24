@@ -1,0 +1,22 @@
+---
+type: Dataplane
+mesh: inf
+name: inf-nginx-DEPLOYMENT_ID
+networking:
+  address: 10.88.0.6
+  gateway:
+    tags:
+      kuma.io/service: ingress
+  outbound:
+    - port: 9090
+      tags:
+        kuma.io/service: kuma
+    - port: 9091
+      tags:
+        kuma.io/service: minio-gui
+    - port: 9092
+      tags:
+        kuma.io/service: nexus-repo
+    - port: 9093
+      tags:
+        kuma.io/service: nexus-registry
