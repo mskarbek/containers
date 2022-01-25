@@ -37,7 +37,8 @@ podman pod create\
  --infra-name=inf-gitlab-${DEPLOYMENT_ID}-infra\
  --hostname=inf-gitlab-${DEPLOYMENT_ID}\
  --name=inf-gitlab-${DEPLOYMENT_ID}\
- --ip=10.88.0.6
+ --ip=10.88.0.6\
+ --publish=2222:22
 podman pod create\
  --infra-image=${REGISTRY_URL}/pause:8.5-1\
  --infra-name=inf-nginx-${DEPLOYMENT_ID}-infra\
