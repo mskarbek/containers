@@ -5,12 +5,13 @@ CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 TMP_DIR=$(mktemp -d)
+CWD=$(pwd)
 if [ -f "./files/nats-server-v${NATS_VERSION}-linux-amd64.tar.gz" ] && [ -f "./files/nats-top_${NATSTOP_VERSION}_linux_amd64.tar.gz" ] && [ -f "./files/nats-${NATSCLI_VERSION}-linux-amd64.zip" ] && [ -f "./files/nsc-linux-amd64.zip" ]; then
     pushd ${TMP_DIR}
-        tar xvf ./files/nats-server-v${NATS_VERSION}-linux-amd64.tar.gz
-        tar xvf ./files/nats-top_${NATSTOP_VERSION}_linux_amd64.tar.gz
-        unzip ./files/nats-${NATSCLI_VERSION}-linux-amd64.zip
-        unzip ./files/nsc-linux-amd64.zip
+        tar xvf ${CWD}/files/nats-server-v${NATS_VERSION}-linux-amd64.tar.gz
+        tar xvf ${CWD}/files/nats-top_${NATSTOP_VERSION}_linux_amd64.tar.gz
+        unzip ${CWD}/files/nats-${NATSCLI_VERSION}-linux-amd64.zip
+        unzip ${CWD}/files/nsc-linux-amd64.zip
     popd
 else
     pushd ${TMP_DIR}
