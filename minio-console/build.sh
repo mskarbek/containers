@@ -14,7 +14,6 @@ chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/minio-console
 rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
- minio-config.service\
  minio-console.service
 
 buildah config --volume /etc/minio ${CONTAINER_UUID}
