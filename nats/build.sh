@@ -18,8 +18,8 @@ else
         curl -L https://github.com/nats-io/nats-top/releases/download/v${NATSTOP_VERSION}/nats-top_${NATSTOP_VERSION}_linux_amd64.tar.gz|tar xzv
         curl -L -O https://github.com/nats-io/natscli/releases/download/v${NATSCLI_VERSION}/nats-${NATSCLI_VERSION}-linux-amd64.zip
         curl -L -O https://github.com/nats-io/nsc/releases/download/${NSC_VERSION}/nsc-linux-amd64.zip
-        unzip ./files/nats-${NATSCLI_VERSION}-linux-amd64.zip
-        unzip ./files/nsc-linux-amd64.zip
+        unzip ./nats-${NATSCLI_VERSION}-linux-amd64.zip
+        unzip ./nsc-linux-amd64.zip
     popd
 fi
 mv -v ${TMP_DIR}/nats-server-v${NATS_VERSION}-linux-amd64/nats-server ${CONTAINER_PATH}/usr/local/bin/
