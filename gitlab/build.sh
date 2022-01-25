@@ -23,6 +23,9 @@ dnf_clean
 
 rsync_rootfs
 
+buildah run -t ${CONTAINER_UUID} systemctl enable\
+ gitlab-reconfigure.service
+
 buildah config --volume /etc/gitlab ${CONTAINER_UUID}
 buildah config --volume /var/log/gitlab ${CONTAINER_UUID}
 buildah config --volume /var/opt/gitlab ${CONTAINER_UUID}
