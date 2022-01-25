@@ -3,7 +3,7 @@ type: Dataplane
 mesh: inf
 name: inf-nginx-DEPLOYMENT_ID
 networking:
-  address: 10.88.0.6
+  address: 10.88.0.7
   gateway:
     tags:
       kuma.io/service: ingress
@@ -20,3 +20,9 @@ networking:
     - port: 9093
       tags:
         kuma.io/service: nexus-registry
+    - port: 9094
+      tags:
+        kuma.io/service: gitlab-gui
+    - port: 9095
+      tags:
+        kuma.io/service: gitlab-ssh
