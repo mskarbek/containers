@@ -1,0 +1,8 @@
+# Salt to encrypt JWT payload
+export CONSOLE_PBKDF_PASSPHRASE=SECRET
+
+# Required to encrypt JWT payload
+export CONSOLE_PBKDF_SALT=SECRET
+
+# MinIO Endpoint
+export CONSOLE_MINIO_SERVER=http://localhost:9000

@@ -2,8 +2,8 @@
 MINIO_ADDRESS=":9000"
 # Bind N number of listeners per ADDRESS:PORT (default: 1).
 MINIO_LISTENERS="1"
-# Bind to a specific ADDRESS:PORT for embedded Console UI, ADDRESS can be an IP or hostname.
-MINIO_CONSOLE_ADDRESS=":9001"
+# Specify off to disable the embedded MinIO Console.
+MINIO_BROWSER="off"
 # Extra flags: --certs-dir </root/.minio/certs> --quiet --anonymous --json
 MINIO_OPTS=""
 # Volume to be used for MinIO server.
