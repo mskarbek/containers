@@ -242,6 +242,7 @@ podman run\
  --detach\
  --pod=inf-gitlab-${DEPLOYMENT_ID}\
  --name=inf-gitlab-${DEPLOYMENT_ID}-app\
+ --cap-add=AUDIT_WRITE\
  --volume=inf-gitlab-${DEPLOYMENT_ID}-app-etc:/etc/gitlab:z\
  --volume=inf-gitlab-${DEPLOYMENT_ID}-app-opt:/var/opt/gitlab:z\
  --volume=inf-gitlab-${DEPLOYMENT_ID}-app-log:/var/log/gitlab:z\
