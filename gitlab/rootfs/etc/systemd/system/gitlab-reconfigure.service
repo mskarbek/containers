@@ -2,7 +2,7 @@
 Description=GitLab Reconfigure
 ConditionPathExists=!/etc/gitlab/.lock
 AssertFileNotEmpty=/run/secrets/gitlab-password
-AssertFileNotEmpty=/etc/gitlab.rb
+AssertFileNotEmpty=/etc/gitlab/gitlab.rb
 After=syslog.target network.target
 
 [Service]
