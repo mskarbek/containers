@@ -1,13 +1,12 @@
-{
-  "retry_join" : ["127.0.0.1"],
-  "data_dir": "/var/lib/consul",
-  "log_level": "INFO",
-  "server": true,
-  "node_name": "master",
-  "addresses": {
-    "https": "0.0.0.0"
-  },
-  "bind_addr": "0.0.0.0",
-  "ui": true,
-  "bootstrap_expect": 1
+node_name = "consul-server"
+server    = true
+bootstrap = true
+ui_config {
+  enabled = true
+}
+datacenter = "dc1"
+data_dir   = "/var/lib/consul"
+log_level  = "INFO"
+addresses {
+  http = "0.0.0.0"
 }
