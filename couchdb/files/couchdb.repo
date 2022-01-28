@@ -1,0 +1,6 @@
+[couchdb]
+name=couchdb
+baseurl=https://apache.jfrog.io/artifactory/couchdb-rpm/el$releasever/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-couchdb
