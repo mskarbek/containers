@@ -18,7 +18,7 @@ buildah run -t --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUIL
 CONTAINER_UUID=$(create_container base/nodejs16:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-mv -v ${BUILD_PATH}${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${CONTAINER_PATH}/usr/local/lib/zigbee2mqtt
+mv -v ${BUILD_PATH}${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${CONTAINER_PATH}/usr/lib/zigbee2mqtt
 rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\

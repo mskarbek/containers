@@ -10,7 +10,7 @@ Type=simple
 User=zigbee2mqtt
 Group=zigbee2mqtt
 Environment=ZIGBEE2MQTT_DATA=/var/lib/zigbee2mqtt
-WorkingDirectory=/var/lib/zigbee2mqtt
+WorkingDirectory=/usr/lib/zigbee2mqtt
 ExecStart=/usr/bin/npm start
 Restart=on-failure
 
