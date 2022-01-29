@@ -1,6 +1,6 @@
 . ../meta/common.sh
 
-CONTAINER_UUID=$(create_container base/node16:latest)
+CONTAINER_UUID=$(create_container base/nodejs16:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
