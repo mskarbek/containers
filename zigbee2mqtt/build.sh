@@ -13,7 +13,10 @@ else
     popd
 fi
 
-buildah run -t --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} npm ci
+buildah run -t --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} npm ci --no-audit --no-optional --no-update-notifier
+buildah run -t --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} npm run build
+buildah run -t --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} rm -rf ./node_modules
+buildah run -t --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} npm ci --production --no-audit --no-optional --no-update-notifier 
 
 CONTAINER_UUID=$(create_container base/nodejs16:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
