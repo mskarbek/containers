@@ -1,0 +1,13 @@
+[Unit]
+Description=CouchDB config generator
+AssertFileNotEmpty=/run/secrets/couchdb-password
+ConditionPathExists=!/opt/couchdb/etc/local.d/10-admins.ini
+After=couchdb-password.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -c "printf \"[admins]\nadmin = $(cat /run/secrets/couchdb-password)\n\" > /opt/couchdb/etc/local.d/10-admins.ini"
+User=couchdb
+Group=couchdb
+UMask=0027
+RemainAfterExit=false
