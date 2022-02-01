@@ -16,6 +16,7 @@ dnf_clean
 
 rsync_rootfs
 
+buildah run -t ${CONTAINER_UUID} systemctl set-default multi-user.target
 buildah run -t ${CONTAINER_UUID} systemctl mask\
  console-getty.service\
  dev-hugepages.mount\
