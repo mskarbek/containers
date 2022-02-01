@@ -14,9 +14,9 @@ fi
 
 if [ -f ./files/*.pem ]; then
     cp -v ./files/*.pem ${CONTAINER_PATH}/etc/pki/ca-trust/source/anchors/
+    buildah run -t ${CONTAINER_UUID} update-ca-trust
 fi
 
-buildah run -t ${CONTAINER_UUID} update-ca-trust
 buildah config --env='container=oci' ${CONTAINER_UUID}
 buildah config --cmd='[ "/usr/bin/bash" ]' ${CONTAINER_UUID}
 
