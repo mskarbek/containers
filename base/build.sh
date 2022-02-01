@@ -3,14 +3,13 @@
 CONTAINER_UUID=$(create_container micro:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-dnf_cache
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-    #cp -v ./files/centos-hyperscale.repo ${CONTAINER_PATH}/etc/yum.repos.d/centos-hyperscale.repo
-    #cp -v ./files/RPM-GPG-KEY-CentOS-SIG-HyperScale /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-HyperScale
-    dnf_install "systemd procps-ng"
-else
-    dnf_install "systemd procps-ng dbus-broker"
+    cp -v ./files/epel.repo ${CONTAINER_PATH}/etc/yum.repos.d/epel.repo
+    cp -v ./files/RPM-GPG-KEY-EPEL-8 /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8
 fi
+
+dnf_cache
+dnf_install "systemd procps-ng dbus-broker"
 dnf_clean_cache
 dnf_clean
 
@@ -33,10 +32,7 @@ buildah run -t ${CONTAINER_UUID} systemctl mask\
  systemd-resolved.service\
  systemd-udev-trigger.service\
  systemd-udevd.service
-
-if [ -z ${IMAGE_BOOTSTRAP} ]; then
-    buildah run -t ${CONTAINER_UUID} systemctl enable\
-     dbus-broker.service
-fi
+buildah run -t ${CONTAINER_UUID} systemctl enable\
+ dbus-broker.service
 
 commit_container base:latest
