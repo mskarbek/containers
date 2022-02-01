@@ -4,13 +4,10 @@ CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 buildah from --name=${CONTAINER_UUID} scratch
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-dnf_install "glibc-minimal-langpack coreutils-single"
-# TODO: for some unknow reason `info` scriptlet for post-installation s(t)ucks if instaled in one transaction with above packages
-# need to debug and fix to drop multiple dnf_install instances in script
-dnf_install "ca-certificates"
+dnf_install "--distablerepo=* --enablerepo=rhel-8-for-x86_64-baseos-rpms glibc-minimal-langpack coreutils-single ca-certificates"
 dnf_clean
 
-if [ -f ./files/proxy.repo ]; then
+if [ -f ./files/proxy.repo ] && [ -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/proxy.repo ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
     sed -i "s/REPOSITORY_URL/${REPOSITORY_URL}/g" ${CONTAINER_PATH}/etc/yum.repos.d/proxy.repo
 fi
