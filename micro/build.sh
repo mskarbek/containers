@@ -4,7 +4,7 @@ CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 buildah from --name=${CONTAINER_UUID} scratch
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-dnf_install "--distablerepo=* --enablerepo=rhel-8-for-x86_64-baseos-rpms glibc-minimal-langpack coreutils-single ca-certificates"
+dnf_install "--disablerepo=* --enablerepo=rhel-8-for-x86_64-baseos-rpms glibc-minimal-langpack coreutils-single ca-certificates"
 dnf_clean
 
 if [ -f ./files/proxy.repo ] && [ -z ${IMAGE_BOOTSTRAP} ]; then
