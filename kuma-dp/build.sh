@@ -13,7 +13,7 @@ else
     popd
 fi
 mv -v ${TMP_DIR}/kuma-${KUMA_VERSION}/bin/{kuma-dp,envoy,coredns} ${CONTAINER_PATH}/usr/local/bin/
-chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/*
+chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/{kuma-dp,envoy,coredns}
 rm -rf ${TMP_DIR}
 
 rsync_rootfs
