@@ -1,0 +1,8 @@
+[Unit]
+Description=MinIO Console config generator
+ConditionFileNotEmpty=!/etc/sysconfig/minio-console
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -c "printf \"CONSOLE_PBKDF_PASSPHRASE=$(cat /proc/sys/kernel/random/uuid)\nCONSOLE_PBKDF_SALT=$(cat /proc/sys/kernel/random/uuid)\n\" > /etc/sysconfig/minio-console"
+RemainAfterExit=false

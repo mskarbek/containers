@@ -16,6 +16,6 @@ rsync_rootfs
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  minio-console.service
 
-buildah config --volume /etc/minio ${CONTAINER_UUID}
+buildah config --volume /etc/minio-console ${CONTAINER_UUID}
 
 commit_container minio-console:latest
