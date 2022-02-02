@@ -9,7 +9,8 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
 fi
 
 dnf_cache
-dnf_install "systemd procps-ng dbus-broker"
+#dnf_install "systemd procps-ng dbus-broker"
+dnf_install "systemd procps-ng"
 dnf_clean_cache
 dnf_clean
 
