@@ -265,7 +265,7 @@ runtime:
 
 # Default Kuma entities configuration
 defaults:
-  skipMeshCreation: false # ENV: KUMA_DEFAULTS_SKIP_MESH_CREATION
+  skipMeshCreation: true # ENV: KUMA_DEFAULTS_SKIP_MESH_CREATION
 
 # Metrics configuration
 metrics:
