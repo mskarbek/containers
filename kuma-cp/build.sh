@@ -13,7 +13,7 @@ else
     popd
 fi
 mv -v ${TMP_DIR}/kuma-${KUMA_VERSION}/bin/{kuma-cp,kumactl} ${CONTAINER_PATH}/usr/local/bin/
-chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/*
+chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/{kuma-cp,kumactl}
 rm -rf ${TMP_DIR}
 
 rsync_rootfs
@@ -21,6 +21,7 @@ rsync_rootfs
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  kuma-cp.service
 
+buildah config --volume /etc/kuma ${CONTAINER_UUID}
 buildah config --volume /var/log/kuma ${CONTAINER_UUID}
 
 commit_container kuma-cp:latest
