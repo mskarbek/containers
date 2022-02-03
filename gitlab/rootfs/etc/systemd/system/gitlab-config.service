@@ -11,6 +11,8 @@ Type=oneshot
 EnvironmentFile=/run/secrets/gitlab-password
 ExecStart=/opt/gitlab/bin/gitlab-ctl reconfigure
 ExecStartPost=/usr/bin/touch /etc/gitlab/.lock
+TimeoutStartSec=120s
+Restart=on-failure
 RemainAfterExit=no
 
 [Install]
