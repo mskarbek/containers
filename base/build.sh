@@ -33,7 +33,7 @@ buildah run -t ${CONTAINER_UUID} systemctl mask\
  systemd-resolved.service\
  systemd-udev-trigger.service\
  systemd-udevd.service
-buildah run -t ${CONTAINER_UUID} systemctl enable\
- dbus-broker.service
+#buildah run -t ${CONTAINER_UUID} systemctl enable\
+# dbus-broker.service
 
 commit_container base:latest
