@@ -4,7 +4,13 @@ CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-dnf_install "haproxy"
+if [ -f ./files/haproxy-2.4.7-1.el8.x86_64.rpm ] && [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    dnf_install "./files/haproxy-2.4.7-1.el8.x86_64.rpm"
+elif [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    dnf_install "https://download.copr.fedorainfracloud.org/results/mskarbek/epel-ext/epel-8-x86_64/03293308-haproxy/haproxy-2.4.7-1.el8.x86_64.rpm"
+else
+    dnf_install "haproxy"
+fi
 dnf_clean_cache
 dnf_clean
 
