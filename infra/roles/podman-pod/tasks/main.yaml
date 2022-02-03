@@ -1,0 +1,9 @@
+---
+- name: Create pod
+  containers.podman.podman_pod:
+    name: "{{ env + '-' + service + '-' + future_pod}}"
+    state: created
+    infra_name: "{{ env + '-' + service + '-' + future_pod + '-' + 'infra' }}"
+    infra_image: "{{ lookup('consul_kv', env + '/defaults/pause_image', host=consul_host) }}"
+    hostname: "{{ env + '-' + service + '-' + future_pod}}"
+    publish: "{{ pod_publish }}"

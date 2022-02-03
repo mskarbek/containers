@@ -1,0 +1,17 @@
+---
+- name: Set remote past pod id
+  community.general.consul_kv:
+    host: "{{ consul_host }}"
+    key: "{{ env + '/services/' + service + '/past_pod' }}"
+    value: "{{ current_pod }}"
+  when: current_pod != []
+- name: Set remote current pod id
+  community.general.consul_kv:
+    host: "{{ consul_host }}"
+    key: "{{ env + '/services/' + service + '/current_pod' }}"
+    value: "{{ future_pod }}"
+- name: Clean remote future pod id
+  community.general.consul_kv:
+    host: "{{ consul_host }}"
+    key: "{{ env + '/services/' + service + '/future_pod' }}"
+    state: absent

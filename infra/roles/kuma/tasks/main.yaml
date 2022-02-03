@@ -1,53 +1,95 @@
 ---
-- name: Create kuma pod
-  containers.podman.podman_pod:
-    name: kuma-2201121344
-    infra_image: "{{ pause_image }}"
-    infra_name: kuma-2201121344-infra
-    state: started
-    ip: "10.88.1.2"
-- name: Create kuma container
-  containers.podman.podman_container:
-    pod: "kuma-2201121344"
-    name: "kuma-2201121344-app"
-    image: "{{ registry_url }}/bootstrap/kuma-cp:latest"
-    state: started
-- name: Create kuma config
-  containers.podman.podman_secret:
-    name: kuma-config
-    state: absent
-- name: Create kuma config
-  containers.podman.podman_secret:
-    name: kuma-config
-    data: "KUMA_CP_ADDRESS=https://10.88.1.2:5678/"
-    state: present
-- name: Create infra mesh
-  ansible.builtin.command:
-    cmd: "{{ item }}"
+- name: Get kuma pod ids
+  ansible.builtin.import_role:
+    name: pod-id
+    tasks_from: get
+
+- name: Create kuma volumes
+  ansible.builtin.include_role:
+    name: podman-volume
+  vars:
+    service: kuma
+    container_type: app
+    volume_mountpoint: "{{ item }}"
   loop:
-    - "podman cp mesh-infra.yaml kuma-2201121344-app:/run/kuma/mesh-infra.yaml"
-    - "podman cp traffic-log-infra.yaml kuma-2201121344-app:/run/kuma/traffic-log-infra.yaml"
-    - "podman exec kuma-2201121344-app kumactl apply -f /run/kuma/mesh-infra.yaml"
-    - "podman exec kuma-2201121344-app kumactl apply -f /run/kuma/traffic-log-infra.yaml"
-- name: Create mesh token
+    - /etc/kuma
+    - /var/log/kuma
+
+- name: Create mesh config
+  ansible.builtin.template:
+    src: mesh.yaml.j2
+    dest: "/var/lib/volumes/storage/{{ env + '-' + service + '-' + future_pod + '-app' + '/etc/kuma'|replace('/', '-') }}/_data/{{ env }}-mesh.yaml"
+- name: Create traffic-log config
+  ansible.builtin.template:
+    src: traffic-log.yaml.j2
+    dest: "/var/lib/volumes/storage/{{ env + '-' + service + '-' + future_pod + '-app' + '/etc/kuma'|replace('/', '-') }}/_data/{{ env }}-traffic-log.yaml"
+
+- name: Create kuma pod
+  ansible.builtin.import_role:
+    name: podman-pod
+  vars:
+    service: kuma
+    pod_publish:
+- name: Create kuma container
+  ansible.builtin.import_role:
+    name: podman-container
+  vars:
+    service: kuma
+    container_image: "{{ lookup('consul_kv', env + '/defaults/registry_url', host=consul_host) + '/bootstrap/kuma-cp:latest' }}"
+    container_type: app
+    container_volumes:
+      - "{{ env + '-' + service + '-' + future_pod + '-app' + '/etc/kuma'|replace('/', '-') }}:/etc/kuma:z"
+      - "{{ env + '-' + service + '-' + future_pod + '-app' + '/var/log/kuma'|replace('/', '-') }}:/var/log/kuma:z"
+    container_secrets:
+
+- name: Wait for kuma
+  ansible.builtin.uri:
+    url: "http://{{ container_info.container.NetworkSettings.IPAddress }}:5681/"
+    status_code: 200
+  register: result
+  until: result.status == 200
+  retries: 60
+  delay: 1
+- name: Set kuma ip as default
+  community.general.consul_kv:
+    host: "{{ consul_host }}"
+    key: "{{ env + '/defaults/kuma_ip' }}"
+    value: "{{ container_info.container.NetworkSettings.IPAddress }}"
+- name: Set kuma id as default
+  community.general.consul_kv:
+    host: "{{ consul_host }}"
+    key: "{{ env + '/defaults/kuma_id' }}"
+    value: "{{ future_pod }}"
+
+- name: Remove config secret
   containers.podman.podman_secret:
-    name: kuma-2201121344-token
     state: absent
-- name: Create mesh token
-  ansible.builtin.shell:
-    cmd: "podman exec kuma-2201121344-app kumactl generate dataplane-token --mesh=infra --name=kuma-2201121344|podman secret create kuma-2201121344-token -"
-- name: Create mesh dataplanes
-  ansible.builtin.copy:
-    src: "dataplane.yaml"
-    dest: "/var/lib/volumes/storage/kuma-2201121344-mesh-etc/_data/dataplane.yaml"
-- name: Create mesh containers
-  containers.podman.podman_container:
-    pod: "kuma-2201121344"
-    name: "kuma-2201121344-mesh"
-    image: "{{ registry_url }}/bootstrap/kuma-dp:latest"
-    secrets:
-      - "kuma-2201121344-token,type=mount,target=kuma-token"
-      - "kuma-config,type=mount"
-    volumes:
-      - "kuma-2201121344-mesh-etc:/etc/kuma:z"
-    state: started
+    name: "{{ env + '-kuma-config' }}"
+- name: Create config secret
+  containers.podman.podman_secret:
+    state: present
+    name: "{{ env + '-kuma-config' }}"
+    data: "KUMA_CP_ADDRESS=https://{{ container_info.container.NetworkSettings.IPAddress }}:5678/"
+
+- name: Configure kuma
+  ansible.builtin.command:
+    cmd: "podman exec {{ env + '-' + service + '-' + future_pod + '-app' }} kumactl apply -f /etc/kuma/{{ item }}"
+  loop:
+    - "{{ env }}-mesh.yaml"
+    - "{{ env }}-traffic-log.yaml"
+- name: Create kuma mesh
+  ansible.builtin.import_role:
+    name: mesh
+  vars:
+    service: kuma
+    mesh_inbound:
+      - service: kuma
+        protocol: http
+        port: "5681"
+        address: "127.0.0.1"
+    mesh_outbound:
+
+- name: Set kuma pod ids
+  ansible.builtin.import_role:
+    name: pod-id
+    tasks_from: set

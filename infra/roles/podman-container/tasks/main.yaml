@@ -1,0 +1,10 @@
+---
+- name: Create container
+  containers.podman.podman_container:
+    name: "{{ env + '-' + service + '-' + future_pod + '-' + container_type }}"
+    pod: "{{ env + '-' + service + '-' + future_pod }}"
+    image: "{{ container_image }}"
+#    state: created
+    volume: "{{ container_volumes }}"
+    secrets: "{{ container_secrets }}"
+  register: container_info

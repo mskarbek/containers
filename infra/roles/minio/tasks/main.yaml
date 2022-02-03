@@ -1,15 +1,72 @@
-- name: Create minio secret
-  containers.podman.podman_secret:
-    name: minio-root-password
-    data: |
-      MINIO_ROOT_USER=root
-      MINIO_ROOT_PASSWORD=password123
-    state: present
-- name: Create minio containers
-  containers.podman.podman_container:
-    pod: minio-2201121344
-    name: minio-2201121344-app
-    image: "{{ registry_url }}/bootstrap/minio:latest"
-    secrets:
-      - "minio-root-password,type=mount"
-    state: started
+---
+- name: Get minio pod ids
+  ansible.builtin.import_role:
+    name: pod-id
+    tasks_from: get
+  vars:
+    service: minio
+
+- name: Stop current minio pod
+  containers.podman.podman_pod:
+    name: "{{ env + '-minio-' + current_pod }}"
+    state: stopped
+  when: current_pod != []
+- name: Stop failed minio pod
+  containers.podman.podman_pod:
+    name: "{{ env + '-minio-' + failed_pod }}"
+    state: stopped
+  when: failed_pod != []
+
+- name: Create minio volumes
+  ansible.builtin.include_role:
+    name: podman-volume
+  vars:
+    service: minio
+    container_type: app
+    volume_mountpoint: "{{ item }}"
+  loop:
+    - /etc/minio
+    - /var/lib/minio
+
+#- name: Create minio config
+#  ansible.builtin.template:
+#    src: minio.env.j2
+#    dest: "/var/lib/volumes/storage/{{ env + '-' + service + '-' + future_pod + '-app' + '/etc/minio'|replace('/', '-') }}/_data/minio.env"
+
+- name: Create minio pod
+  ansible.builtin.import_role:
+    name: podman-pod
+  vars:
+    service: minio
+    pod_publish:
+- name: Create minio container
+  ansible.builtin.import_role:
+    name: podman-container
+  vars:
+    service: minio
+    container_image: "{{ lookup('consul_kv', env + '/defaults/registry_url', host=consul_host) + '/bootstrap/minio:latest' }}"
+    container_type: app
+    container_volumes:
+      - "{{ env + '-' + service + '-' + future_pod + '-app' + '/etc/minio'|replace('/', '-') }}:/etc/minio:z"
+      - "{{ env + '-' + service + '-' + future_pod + '-app' + '/var/lib/minio'|replace('/', '-') }}:/var/lib/minio:z"
+    container_secrets:
+
+- name: Create minio mesh
+  ansible.builtin.import_role:
+    name: mesh
+  vars:
+    service: minio
+    mesh_gateway:
+    mesh_inbound:
+      - service: minio
+        protocol: http
+        address: "127.0.0.1"
+        port: "9000"
+    mesh_outbound:
+
+- name: Set minio pod ids
+  ansible.builtin.import_role:
+    name: pod-id
+    tasks_from: set
+  vars:
+    service: minio

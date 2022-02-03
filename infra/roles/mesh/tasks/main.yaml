@@ -1,0 +1,42 @@
+---
+- name: Generate token
+  ansible.builtin.command:
+    cmd: "podman exec {{ env + '-kuma-' + lookup('consul_kv', env + '/defaults/kuma_id', host=consul_host) + '-app' }} kumactl generate dataplane-token --mesh={{ env }} --name={{ env + '-' + service + '-' + future_pod }}"
+  register: mesh_token
+- name: Create mesh volumes
+  ansible.builtin.include_role:
+    name: podman-volume
+  vars:
+    #service: "{{ service }}"
+    container_type: mesh
+    volume_mountpoint: "{{ item }}"
+  loop:
+    - /etc/kuma
+    - /var/log/kuma
+
+- name: Create dataplane config
+  ansible.builtin.template:
+    src: dataplane.yaml.j2
+    dest: "/var/lib/volumes/storage/{{ env + '-' + service + '-' + future_pod + '-mesh' + '/etc/kuma'|replace('/', '-') }}/_data/dataplane.yaml"
+
+- name: Create mesh secret
+  ansible.builtin.import_role:
+    name: podman-secret
+  vars:
+    #service: "{{ service }}"
+    container_type: mesh
+    secret_name: token
+    secret_data: "{{ mesh_token.stdout }}"
+- name: Create mesh container
+  ansible.builtin.import_role:
+    name: podman-container
+  vars:
+    #service: "{{ service }}"
+    container_image: "{{ lookup('consul_kv', env + '/defaults/registry_url', host=consul_host) + '/bootstrap/kuma-dp:latest' }}"
+    container_type: mesh
+    container_volumes:
+      - "{{ env + '-' + service + '-' + future_pod + '-mesh' + '/etc/kuma'|replace('/', '-') }}:/etc/kuma:z"
+      - "{{ env + '-' + service + '-' + future_pod + '-mesh' + '/var/log/kuma'|replace('/', '-') }}:/var/log/kuma:z"
+    container_secrets:
+      - "{{ env + '-' + service + '-' + future_pod + '-mesh-token' }},type=mount,target=kuma-token"
+      - "{{ env + '-kuma-config' }},type=mount,target=kuma-config"
