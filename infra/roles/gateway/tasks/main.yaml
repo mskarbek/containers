@@ -71,9 +71,9 @@
         port: "12003"
       - service: nexus-registry
         port: "12004"
-      - service: git-web
+      - service: gitlab-web
         port: "12005"
-      - service: git-ssh
+      - service: gitlab-ssh
         port: "12006"
 
 - name: Set gateway pod ids

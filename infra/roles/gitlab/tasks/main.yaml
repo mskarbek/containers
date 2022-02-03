@@ -4,15 +4,15 @@
     name: pod-id
     tasks_from: get
 
-- name: Remove current gitlab pod
+- name: Stop current gitlab pod
   containers.podman.podman_pod:
     name: "{{ env + '-gitlab-' + current_pod }}"
-    state: absent
+    state: stopped
   when: current_pod != []
-- name: Remove failed gitlab pod
+- name: Stop failed gitlab pod
   containers.podman.podman_pod:
     name: "{{ env + '-gitlab-' + failed_pod }}"
-    state: absent
+    state: stopped
   when: failed_pod != []
 
 - name: Create gitlab volumes
@@ -47,7 +47,7 @@
     container_type: app
     container_volumes:
       - "{{ env + '-' + service + '-' + future_pod + '-app' + '/etc/gitlab'|replace('/', '-') }}:/etc/gitlab:z"
-      - "{{ env + '-' + service + '-' + future_pod + '-app' + '/var/log/gitlab'|replace('/', '-') }}:/var/opt/gitlab:z"
+      - "{{ env + '-' + service + '-' + future_pod + '-app' + '/var/log/gitlab'|replace('/', '-') }}:/var/log/gitlab:z"
       - "{{ env + '-' + service + '-' + future_pod + '-app' + '/var/opt/gitlab'|replace('/', '-') }}:/var/opt/gitlab:z"
     container_secrets:
 

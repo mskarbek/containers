@@ -13,6 +13,10 @@ grafana['enable'] = false
 gitlab_kas['enable'] = false
 #redis['enable'] = false
 
+nginx['real_ip_trusted_addresses'] = [ '127.0.0.1' ]
+nginx['real_ip_header'] = 'X-Forwarded-For'
+nginx['real_ip_recursive'] = 'on'
+
 gitlab_rails['registry_enabled'] = false
 gitlab_rails['dependency_proxy_enabled'] = false
 gitlab_rails['terraform_state_enabled'] = false
