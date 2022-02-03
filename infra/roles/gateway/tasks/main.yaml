@@ -63,6 +63,10 @@
         port: "12001"
       - service: minio-console
         port: "12002"
+      - service: nexus-repo
+        port: "12003"
+      - service: nexus-registry
+        port: "12004"
 
 - name: Set gateway pod ids
   ansible.builtin.import_role:

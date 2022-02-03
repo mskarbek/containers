@@ -1,0 +1,7 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Crete nexus
+      ansible.builtin.import_role:
+        name: nexus

@@ -27,3 +27,25 @@ server {
         proxy_pass      http://127.0.0.1:12002;
     }
 }
+
+server {
+    listen 80;
+    server_name repo.lab.skarbek.name;
+    
+    access_log /var/log/nginx/repo.lab.skarbek.name-access.log;
+
+    location / {
+        proxy_pass      http://127.0.0.1:12003;
+    }
+}
+
+server {
+    listen 80;
+    server_name registry.lab.skarbek.name;
+    
+    access_log /var/log/nginx/registry.lab.skarbek.name-access.log;
+
+    location / {
+        proxy_pass      http://127.0.0.1:12004;
+    }
+}
