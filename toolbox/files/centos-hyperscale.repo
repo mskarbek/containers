@@ -1,0 +1,13 @@
+[centos-hyperscale-main]
+name=CentOS Stream $releasever - Hyperscale Main
+baseurl=http://centos.slaskdatacenter.com/8-stream/hyperscale/x86_64/packages-main
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-HyperScale
+
+[centos-hyperscale-facebook]
+name=CentOS Stream $releasever - Hyperscale Facebook
+baseurl=http://centos.slaskdatacenter.com/8-stream/hyperscale/x86_64/packages-facebook
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-HyperScale
