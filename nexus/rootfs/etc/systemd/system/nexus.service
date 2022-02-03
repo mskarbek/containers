@@ -1,8 +1,9 @@
 [Unit]
 Description=Nexus Repository
 Documentation=https://help.sonatype.com/repomanager3/
-After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
-Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+Requires=nexus-password.service nexus-config.service
+After=network.target nss-lookup.target nexus-password.service
+Before=nexus-config.service
 
 [Service]
 WorkingDirectory=/run/nexus

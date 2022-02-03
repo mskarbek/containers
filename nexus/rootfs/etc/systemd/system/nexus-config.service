@@ -1,0 +1,11 @@
+[Unit]
+Description=Nexus config generator
+AssertFileNotEmpty=/run/secrets/nexus-password
+ConditionPathExists=!/var/lib/sonatype-work/nexus3/.lock
+
+[Service]
+Type=oneshot
+EnvironmentFile=/run/secrets/nexus-password
+ExecStart=/usr/bin/bash /usr/local/bin/nexus-config.sh
+ExecStartPost=/usr/bin/touch /var/lib/sonatype-work/nexus3/.lock
+Type=oneshot

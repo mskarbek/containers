@@ -27,6 +27,7 @@ rm -rf ${TMP_DIR}
 
 rsync_rootfs
 
+#TODO: keystore situation needs to be rethought
 sed -i 's/=\.\.\/sonatype-work/=\/var\/lib\/sonatype-work/' ${CONTAINER_PATH}/usr/lib/sonatype/nexus/bin/nexus.vmoptions
 if [ -f ./files/keystore.p12 ] && [ -f ./files/keystore.pass ]; then
     cp -v ./files/keystore.p12 ${CONTAINER_PATH}/usr/lib/sonatype/sonatype-work/nexus3/keystores/keystore.p12
@@ -35,8 +36,7 @@ if [ -f ./files/keystore.p12 ] && [ -f ./files/keystore.pass ]; then
 fi
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
- nexus.service\
- nexus-password.service
+ nexus.service
 
 buildah config --volume /var/lib/sonatype-work ${CONTAINER_UUID}
 
