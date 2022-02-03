@@ -34,7 +34,7 @@ dnf_install () {
      --setopt=module_platform_id=platform:el8\
      --setopt=install_weak_deps=false\
      --nodocs\
-     install ${1}
+     install ${@}
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
         rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
     fi
@@ -49,7 +49,7 @@ dnf_install_with_docs () {
      --releasever=8\
      --setopt=module_platform_id=platform:el8\
      --setopt=install_weak_deps=false\
-     install ${1}
+     install ${@}
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
         rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
     fi
