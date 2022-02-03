@@ -1,0 +1,7 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Crete gitlab
+      ansible.builtin.import_role:
+        name: gitlab

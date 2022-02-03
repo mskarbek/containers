@@ -39,6 +39,7 @@
     pod_publish:
       - "80:80"
       - "443:443"
+      - "2222:11001"
 - name: Create gateway container
   ansible.builtin.import_role:
     name: podman-container
@@ -56,8 +57,11 @@
     name: mesh
   vars:
     service: gateway
-    mesh_gateway: gateway
     mesh_inbound:
+      - service: gateway-ssh
+        protocol: tcp
+        address: "127.0.0.1"
+        port: "12006"
     mesh_outbound:
       - service: kuma
         port: "12001"
@@ -67,6 +71,10 @@
         port: "12003"
       - service: nexus-registry
         port: "12004"
+      - service: git-web
+        port: "12005"
+      - service: git-ssh
+        port: "12006"
 
 - name: Set gateway pod ids
   ansible.builtin.import_role:

@@ -8,12 +8,13 @@ fi
 CONTAINER_UUID=$(create_container openssh:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-dnf_cache
-dnf_install "hostname perl policycoreutils policycoreutils-python-utils checkpolicy git"
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/gitlab-${GITLAB_TYPE}.repo /etc/yum.repos.d/gitlab-${GITLAB_TYPE}.repo
     cp -v ./files/RPM-GPG-KEY-Gitlab /etc/pki/rpm-gpg/RPM-GPG-KEY-Gitlab
 fi
+
+dnf_cache
+dnf_install "hostname perl policycoreutils policycoreutils-python-utils checkpolicy git"
 pushd ./files
     dnf download gitlab-${GITLAB_TYPE}-${GITALB_VERSION}
 popd
@@ -24,7 +25,7 @@ dnf_clean
 rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
- gitlab-reconfigure.service
+ gitlab-config.service
 
 buildah config --volume /etc/gitlab ${CONTAINER_UUID}
 buildah config --volume /var/log/gitlab ${CONTAINER_UUID}

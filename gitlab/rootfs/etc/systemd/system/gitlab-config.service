@@ -1,9 +1,10 @@
 [Unit]
-Description=GitLab Reconfigure
+Description=GitLab config generator
+Requires=gitlab-password.service
+After=syslog.target network.target gitlab-password.service
 ConditionPathExists=!/etc/gitlab/.lock
 AssertFileNotEmpty=/run/secrets/gitlab-password
 AssertFileNotEmpty=/etc/gitlab/gitlab.rb
-After=syslog.target network.target
 
 [Service]
 Type=oneshot
