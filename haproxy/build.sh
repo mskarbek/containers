@@ -14,6 +14,8 @@ fi
 dnf_clean_cache
 dnf_clean
 
+mv ${CONTAINER_PATH}/etc/haproxy/haproxy.cfg ${CONTAINER_PATH}/usr/share/haproxy/
+
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  haproxy.service
 
