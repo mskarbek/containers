@@ -1,0 +1,30 @@
+---
+- name: Get openssh pod ids
+  ansible.builtin.import_role:
+    name: pod-id
+    tasks_from: get
+  vars:
+    service: "{{ name }}"
+
+- name: Create openssh pod
+  ansible.builtin.import_role:
+    name: podman-pod
+  vars:
+    service: "{{ name }}"
+    pod_publish:
+- name: Create openssh container
+  ansible.builtin.import_role:
+    name: podman-container
+  vars:
+    service: "{{ name }}"
+    container_image: "{{ lookup('consul_kv', env + '/defaults/registry_url', host=consul_host) + '/bootstrap/openssh:latest' }}"
+    container_type: app
+    container_volumes:
+    container_secrets:
+
+- name: Set openssh pod ids
+  ansible.builtin.import_role:
+    name: pod-id
+    tasks_from: set
+  vars:
+    service: "{{ name }}"

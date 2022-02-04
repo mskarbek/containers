@@ -1,0 +1,104 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh000
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh001
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh002
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh003
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh004
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh005
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh006
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh007
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh008
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh009
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh010
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh011
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh012
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh013
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh014
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh015
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh016
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh017
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh018
+    - name: Crete openssh
+      ansible.builtin.import_role:
+        name: openssh
+      vars:
+        name: ssh019
