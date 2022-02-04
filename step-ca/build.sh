@@ -10,8 +10,8 @@ if [ -f "./files/step-ca_linux_${STEPCA_VERSION}_amd64.tar.gz" ] && [ -f "./file
     tar xvf ./files/step_linux_${STEPCLI_VERSION}_amd64.tar.gz -C ${TMP_DIR}
 else
     pushd ${TMP_DIR}
-        curl -L https://github.com/smallstep/certificates/releases/download/v0.17.4/step-ca_linux_${STEPCA_VERSION}_amd64.tar.gz|tar xzv
-        curl -L https://github.com/smallstep/cli/releases/download/v0.17.6/step_linux_${STEPCLI_VERSION}_amd64.tar.gz|tar xzv
+        curl -L https://github.com/smallstep/certificates/releases/download/v${STEPCA_VERSION}/step-ca_linux_${STEPCA_VERSION}_amd64.tar.gz|tar xzv
+        curl -L https://github.com/smallstep/cli/releases/download/v${STEPCLI_VERSION}/step_linux_${STEPCLI_VERSION}_amd64.tar.gz|tar xzv
     popd
 fi
 mv -v ${TMP_DIR}/step-ca_${STEPCA_VERSION}/bin/step-ca ${CONTAINER_PATH}/usr/local/bin/step-ca
