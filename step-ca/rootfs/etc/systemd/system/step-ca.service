@@ -2,13 +2,11 @@
 Description=step-ca service
 Documentation=https://smallstep.com/docs/step-ca
 Documentation=https://smallstep.com/docs/step-ca/certificate-authority-server-production
-After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
-Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+After=network.target nss-lookup.target
 ConditionFileNotEmpty=/var/lib/step-ca/config/ca.json
 ConditionFileNotEmpty=/var/lib/step-ca/root-ca.pass
 
 [Service]
-Type=simple
 User=step
 Group=step
 Environment=STEPPATH=/var/lib/step-ca
