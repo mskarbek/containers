@@ -7,4 +7,5 @@
 #    state: created
     volume: "{{ container_volumes }}"
     secrets: "{{ container_secrets }}"
+    tty: yes
   register: container_info

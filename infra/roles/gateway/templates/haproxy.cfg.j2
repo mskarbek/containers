@@ -1,0 +1,61 @@
+global
+    log                         127.0.0.1 local2
+    chroot                      /var/lib/haproxy
+    pidfile                     /run/haproxy.pid
+    maxconn                     4000
+    user                        haproxy
+    group                       haproxy
+    daemon
+    stats socket                /var/lib/haproxy/stats
+    ssl-default-bind-ciphers    PROFILE=SYSTEM
+    ssl-default-server-ciphers  PROFILE=SYSTEM
+
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+
+frontend ingress
+  bind *:80
+  use_backend %[req.hdr(Host),lower]
+
+frontend git-ssh-ingress
+    bind *:2222
+    mode tcp
+    use_backend git-ssh
+frontend step-ca-ingress
+    bind *:8443
+    mode tcp
+    use_backend step-ca
+
+backend kuma.lab.skarbek.name
+    server kuma1 127.0.0.1:12001 check
+backend minio.lab.skarbek.name
+    server minio1 127.0.0.1:12002 check
+backend repo.lab.skarbek.name
+    server repo1 127.0.0.1:12003 check
+backend registry.lab.skarbek.name
+    server registry1 127.0.0.1:12004 check
+backend git.lab.skarbek.name
+    server git-web1 127.0.0.1:12005 check
+
+backend git-ssh
+    mode tcp
+    server git-ssh1 127.0.0.1:12006 check
+backend step-ca
+    mode tcp
+    server step-ca1 127.0.0.1:12007 check

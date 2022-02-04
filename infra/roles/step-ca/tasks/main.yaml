@@ -1,0 +1,94 @@
+---
+- name: Get step-ca pod ids
+  ansible.builtin.import_role:
+    name: pod-id
+    tasks_from: get
+  vars:
+    service: step-ca
+
+- name: Stop current step-ca pod
+  containers.podman.podman_pod:
+    name: "{{ env + '-step-ca-' + current_pod }}"
+    state: stopped
+  when: current_pod != []
+- name: Stop failed step-ca pod
+  containers.podman.podman_pod:
+    name: "{{ env + '-step-ca-' + failed_pod }}"
+    state: stopped
+  when: failed_pod != []
+
+- name: Create step-ca volumes
+  ansible.builtin.include_role:
+    name: podman-volume
+  vars:
+    service: step-ca
+    container_type: app
+    volume_mountpoint: /var/lib/step-ca
+
+- name: Create step-ca config
+  ansible.builtin.file:
+    dest: "/var/lib/volumes/storage/{{ env + '-' + service + '-' + future_pod + '-app' + '/var/lib/step-ca'|replace('/', '-') }}/_data/{{ item }}"
+    state: directory
+  loop:
+    - certs
+    - config
+    - db
+    - secrets
+    - templates
+- name: Create step-ca config
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/var/lib/volumes/storage/{{ env + '-' + service + '-' + future_pod + '-app' + '/var/lib/step-ca'|replace('/', '-') }}/_data/{{ item }}"
+  loop:
+    - certs/intermediate_ca.crt
+    - certs/root_ca.crt
+    - config/ca.json
+    - config/defaults.json
+    - secrets/intermediate_ca_key
+    - secrets/root_ca_key
+
+- name: Create mesh secret
+  ansible.builtin.import_role:
+    name: podman-secret
+  vars:
+    service: step-ca
+    container_type: app
+    secret_name: password
+    secret_data: "{{ step_ca_password }}"
+- name: Create step-ca pod
+  ansible.builtin.import_role:
+    name: podman-pod
+  vars:
+    service: step-ca
+    pod_publish:
+- name: Create step-ca container
+  ansible.builtin.import_role:
+    name: podman-container
+  vars:
+    service: step-ca
+    container_image: "{{ lookup('consul_kv', env + '/defaults/registry_url', host=consul_host) + '/bootstrap/step-ca:latest' }}"
+    container_type: app
+    container_volumes:
+      - "{{ env + '-' + service + '-' + future_pod + '-app' + '/var/lib/step-ca'|replace('/', '-') }}:/var/lib/step-ca:z"
+    container_secrets:
+      - "{{ env + '-' + service + '-' + future_pod + '-app-password' }},type=mount,target=step-ca-password"
+
+- name: Create step-ca mesh
+  ansible.builtin.import_role:
+    name: mesh
+  vars:
+    service: step-ca
+    mesh_gateway:
+    mesh_inbound:
+      - service: step-ca
+        protocol: tcp
+        address: "127.0.0.1"
+        port: "8443"
+    mesh_outbound:
+
+- name: Set step-ca pod ids
+  ansible.builtin.import_role:
+    name: pod-id
+    tasks_from: set
+  vars:
+    service: step-ca
