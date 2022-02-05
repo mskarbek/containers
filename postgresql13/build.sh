@@ -17,9 +17,8 @@ dnf_clean
 rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
- postgresql-initdb.service\
  postgresql-13.service
 
-buildah config --volume /var/lib/pgsql/14/data ${CONTAINER_UUID}
+buildah config --volume /var/lib/pgsql/13/data ${CONTAINER_UUID}
 
 commit_container postgres13:latest

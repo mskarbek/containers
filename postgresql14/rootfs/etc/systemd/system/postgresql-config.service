@@ -1,8 +1,9 @@
 [Unit]
 Description=PostgreSQL 14 database init
 ConditionPathExists=!/var/lib/pgsql/14/.lock
-ConditionFileNotEmpty=/run/secrets/postgres-password
-After=syslog.target network.target
+AssertFileNotEmpty=/run/secrets/postgres-password
+After=postgresql-password.service
+Requires=postgresql-password.service
 
 [Service]
 Type=oneshot
@@ -10,6 +11,3 @@ Environment="PGSETUP_INITDB_OPTIONS=--pwfile=/run/secrets/postgres-password"
 ExecStart=/usr/pgsql-14/bin/postgresql-14-setup initdb
 ExecStartPost=/usr/bin/touch /var/lib/pgsql/14/.lock
 RemainAfterExit=no
-
-[Install]
-WantedBy=multi-user.target
