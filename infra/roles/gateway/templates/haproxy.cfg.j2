@@ -9,6 +9,7 @@ global
     stats socket                /var/lib/haproxy/stats
     ssl-default-bind-ciphers    PROFILE=SYSTEM
     ssl-default-server-ciphers  PROFILE=SYSTEM
+    ssl-default-bind-options    ssl-min-ver TLSv1.2
 
 defaults
     mode                    http
@@ -30,8 +31,10 @@ defaults
 
 
 frontend ingress
-  bind *:80
-  use_backend %[req.hdr(Host),lower]
+    bind *:80
+    bind *:443 ssl crt /etc/pki/tls/private/ ca-file /etc/pki/ca-trust/source/anchors/root_ca.pem
+    http-request redirect scheme https unless { ssl_fc }
+    use_backend %[req.hdr(Host),lower]
 
 frontend git-ssh-ingress
     bind *:2222
