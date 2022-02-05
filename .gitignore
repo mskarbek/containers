@@ -2,3 +2,6 @@
 **/files/**
 **/keystore.p12
 **/build.log
+**/*.crt
+**/*.key
+
