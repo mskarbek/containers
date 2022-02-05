@@ -16,6 +16,6 @@ dnf_clean
 rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
- rundeck.service
+ rundeckd.service
 
 commit_container rundeck:latest
