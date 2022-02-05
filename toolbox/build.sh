@@ -1,6 +1,6 @@
 . ../meta/common.sh
 
-TOOLS="curl vi nano telnet hostname iputils iproute mtr tmux lsof bind-utils tar rsync jq htop openssh-clients"
+TOOLS="curl vi nano telnet hostname iputils iproute mtr tmux lsof bind-utils tar rsync jq htop openssh-clients tcpdump"
 
 CONTAINER_UUID=$(create_container base:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
