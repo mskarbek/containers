@@ -1,9 +1,9 @@
 [Unit]
 Description=Rundeck
 Documentation=https://docs.rundeck.com/docs/
-After=network.target nss-lookup.target
 #Requires=
-AssertFileNotEmpty=/etc/prometheus/prometheus.yaml
+After=network.target nss-lookup.target
+#AssertFileNotEmpty=
 
 [Service]
 User=rundeck
