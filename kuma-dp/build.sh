@@ -1,7 +1,7 @@
 . ../meta/common.sh
 . ./files/VERSIONS
 
-CONTAINER_UUID=$(create_container systemd:latest)
+CONTAINER_UUID=$(create_container base:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 TMP_DIR=$(mktemp -d)
@@ -18,10 +18,33 @@ rm -rf ${TMP_DIR}
 
 rsync_rootfs
 
+buildah run -t ${CONTAINER_UUID} groupadd\
+ --gid=996\
+ --system\
+ kuma
+buildah run -t ${CONTAINER_UUID} useradd\
+ --comment="Kuma"\
+ --home-dir=/run/kuma\
+ --no-create-home\
+ --gid=996\
+ --uid=996\
+ --shell=/usr/sbin/nologin\
+ --system\
+ kuma
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  kuma-dp.service
 
 buildah config --volume /etc/kuma ${CONTAINER_UUID}
 buildah config --volume /var/log/kuma ${CONTAINER_UUID}
+
+commit_container base/kuma-dp:latest
+
+
+CONTAINER_UUID=$(create_container base/kuma-dp:latest)
+CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+
+buildah config --cmd '[ "/usr/sbin/init" ]' ${CONTAINER_UUID}
+buildah config --stop-signal 'SIGRTMIN+3' ${CONTAINER_UUID}
+buildah config --volume /var/log/journal ${CONTAINER_UUID}
 
 commit_container kuma-dp:latest
