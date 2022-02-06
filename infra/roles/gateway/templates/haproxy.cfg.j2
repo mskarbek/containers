@@ -32,7 +32,8 @@ defaults
 
 frontend ingress
     bind *:80
-    bind *:443 ssl crt /etc/pki/tls/private/ ca-file /etc/pki/ca-trust/source/anchors/root_ca.pem
+    #bind *:443 ssl crt /etc/pki/tls/private/
+    bind *:443 ssl crt /etc/pki/tls/private/
     http-request redirect scheme https unless { ssl_fc }
     use_backend %[req.hdr(Host),lower]
 
@@ -47,18 +48,19 @@ frontend step-ca-ingress
 
 backend kuma.lab.skarbek.name
     server kuma1 127.0.0.1:12001 check
-backend minio.lab.skarbek.name
-    server minio1 127.0.0.1:12002 check
-backend repo.lab.skarbek.name
-    server repo1 127.0.0.1:12003 check
-backend registry.lab.skarbek.name
-    server registry1 127.0.0.1:12004 check
-backend git.lab.skarbek.name
-    server git-web1 127.0.0.1:12005 check
-
-backend git-ssh
-    mode tcp
-    server git-ssh1 127.0.0.1:12006 check
 backend step-ca
     mode tcp
-    server step-ca1 127.0.0.1:12007 check
+    server step-ca1 127.0.0.1:12002 check
+backend consul.lab.skarbek.name
+    server consul1 127.0.0.1:12003 check
+backend minio.lab.skarbek.name
+    server minio1 127.0.0.1:12004 check
+backend repo.lab.skarbek.name
+    server repo1 127.0.0.1:12005 check
+backend registry.lab.skarbek.name
+    server registry1 127.0.0.1:12006 check
+backend git.lab.skarbek.name
+    server git-web1 127.0.0.1:12007 check
+backend git-ssh
+    mode tcp
+    server git-ssh1 127.0.0.1:12008 check

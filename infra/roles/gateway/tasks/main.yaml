@@ -21,12 +21,33 @@
   vars:
     service: gateway
     container_type: app
-    volume_mountpoint: /etc/haproxy
+    volume_mountpoint: "{{ item }}"
+  loop:
+    - /etc/haproxy
+    - /etc/pki/tls/private
 
 - name: Create gateway config
   ansible.builtin.template:
     src: haproxy.cfg.j2
     dest: "/var/lib/volumes/storage/{{ env + '-' + service + '-' + future_pod + '-app' + '/etc/haproxy'|replace('/', '-') }}/_data/haproxy.cfg"
+
+- name: Create step-ca config
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/var/lib/volumes/storage/{{ env + '-' + service + '-' + future_pod + '-app' + '/etc/pki/tls/private'|replace('/', '-') }}/_data/{{ item }}"
+  loop:
+    - consul.crt
+    - consul.crt.key
+    - git.crt
+    - git.crt.key
+    - kuma.crt
+    - kuma.crt.key
+    - minio.crt
+    - minio.crt.key
+    - registry.crt
+    - registry.crt.key
+    - repo.crt
+    - repo.crt.key
 
 - name: Create gateway pod
   ansible.builtin.import_role:
@@ -46,7 +67,8 @@
     container_image: "{{ lookup('consul_kv', env + '/defaults/registry_url', host=consul_host) + '/bootstrap/haproxy:latest' }}"
     container_type: app
     container_volumes:
-      - "{{ env + '-' + service + '-' + future_pod + '-app' + '/etc/haproxy'|replace('/', '-') }}://etc/haproxy:z"
+      - "{{ env + '-' + service + '-' + future_pod + '-app' + '/etc/haproxy'|replace('/', '-') }}:/etc/haproxy:z"
+      - "{{ env + '-' + service + '-' + future_pod + '-app' + '/etc/pki/tls/private'|replace('/', '-') }}:/etc/pki/tls/private:z"
     container_secrets:
 
 - name: Create gateway mesh
@@ -59,18 +81,20 @@
     mesh_outbound:
       - service: kuma
         port: "12001"
-      - service: minio-console
-        port: "12002"
-      - service: nexus-repo
-        port: "12003"
-      - service: nexus-registry
-        port: "12004"
-      - service: gitlab-web
-        port: "12005"
-      - service: gitlab-ssh
-        port: "12006"
       - service: step-ca
+        port: "12002"
+      - service: consul-api
+        port: "12003"
+      - service: minio-console
+        port: "12004"
+      - service: nexus-repo
+        port: "12005"
+      - service: nexus-registry
+        port: "12006"
+      - service: gitlab-web
         port: "12007"
+      - service: gitlab-ssh
+        port: "12008"
 
 - name: Set gateway pod ids
   ansible.builtin.import_role:
