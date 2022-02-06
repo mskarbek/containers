@@ -22,8 +22,14 @@ buildah run -t ${CONTAINER_UUID} systemctl mask\
  dev-hugepages.mount\
  dnf-makecache.timer\
  getty.target\
+ local-fs.target\
+ remote-fs.target\
+ swap.target\
+ veritysetup.target\
  kdump.service\
  sys-fs-fuse-connections.mount\
+ systemd-ask-password-console.path\
+ systemd-ask-password-wall.path\
  systemd-homed.service\
  systemd-hostnamed.service\
  systemd-logind.service\
