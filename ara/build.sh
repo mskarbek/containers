@@ -24,7 +24,6 @@ rm -rvf ${CONTAINER_PATH}/root/.cache
 rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
- ara-migrate.service\
  ara-server.service
 
 buildah config --volume /var/lib/ara ${CONTAINER_UUID}

@@ -24,7 +24,6 @@ rm -rf ${TMP_DIR}
 rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
- connection-token.service\
  openvscode.service
 
 buildah config --volume /home/openvscode ${CONTAINER_UUID}

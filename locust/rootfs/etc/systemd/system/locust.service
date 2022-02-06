@@ -1,8 +1,7 @@
 [Unit]
 Description=Locust
 Documentation=http://docs.locust.io/
-After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
-Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+After=network.target nss-lookup.target
 AssertFileNotEmpty=/var/lib/locust/locustfile.py
 
 [Service]

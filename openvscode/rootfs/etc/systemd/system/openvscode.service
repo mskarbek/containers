@@ -1,15 +1,15 @@
 [Unit]
 Description=OpenVSCode Server
 Documentation=https://github.com/gitpod-io/openvscode-server/
-After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service connection-token.service
-Requires=systemd-sysusers.service systemd-tmpfiles-setup.service connection-token.service
-AssertFileNotEmpty=/run/secrets/connection-token
+Requires=openvscode-token.service
+After=network.target nss-lookup.target openvscode-token.service
+AssertFileNotEmpty=/run/secrets/openvscode-token
 
 [Service]
 WorkingDirectory=/home/openvscode
 User=openvscode
 Group=openvscode
-EnvironmentFile=/run/secrets/connection-token
+EnvironmentFile=/run/secrets/openvscode-token
 ExecStart=/usr/lib/openvscode/node /usr/lib/openvscode/out/vs/server/main.js --connection-token ${CONNECTION_TOKEN}
 Restart=always
 

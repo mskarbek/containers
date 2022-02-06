@@ -1,8 +1,9 @@
 [Unit]
 Description=GitLab Runner - Podman
 ConditionFileIsExecutable=/usr/local/bin/gitlab-runner
-After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
-Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+Requires=gitlab-runner-register.service
+After=network.target nss-lookup.target
+Before=gitlab-runner-register.service
 #ConditionPathExists=/run/docker.sock
 
 [Service]

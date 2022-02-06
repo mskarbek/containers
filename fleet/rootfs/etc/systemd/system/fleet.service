@@ -1,8 +1,7 @@
 [Unit]
 Description=Fleet
 Documentation=https://github.com/fleetdm/fleet/blob/main/docs/README.md
-After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
-Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+After=network.target nss-lookup.target
 AssertFileIsExecutable=/usr/local/bin/fleet
 
 [Service]

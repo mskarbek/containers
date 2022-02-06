@@ -1,8 +1,7 @@
 [Unit]
 Description=Apache Zookeeper server (Kafka)
 Documentation=https://zookeeper.apache.org/
-After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
-Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+After=network.target nss-lookup.target
 
 [Service]
 WorkingDirectory=/run/zookeeper

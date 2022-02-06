@@ -1,8 +1,7 @@
 [Unit]
 Description=YB-Master
 Documentation=https://docs.yugabyte.com/latest/reference/configuration/yb-master/
-After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
-Requires=systemd-sysusers.service systemd-tmpfiles-setup.service
+After=network.target nss-lookup.target
 ConditionFileNotEmpty=/etc/yugabyte/yb-master.flags
 
 [Service]

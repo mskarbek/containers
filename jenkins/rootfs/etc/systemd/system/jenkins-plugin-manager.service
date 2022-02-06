@@ -1,8 +1,7 @@
 [Unit]
 Description=Jenkins Plugin Manager
 Documentation=https://www.jenkins.io/doc
-After=network.target nss-lookup.target systemd-tmpfiles-setup.service
-Requires=systemd-tmpfiles-setup.service
+After=network.target nss-lookup.target
 ConditionDirectoryNotEmpty=!/var/lib/jenkins/plugins
 
 [Service]
@@ -13,6 +12,3 @@ Group=jenkins
 Environment=JENKINS_WAR=/usr/lib/jenkins/jenkins.war
 Environment=JENKINS_UC_DOWNLOAD=http://192.168.123.249:8081/repository/raw-proxy-jenkins-plugins/
 ExecStart=/usr/bin/java -jar /usr/lib/jenkins/jenkins-plugin-manager.jar --verbose --war ${JENKINS_WAR} --plugin-download-directory=/var/lib/jenkins/plugins/ --plugins configuration-as-code git
-
-[Install]
-WantedBy=multi-user.target

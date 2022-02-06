@@ -1,9 +1,9 @@
 [Unit]
 Description= YB-TServer
 Documentation=https://docs.yugabyte.com/latest/reference/configuration/yb-tserver/
-After=network.target nss-lookup.target systemd-sysusers.service systemd-tmpfiles-setup.service
-Requires=systemd-sysusers.service systemd-tmpfiles-setup.service yb-master.service
-ConditionFileNotEmpty=/etc/yugabyte/yb-tserver.flags yb-master.service
+Requires=yb-master.service
+After=network.target nss-lookup.target yb-master.service
+ConditionFileNotEmpty=/etc/yugabyte/yb-tserver.flags
 
 [Service]
 WorkingDirectory=/run/yugabyte

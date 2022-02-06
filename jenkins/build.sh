@@ -18,8 +18,7 @@ curl -L -o ${CONTAINER_PATH}/usr/lib/jenkins/jenkins-plugin-manager.jar https://
 clean_files
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
- jenkins.service\
- jenkins-plugin-manager.service
+ jenkins.service
 
 buildah config --volume /var/lib/jenkins ${CONTAINER_UUID}
 

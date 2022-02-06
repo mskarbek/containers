@@ -19,8 +19,7 @@ chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/*
 rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
- gitlab-runner.service\
- gitlab-runner-register.service
+ gitlab-runner.service
 
 buildah config --volume /etc/gitlab-runner ${CONTAINER_UUID}
 buildah config --volume /var/lib/gitlab-runner ${CONTAINER_UUID}
