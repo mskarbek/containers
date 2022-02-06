@@ -15,5 +15,6 @@ CONTAINER_UUID=$(create_container base/python39:latest)
 
 buildah config --cmd '[ "/usr/sbin/init" ]' ${CONTAINER_UUID}
 buildah config --stop-signal 'SIGRTMIN+3' ${CONTAINER_UUID}
+buildah config --volume /var/log/journal ${CONTAINER_UUID}
 
 commit_container python39:latest
