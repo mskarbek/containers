@@ -6,8 +6,8 @@ CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 if [ ${BASE_OS} = "el8" ]; then
     ENABLE_REPO="openstack-16-tools-for-rhel-8-x86_64-rpms"
 elif [ ${BASE_OS} = "c8s" ]; then
-    cp -v ./files/centos-{openstack-xena,ceph-pacific}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
-    cp -v ./RPM-GPG-KEY-CentOS-SIG-{Cloud,Storage} /etc/pki/rpm-gpg/
+    cp -v ./files/centos-{sig-ansible,openstack-xena,ceph-pacific}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+    cp -v ./RPM-GPG-KEY-CentOS-SIG-{Cloud,Storage,ConfigManagement} /etc/pki/rpm-gpg/
     ENABLE_REPO="centos-openstack-xena --enablerepo=centos-ceph-pacific"
 else
     printf "ERROR: Missing or incorrect BASE_OS variable." >&2
