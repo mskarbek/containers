@@ -26,7 +26,14 @@ dnf_cache () {
 
 dnf_install () {
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+        if [ ${BASE_OS} = "el8" ]; then
+            cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+        elif [ ${BASE_OS} = "c8s" ]; then
+            cp -v /etc/yum.repos.d/CentOS*.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+        else
+            printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+            exit 1
+        fi
     fi
     dnf -y\
      --installroot=${CONTAINER_PATH}\
@@ -36,13 +43,27 @@ dnf_install () {
      --nodocs\
      install ${@}
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+        if [ ${BASE_OS} = "el8" ]; then
+            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+        elif [ ${BASE_OS} = "c8s" ]; then
+            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS*.repo
+        else
+            printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+            exit 1
+        fi
     fi
 }
 
 dnf_install_with_docs () {
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+        if [ ${BASE_OS} = "el8" ]; then
+            cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+        elif [ ${BASE_OS} = "c8s" ]; then
+            cp -v /etc/yum.repos.d/CentOS*.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+        else
+            printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+            exit 1
+        fi
     fi
     dnf -y\
      --installroot=${CONTAINER_PATH}\
@@ -51,13 +72,27 @@ dnf_install_with_docs () {
      --setopt=install_weak_deps=false\
      install ${@}
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+        if [ ${BASE_OS} = "el8" ]; then
+            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+        elif [ ${BASE_OS} = "c8s" ]; then
+            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS*.repo
+        else
+            printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+            exit 1
+        fi
     fi
 }
 
 dnf_module () {
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+        if [ ${BASE_OS} = "el8" ]; then
+            cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+        elif [ ${BASE_OS} = "c8s" ]; then
+            cp -v /etc/yum.repos.d/CentOS*.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+        else
+            printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+            exit 1
+        fi
     fi
     dnf -y\
      --installroot=${CONTAINER_PATH}\
@@ -67,7 +102,14 @@ dnf_module () {
      --nodocs\
      module ${1}
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+        if [ ${BASE_OS} = "el8" ]; then
+            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
+        elif [ ${BASE_OS} = "c8s" ]; then
+            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS*.repo
+        else
+            printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+            exit 1
+        fi
     fi
 }
 

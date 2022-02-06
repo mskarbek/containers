@@ -4,7 +4,16 @@ CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 buildah from --name=${CONTAINER_UUID} scratch
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-dnf_install "--disablerepo=* --enablerepo=rhel-8-for-x86_64-baseos-rpms glibc-minimal-langpack coreutils-single ca-certificates"
+if [ ${BASE_OS} = "el8" ]; then
+    ENABLE_REPO="rhel-8-for-x86_64-baseos-rpms"
+elif [ ${BASE_OS} = "c8s" ]; then
+    ENABLE_REPO="baseos"
+else
+    printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+    exit 1
+fi
+
+dnf_install "--disablerepo=* --enablerepo=${ENABLE_REPO} glibc-minimal-langpack coreutils-single ca-certificates"
 dnf_clean
 
 if [ -f ./files/proxy.repo ] && [ -z ${IMAGE_BOOTSTRAP} ]; then

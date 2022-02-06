@@ -1,2 +1,7 @@
 export IMAGE_BOOTSTRAP=1
 export REGISTRY_URL="registry.lab.skarbek.name"
+# Supported options: el8 - RHEL 8, c8s - CentOS Stream 8
+# Most of the containers should "just work" with RHEL 9/CentOS Stream 9 as a
+# base but there are few small differences in a handful of images, so I'll not
+# support that yet
+export BASE_OS=el8

@@ -4,11 +4,6 @@
 CONTAINER_UUID=$(create_container base/python36-devel:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-    cp -v ./files/epel.repo ${CONTAINER_PATH}/etc/yum.repos.d/epel.repo
-    cp -v ./files/RPM-GPG-KEY-EPEL-8 /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8
-fi
-
 # Packages in repos that are unfortunately outdated:
 #   python3-greenlet
 #   python3-itsdangerous

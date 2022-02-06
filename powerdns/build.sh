@@ -4,8 +4,8 @@ CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-    cp -v ./files/{epel,powerdns}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
-    cp -v ./files/RPM-GPG-KEY-{EPEL-8,powerdns} /etc/pki/rpm-gpg/
+    cp -v ./files/powerdns.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+    cp -v ./files/RPM-GPG-KEY-powerdns /etc/pki/rpm-gpg/
 fi
 
 dnf_cache

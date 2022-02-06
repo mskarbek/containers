@@ -6,6 +6,9 @@ CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/{epel.repo,centos-hyperscale.repo} ${CONTAINER_PATH}/etc/yum.repos.d/
     cp -v ./files/{RPM-GPG-KEY-EPEL-8,RPM-GPG-KEY-CentOS-SIG-HyperScale} /etc/pki/rpm-gpg/
+    if [ ${BASE_OS} = "c8s" ]; then
+        cp -v ./files/epel-next.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+    fi
 fi
 
 dnf_cache

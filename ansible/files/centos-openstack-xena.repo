@@ -1,0 +1,8 @@
+[centos-openstack-xena]
+name=CentOS-$releasever - OpenStack xena
+#baseurl=http://mirror.centos.org/$contentdir/8-stream/cloud/$basearch/openstack-xena/
+mirrorlist=http://mirrorlist.centos.org/?release=8-stream&arch=$basearch&repo=cloud-openstack-xena
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Cloud
+module_hotfixes=1
