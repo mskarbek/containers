@@ -5,7 +5,7 @@ CONTAINER_UUID=$(create_container buildah:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-dnf_install "openssh-clients git-core rsync hostname"
+dnf_install "openssh-clients git-core hostname"
 dnf_clean_cache
 dnf_clean
 

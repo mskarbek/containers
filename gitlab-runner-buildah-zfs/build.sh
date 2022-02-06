@@ -1,7 +1,7 @@
 . ../meta/common.sh
 . ./files/VERSIONS
 
-CONTAINER_UUID=$(create_container podman:latest)
+CONTAINER_UUID=$(create_container buildah-zfs:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
@@ -25,4 +25,4 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
 buildah config --volume /etc/gitlab-runner ${CONTAINER_UUID}
 buildah config --volume /var/lib/gitlab-runner ${CONTAINER_UUID}
 
-commit_container gitlab-runner-podman:latest
+commit_container gitlab-runner-buildah-zfs:latest
