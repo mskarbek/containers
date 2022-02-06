@@ -1,9 +1,9 @@
 # RHEL-based set of container images
 ## Idea
-RHEL-based containers leveraging `systemd` and its potential including `sysusers.d`, `tmpfiles.d`, eliminating shell scripts inside containers as much as possible. Strongly opinionated. I do not intend to extend support to RHEL rebuilds (AmaLinux/Rocky/whatever). Pretty much every script provided in this repo should "just work" and build a fully functional image based on those RHEL rebuilds (with small adjustments in `meta/common.sh`) but I don't have need nor time to validate that.
+RHEL/CentOS Stream-based containers leveraging `systemd` and its potential including `sysusers.d`, `tmpfiles.d`, eliminating shell scripts inside containers as much as possible. Strongly opinionated. I do not intend to extend support to RHEL rebuilds (AmaLinux/Rocky/whatever). Pretty much every script provided in this repo should "just work" and build a fully functional image based on those RHEL rebuilds (with small adjustments in `meta/common.sh`) but I don't have need nor time to validate that.
 
 ## Build process
-Build requires valid Red Hat [subscription](https://developers.redhat.com/), RHEL 8 as a host and [`buildah`](https://buildah.io/).
+Build requires RHEL 8 (with valid Red Hat [subscription](https://developers.redhat.com/)) or CentOS Stream 8 as a host and [`buildah`](https://buildah.io/).
 Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, some images take advantage of ZFS and require it to be used as containers (podman, buildah, based on them GitLab runners).
 
 # Images
