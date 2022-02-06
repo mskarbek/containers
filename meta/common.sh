@@ -29,7 +29,7 @@ dnf_install () {
         if [ ${BASE_OS} = "el8" ]; then
             cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         elif [ ${BASE_OS} = "c8s" ]; then
-            cp -v /etc/yum.repos.d/CentOS*.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+            cp -v /etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
         else
             printf "ERROR: Missing or incorrect BASE_OS variable." >&2
             exit 1
@@ -46,7 +46,7 @@ dnf_install () {
         if [ ${BASE_OS} = "el8" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         elif [ ${BASE_OS} = "c8s" ]; then
-            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS*.repo
+            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo
         else
             printf "ERROR: Missing or incorrect BASE_OS variable." >&2
             exit 1
@@ -59,7 +59,7 @@ dnf_install_with_docs () {
         if [ ${BASE_OS} = "el8" ]; then
             cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         elif [ ${BASE_OS} = "c8s" ]; then
-            cp -v /etc/yum.repos.d/CentOS*.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+            cp -v /etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
         else
             printf "ERROR: Missing or incorrect BASE_OS variable." >&2
             exit 1
@@ -75,7 +75,7 @@ dnf_install_with_docs () {
         if [ ${BASE_OS} = "el8" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         elif [ ${BASE_OS} = "c8s" ]; then
-            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS*.repo
+            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo
         else
             printf "ERROR: Missing or incorrect BASE_OS variable." >&2
             exit 1
@@ -88,7 +88,7 @@ dnf_module () {
         if [ ${BASE_OS} = "el8" ]; then
             cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         elif [ ${BASE_OS} = "c8s" ]; then
-            cp -v /etc/yum.repos.d/CentOS*.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+            cp -v /etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
         else
             printf "ERROR: Missing or incorrect BASE_OS variable." >&2
             exit 1
@@ -105,7 +105,7 @@ dnf_module () {
         if [ ${BASE_OS} = "el8" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         elif [ ${BASE_OS} = "c8s" ]; then
-            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS*.repo
+            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo
         else
             printf "ERROR: Missing or incorrect BASE_OS variable." >&2
             exit 1
