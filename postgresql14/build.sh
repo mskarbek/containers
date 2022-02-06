@@ -21,4 +21,4 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
 
 buildah config --volume /var/lib/pgsql/14/data ${CONTAINER_UUID}
 
-commit_container postgres14:latest
+commit_container postgresql14:latest
