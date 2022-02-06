@@ -13,6 +13,7 @@ mv -v ${CONTAINER_PATH}/etc/knot-resolver/* ${CONTAINER_PATH}/usr/share/knot-res
 rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
+ kres-cache-gc.service\
  kresd@1.service
 
 buildah config --volume /etc/knot-resolver ${CONTAINER_UUID}
