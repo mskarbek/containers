@@ -4,11 +4,9 @@ Documentation=https://www.keycloak.org/docs/
 After=network.target nss-lookup.target
 
 [Service]
-WorkingDirectory=/run/keycloak
-Type=forking
 User=keycloak
 Group=keycloak
-ExecStart=/usr/lib/keycloak/bin/standalone.sh
+ExecStart=/usr/bin/bash /usr/lib/keycloak/bin/standalone.sh
 Restart=on-abort
 LimitNOFILE=65536
 TimeoutSec=600

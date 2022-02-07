@@ -13,6 +13,7 @@ else
     popd
 fi
 mv -v ${TMP_DIR}/keycloak-${KEYCLOAK_VERSION} ${CONTAINER_PATH}/usr/lib/keycloak
+chown -R root:root ${CONTAINER_PATH}/usr/lib/keycloak
 rm -rf ${TMP_DIR}
 
 rsync_rootfs
@@ -28,7 +29,11 @@ fi
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  keycloak.service
 
-buildah config --volume /etc/kuma ${CONTAINER_UUID}
-buildah config --volume /var/log/kuma ${CONTAINER_UUID}
+# Standalone mode
+buildah config --volume /usr/lib/keycloak/standalone/data ${CONTAINER_UUID}
+buildah config --volume /usr/lib/keycloak/standalone/log ${CONTAINER_UUID}
+# Domain mode
+#buildah config --volume /usr/lib/keycloak/domain/data ${CONTAINER_UUID}
+#buildah config --volume /usr/lib/keycloak/domain/log ${CONTAINER_UUID}
 
 commit_container keycloak:latest
