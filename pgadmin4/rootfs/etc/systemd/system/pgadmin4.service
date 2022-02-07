@@ -1,0 +1,15 @@
+[Unit]
+Description=pgAdmin4 Server
+Documentation=https://www.pgadmin.org/docs/pgadmin4/
+Requires=pgadmin4-password.service pgadmin4-config.service pgadmin4-import.service
+After=network.target nss-lookup.target pgadmin4-password.service pgadmin4-config.service pgadmin4-import.service
+
+[Service]
+WorkingDirectory=/run/pgadmin
+User=pgadmin
+Group=pgadmin
+ExecStart=/usr/pgadmin4/venv/bin/gunicorn --workers=1 --threads=25 --chdir /usr/pgadmin4/web/ pgAdmin4:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
