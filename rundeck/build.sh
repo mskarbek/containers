@@ -13,14 +13,14 @@ dnf_install "rundeck git-core"
 dnf_clean_cache
 dnf_clean
 
-mkdir -vp ${CONTAINER_PATH}/usr/share/rundeck
-mv -v ${CONTAINER_PATH}/etc/rundeck/* ${CONTAINER_PATH}/usr/share/rundeck/
+#mkdir -vp ${CONTAINER_PATH}/usr/share/rundeck
+#mv -v ${CONTAINER_PATH}/etc/rundeck/* ${CONTAINER_PATH}/usr/share/rundeck/
 rsync_rootfs
 
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  rundeckd.service
 
-buildah config --volume /etc/rundeck ${CONTAINER_UUID}
+#buildah config --volume /etc/rundeck ${CONTAINER_UUID}
 buildah config --volume /var/log/rundeck ${CONTAINER_UUID}
 
 commit_container rundeck:latest

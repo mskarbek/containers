@@ -56,6 +56,8 @@
     - keycloak.crt.key
     - pgadmin.crt
     - pgadmin.crt.key
+    - rundeck.crt
+    - rundeck.crt.key
 
 - name: Create gateway pod
   ansible.builtin.import_role:
@@ -111,6 +113,8 @@
         port: "12011"
       - service: pgadmin
         port: "12012"
+      - service: rundeck
+        port: "12013"
 
 - name: Set gateway pod ids
   ansible.builtin.import_role:
