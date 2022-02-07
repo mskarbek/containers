@@ -48,6 +48,12 @@
     - registry.crt.key
     - repo.crt
     - repo.crt.key
+    - resolver.crt
+    - resolver.crt.key
+    - auth.crt
+    - auth.crt.key
+    - keycloak.crt
+    - keycloak.crt.key
 
 - name: Create gateway pod
   ansible.builtin.import_role:
@@ -95,6 +101,12 @@
         port: "12007"
       - service: gitlab-ssh
         port: "12008"
+      - service: resolver-web
+        port: "12009"
+      - service: keycloak-web
+        port: "12010"
+      - service: keycloak-mgmt
+        port: "12011"
 
 - name: Set gateway pod ids
   ansible.builtin.import_role:

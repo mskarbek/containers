@@ -64,3 +64,9 @@ backend git.lab.skarbek.name
 backend git-ssh
     mode tcp
     server git-ssh1 127.0.0.1:12008 check
+backend resolver.lab.skarbek.name
+    server resolver-web1 127.0.0.1:12009 check
+backend auth.lab.skarbek.name
+    server auth-web1 127.0.0.1:12010 check
+backend keycloak.lab.skarbek.name
+    server keycloak-web1 127.0.0.1:12011 check
