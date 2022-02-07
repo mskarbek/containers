@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "inf",
+            "Group": "inf",
+            "Port": 12001,
+            "Username": "postgres",
+            "Host": "localhost",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres"
+        }
+    }
+}

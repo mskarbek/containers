@@ -11,6 +11,6 @@ Type=oneshot
 User=pgadmin
 Group=pgadmin
 EnvironmentFile=/run/secrets/pgadmin4-password
-ExecStart=/usr/pgadmin4/venv/bin/python3 /usr/pgadmin4/web/setup.py --load-servers /etc/pgadmin/servers.json --user $PGADMIN_SETUP_EMAIL
+ExecStart=/usr/pgadmin4/venv/bin/python3 /usr/pgadmin4/web/setup.py --replace --load-servers /etc/pgadmin/servers.json --user $PGADMIN_SETUP_EMAIL
 ExecStartPost=/usr/bin/touch /etc/pgadmin/.lock
 RemainAfterExit=false
