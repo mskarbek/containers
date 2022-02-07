@@ -1,6 +1,6 @@
 . ../meta/common.sh
 
-TOOLS="curl vi nano telnet hostname iputils iproute mtr tmux lsof knot-utils tar rsync jq htop openssh-clients tcpdump postgresql14"
+TOOLS="less findutils curl vi nano telnet hostname iputils iproute mtr tmux lsof knot-utils tar unzip zstd gzip rsync jq htop openssh-clients tcpdump postgresql14"
 
 CONTAINER_UUID=$(create_container base:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
