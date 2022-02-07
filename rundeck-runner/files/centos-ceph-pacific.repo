@@ -1,0 +1,7 @@
+[centos-ceph-pacific]
+name=CentOS-$stream - Ceph Pacific
+#baseurl=http://mirror.centos.org/$contentdir/$stream/storage/$basearch/ceph-pacific/
+mirrorlist=http://mirrorlist.centos.org/?release=$stream&arch=$basearch&repo=storage-ceph-pacific
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Storage
