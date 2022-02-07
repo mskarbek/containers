@@ -11,6 +11,7 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
 fi
 
 dnf_cache
+dnf_module "disable postgresql"
 dnf_install ${TOOLS}
 dnf_clean_cache
 dnf_clean
@@ -27,6 +28,7 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
 fi
 
 dnf_cache
+dnf_module "disable postgresql"
 dnf_install ${TOOLS}
 dnf_clean_cache
 dnf_clean
