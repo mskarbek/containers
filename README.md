@@ -4,13 +4,15 @@ RHEL/CentOS Stream-based containers leveraging `systemd` and its potential inclu
 
 ## Build process
 Build requires RHEL 8 (with valid Red Hat [subscription](https://developers.redhat.com/)) or CentOS Stream 8 as a host and [`buildah`](https://buildah.io/).
-Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, some images take advantage of ZFS and require it to be used as containers (podman, buildah, based on them GitLab runners).
+Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, some images take advantage of ZFS and require it to be used as containers (`podman-zfs`, `buildah-zfs`, based on them GitLab runners).
 
 # Images
 ## Foundation
-* [base](./base/README.md)
-* [micro](./micro/README.md)
-* [systemd](./systemd/README.md)
+Those images are intended to replace UBI in their function, but they drop entirely package management from the list of installed packages, so no `dnf` or `rpm`. Instead, all the other containers are built using `buildah` and host `dnf` with `--installroot`.
+
+* [base](./base/README.md) - equivalent of `ubi8/ubi`
+* [micro](./micro/README.md) - equivalent of `ubi8/ubi-micro`
+* [systemd](./systemd/README.md) - equivalent of `ubi8/ubi-init`
 
 ## base-based
 ### build-related
@@ -36,81 +38,99 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 
 ## systemd-based
 ### build-related
+* [buildah-zfs](./buildah-zfs/README.md)
 * [buildah](./buildah/README.md)
+* [gitlab-runner-buildah-zfs](./gitlab-runner-buildah-zfs/README.md)
 * [gitlab-runner-buildah](./gitlab-runner-buildah/README.md)
+* [gitlab-runner-podman-zfs](./gitlab-runner-podman-zfs/README.md)
 * [gitlab-runner-podman](./gitlab-runner-podman/README.md)
+* [podman-zfs](./podman/README.md)
+* [podman](./podman/README.md)
 
 ### runtime-related
+* [nodejs14](./nodejs14/README.md)
+* [nodejs16](./nodejs16/README.md)
 * [openjdk11-jre](./openjdk10-jre/README.md)
 * [openjdk17-jre](./openjdk17-jre/README.md)
 * [openjdk8-jre](./openjdk8-jre/README.md)
-* [podman](./podman/README.md)
 * [python36](./python36/README.md)
 * [python39](./python39/README.md)
-* [toolbox](./toolbox/README.md)
 
 ### services
-* [alertmanager](./alertmanager/README.md)
-* [ara](./ara/README.md)
-* [consul](./consul/README.md)
+#### development
 * [fake-service](./fake-service/README.md)
 * [gitlab](./gitlab/README.md)
-* [grafana](./grafana/README.md)
-* [haproxy](./haproxy/README.md)
-* [influxdb](./influxdb/README.md)
-* [kea](./kea/README.md)
-* [knot-dns](./knot-dns/README.md)
-* [knot-resolver](./knot-resolver/README.md)
-* [kong](./kong/README.md)
-* [krakend](./krakend/README.md)
-* [kuma-cp](./kuma-cp/README.md)
-* [kuma-dp](./kuma-dp/README.md)
 * [locust](./locust/README.md)
-* [loki-canary](./loki-canary/README.md)
-* [loki](./loki/README.md)
-* [minio-console](./minio-console/README.md)
-* [minio](./minio/README.md)
-* [nats-kafka](./nats-kafka/README.md)
-* [nats](./nats/README.md)
 * [nexus](./nexus/README.md)
-* [nginx](./nginx/README.md)
-* [openssh](./openssh/README.md)
 * [openvscode](./openvscode/README.md)
+
+#### databases
+* [consul](./consul/README.md)
+* [influxdb](./influxdb/README.md)
 * [pgadmin4](./pgadmin4/README.md)
 * [postgresql13](./postgresql13/README.md)
 * [postgresql14](./postgresql14/README.md)
-* [prometheus](./prometheus/README.md)
-* [pushgateway](./pushgateway/README.md)
-* [rabbitmq](./rabbitmq/README.md)
-* [tinyproxy](./tinyproxy/README.md)
-* [vector](./vector/README.md)
-* [vsftpd](./vsftpd/README.md)
 * [yugabytedb](./yugabytedb/README.md)
 
+#### networking
+* [haproxy](./haproxy/README.md)
+* [kea](./kea/README.md)
+* [knot-dns](./knot-dns/README.md)
+* [knot-resolver](./knot-resolver/README.md)
+* [krakend](./krakend/README.md)
+* [kuma-cp](./kuma-cp/README.md)
+* [kuma-dp](./kuma-dp/README.md)
+* [nginx](./nginx/README.md)
+* [tinyproxy](./tinyproxy/README.md)
+* [vsftpd](./vsftpd/README.md)
+
+#### monitoring
+* [alertmanager](./alertmanager/README.md)
+* [grafana](./grafana/README.md)
+* [loki-canary](./loki-canary/README.md)
+* [loki](./loki/README.md)
+* [prometheus](./prometheus/README.md)
+* [pushgateway](./pushgateway/README.md)
+* [vector](./vector/README.md)
+
+#### tools
+* [ara](./ara/README.md)
+* [minio-console](./minio-console/README.md)
+* [minio](./minio/README.md)
+* [openssh](./openssh/README.md)
+* [rundeck-runner](./rundeck-runner/README.md)
+* [rundeck](./rundeck/README.md)
+* [step-ca](./step-ca/README.md)
+* [toolbox](./toolbox/README.md)
+
+#### streaming/messaging
+* [nats-kafka](./nats-kafka/README.md)
+* [nats](./nats/README.md)
+* [rabbitmq](./rabbitmq/README.md)
+
 ## TODO
-* [389ds](./389ds/README.md)
+* [apisix](./apisix/README.md)
+* [budibase](./budibase/README.md)
+* [couchdb](./couchdb/README.md)
 * [fleet](./fleet/README.md)
 * [harbor](./harbor/README.md)
 * [hazelcast-mc4](./hazelcast-mc4/README.md)
 * [hazelcast-mc5](./hazelcast-mc5/README.md)
 * [hazelcast4](./hazelcast4/README.md)
 * [hazelcast5](./hazelcast5/README.md)
-* [jenkins](./jenkins/README.md)
-* [kafka-all-in-one](./kafka-all-in-one/README.md)
 * [kafka](./kafka/README.md)
 * [keycloak](./keycloak/README.md)
 * [kowl](./kowl/README.md)
 * [mssql](./mssql/README.md)
 * [mysql8](./mysql8/README.md)
+* [openldap](./openldap/README.md)
+* [powerdns](./powerdns/README.md)
 * [redis](./redis/README.md)
 * [rekor](./rekor/README.md)
-* [rundeck](./rundeck/README.md)
-* [step-ca](./step-ca/README.md)
-* [stork](./stork/README.md)
-* [svn](./svn/README.md)
 * [synth](./synth/README.md)
 * [tempo](./tempo/README.md)
-* [tikv](./tidb/README.md)
 * [tidb](./tidb/README.md)
+* [tikv](./tidb/README.md)
 * [vault](./vault/README.md)
+* [victoriametrics](./victoriametrics/README.md)
 * [zookeeper](./zookeeper/README.md)
