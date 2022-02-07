@@ -7,7 +7,7 @@ Requires=postgresql-password.service
 
 [Service]
 Type=oneshot
-Environment="PGSETUP_INITDB_OPTIONS=--pwfile=/run/secrets/postgres-password"
+Environment="PGSETUP_INITDB_OPTIONS=--encoding=UTF8 --locale=C.UTF-8 --pwfile=/run/secrets/postgres-password"
 ExecStart=/usr/pgsql-13/bin/postgresql-13-setup initdb
 ExecStartPost=/usr/bin/touch /var/lib/pgsql/13/.lock
 RemainAfterExit=no
