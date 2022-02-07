@@ -36,7 +36,6 @@ frontend ingress
     bind *:443 ssl crt /etc/pki/tls/private/
     http-request redirect scheme https unless { ssl_fc }
     use_backend %[req.hdr(Host),lower]
-
 frontend git-ssh-ingress
     bind *:2222
     mode tcp
@@ -70,3 +69,5 @@ backend auth.lab.skarbek.name
     server auth-web1 127.0.0.1:12010 check
 backend keycloak.lab.skarbek.name
     server keycloak-web1 127.0.0.1:12011 check
+backend pgadmin.lab.skarbek.name
+    server pgadmin1 127.0.0.1:12012 check
