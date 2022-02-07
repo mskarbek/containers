@@ -29,5 +29,6 @@ chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/mcli
 
 rsync_rootfs
 buildah run --workingdir /var/lib/rundeck ${CONTAINER_UUID} ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections
+buildah config --volume /var/lib/rundeck/.ssh ${CONTAINER_UUID}
 
 commit_container rundeck-runner:latest
