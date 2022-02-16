@@ -1,0 +1,33 @@
+---
+- name: Create mesh config
+  ansible.builtin.template:
+    src: mesh.yaml.j2
+    dest: "/var/lib/volumes/storage/{{ kuma_env + '-' + service_name + '-' + deployment_id + '-app' + '/etc/kuma'|replace('/', '-') }}/_data/{{ item }}-mesh.yaml"
+    owner: root
+    group: root
+    mode: "0644"
+    seuser: system_u
+    serole: object_r
+    setype: container_file_t
+    selevel: s0
+  loop: "{{ mesh_env }}"
+- name: Create traffic-log config
+  ansible.builtin.template:
+    src: traffic-log.yaml.j2
+    dest: "/var/lib/volumes/storage/{{ kuma_env + '-' + service_name + '-' + deployment_id + '-app' + '/etc/kuma'|replace('/', '-') }}/_data/{{ item }}-traffic-log.yaml"
+    owner: root
+    group: root
+    mode: "0644"
+    seuser: system_u
+    serole: object_r
+    setype: container_file_t
+    selevel: s0
+  loop: "{{ mesh_env }}"
+- name: Configure mesh in kuma
+  ansible.builtin.command:
+    cmd: "podman exec {{ kuma_env + '-' + service_name + '-' + deployment_id + '-app' }} kumactl apply -f /etc/kuma/{{ item }}-mesh.yaml"
+  loop: "{{ mesh_env }}"
+- name: Configure traffic-log in kuma
+  ansible.builtin.command:
+    cmd: "podman exec {{ kuma_env + '-' + service_name + '-' + deployment_id + '-app' }} kumactl apply -f /etc/kuma/{{ item }}-traffic-log.yaml"
+  loop: "{{ mesh_env }}"

@@ -1,0 +1,21 @@
+---
+- hosts: all
+  gather_facts: false
+  vars:
+  #vars_files:
+  #  - "{{ env }}.yaml"
+  tasks:
+    - name: Configure kuma mesh
+      ansible.builtin.include_role:
+        name: kuma-mesh
+        tasks_from: present
+      vars:
+        kuma_env: inf
+        service_name: kuma-cp
+        deployment_id: 6954ca59
+        mesh_env:
+          - inf
+          - dev
+          - tst
+          - ref
+          - prd
