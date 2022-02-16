@@ -1,0 +1,28 @@
+---
+- hosts: all
+  gather_facts: false
+  vars:
+    service_name: kuma-cp
+    deployment_id: 6954ca59
+    remove_volumes: true
+  #vars_files:
+  #  - "{{ env }}.yaml"
+  tasks:
+    - name: Generate deployment id
+      ansible.builtin.include_role:
+        name: pod-id
+    - name: Deploy mesh dataplane
+      ansible.builtin.include_role:
+        name: pod-mesh
+        tasks_from: present
+      vars:
+        mesh_config:
+          #mesh_gateway:
+          mesh_inbound:
+            - port: 5681
+              service: kuma
+              protocol: http
+              address: 127.0.0.1
+          #mesh_outbound:
+          #  - port:
+          #    service:

@@ -1,10 +1,12 @@
 ---
-
 - name: Generate token
   ansible.builtin.command:
-#    cmd: "podman exec {{ kuma_env + '-kuma-' + lookup('consul_kv', env + '/defaults/kuma_id', host=consul_host) + '-app' }} kumactl generate dataplane-token --mesh={{ env }} --name={{ env + '-' + service + '-' + future_pod }}"
-    cmd: "cat /proc/sys/kernel/random/uuid"
+    cmd: "podman exec {{ lookup('consul_kv', env + '/defaults/kuma_env', host=consul_host) + '-kuma-cp-' + lookup('consul_kv', env + '/defaults/kuma_id', host=consul_host) + '-app' }} kumactl generate dataplane-token --mesh={{ env }} --name={{ current_app_container_name }}"
   register: mesh_token
+- name: Get app container info
+  containers.podman.podman_container_info:
+    name: "{{ current_app_container_name }}"
+  register: container_info
 - name: Deploy mesh dataplane container
   ansible.builtin.include_role:
     name: podman-container
@@ -12,18 +14,17 @@
   vars:
     container_name: "{{ current_mesh_container_name }}"
     container_pod: "{{ current_pod_name }}"
-    container_image: "registry.access.redhat.com/ubi8/ubi:8.5"
-    container_command: ["sleep", "300"]
-    #container_command:
-    #  - /usr/local/bin/kuma-dp
-    #  - run
-    #  - --log-output-path=/var/log/kuma/kuma-dp.log
-    #  - --cp-address=https://{{ lookup('consul_kv', env + '/defaults/kuma_ip', host=consul_host) }}:5678/
-    #  - --dns-enabled=false
-    #  - --dataplane-file=/etc/kuma/dataplane.yaml
-    #  - --dataplane-token-file=/run/secrets/kuma-token
-    #  - --config-dir=/run/kuma/envoy/
-    #  - --dns-server-config-dir=/run/kuma/coredns/
+    container_image: "registry.lab.skarbek.name/bootstrap/base/kuma-dp:latest"
+    container_command:
+      - /usr/local/bin/kuma-dp
+      - run
+      - --log-output-path=/var/log/kuma/kuma-dp.log
+      - --cp-address=https://{{ lookup('consul_kv', env + '/defaults/kuma_ip', host=consul_host) }}:5678/
+      - --dns-enabled=false
+      - --dataplane-file=/etc/kuma/dataplane.yaml
+      - --dataplane-token-file=/run/secrets/kuma-token
+      - --config-dir=/run/kuma/envoy/
+      - --dns-server-config-dir=/run/kuma/coredns/
     container_catatonit: true
     container_mount:
       - type=tmpfs,destination=/run/kuma
