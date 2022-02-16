@@ -1,0 +1,14 @@
+---
+- hosts: all
+  gather_facts: false
+  vars:
+    #deployment_id: 78a9fe33
+  #vars_files:
+  #  - "{{ env }}.yaml"
+  tasks:
+    - name: Deploy kuma-cp
+      ansible.builtin.include_role:
+        name: kuma-controlplane
+        tasks_from: present
+      vars:
+        service_name: kuma-cp
