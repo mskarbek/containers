@@ -1,0 +1,2 @@
+---
+infra_image: registry.access.redhat.com/ubi8/pause:8.5

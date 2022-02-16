@@ -1,0 +1,32 @@
+---
+argument_specs:
+  present:
+    short_description: Generic service
+    options:
+      env:
+        type: str
+        required: true
+        description: Environment
+      service_name:
+        type: str
+        required: true
+        description: Service name
+  absent:
+    short_description: Generic service
+    options:
+      env:
+        type: str
+        required: true
+        description: Environment
+      service_name:
+        type: str
+        required: true
+        description: Service name
+      deployment_id:
+        type: str
+        required: true
+        description: Deployment id
+      remove_volumes:
+        type: bool
+        required: true
+        description: Destroy volumes with container

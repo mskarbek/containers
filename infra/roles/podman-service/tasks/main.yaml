@@ -1,4 +1,0 @@
----
-- name: Create service
-  ansible.builtin.debug:
-    msg: "{{ service + ' service created'}}"

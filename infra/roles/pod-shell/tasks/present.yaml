@@ -1,0 +1,17 @@
+---
+- name: Deploy shell container
+  ansible.builtin.include_role:
+    name: podman-container
+    tasks_from: present
+  vars:
+    container_name: "{{ current_shell_container_name }}"
+    container_pod: "{{ current_pod_name }}"
+    container_image: "registry.access.redhat.com/ubi8/ubi:8.5"
+    container_command: ["sleep", "300"]
+    container_catatonit: true
+- name: Start shell container
+  ansible.builtin.include_role:
+    name: podman-container
+    tasks_from: started
+  vars:
+    container_name: "{{ current_shell_container_name }}"

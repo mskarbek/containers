@@ -1,7 +1,0 @@
----
-- hosts: all
-  gather_facts: no
-  tasks:
-    - name: Crete consul
-      ansible.builtin.import_role:
-        name: postgresql14

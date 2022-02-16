@@ -1,0 +1,49 @@
+---
+
+- name: Generate token
+  ansible.builtin.command:
+#    cmd: "podman exec {{ kuma_env + '-kuma-' + lookup('consul_kv', env + '/defaults/kuma_id', host=consul_host) + '-app' }} kumactl generate dataplane-token --mesh={{ env }} --name={{ env + '-' + service + '-' + future_pod }}"
+    cmd: "cat /proc/sys/kernel/random/uuid"
+  register: mesh_token
+- name: Deploy mesh dataplane container
+  ansible.builtin.include_role:
+    name: podman-container
+    tasks_from: present
+  vars:
+    container_name: "{{ current_mesh_container_name }}"
+    container_pod: "{{ current_pod_name }}"
+    container_image: "registry.access.redhat.com/ubi8/ubi:8.5"
+    container_command: ["sleep", "300"]
+    #container_command:
+    #  - /usr/local/bin/kuma-dp
+    #  - run
+    #  - --log-output-path=/var/log/kuma/kuma-dp.log
+    #  - --cp-address=https://{{ lookup('consul_kv', env + '/defaults/kuma_ip', host=consul_host) }}:5678/
+    #  - --dns-enabled=false
+    #  - --dataplane-file=/etc/kuma/dataplane.yaml
+    #  - --dataplane-token-file=/run/secrets/kuma-token
+    #  - --config-dir=/run/kuma/envoy/
+    #  - --dns-server-config-dir=/run/kuma/coredns/
+    container_catatonit: true
+    container_mount:
+      - type=tmpfs,destination=/run/kuma
+    container_secrets:
+      - container_secret_name: "token"
+        container_secret_data: "{{ mesh_token.stdout }}"
+        container_secret_target: "kuma-token"
+      - global_secret_name: "{{ env }}-kuma-config"
+    container_volumes:
+      - container_volume_mountpoint: /etc/kuma
+        container_volume_type: zfs
+        container_volume_files:
+          template_files:
+            - src: ../../pod-mesh/templates/dataplane.yaml.j2
+              dest: /dataplane.yaml
+      - container_volume_mountpoint: /var/log/kuma
+        container_volume_type: zfs
+- name: Start mesh dataplane container
+  ansible.builtin.include_role:
+    name: podman-container
+    tasks_from: started
+  vars:
+    container_name: "{{ current_mesh_container_name }}"

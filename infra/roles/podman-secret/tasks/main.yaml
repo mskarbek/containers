@@ -1,6 +1,0 @@
----
-- name: Create secret
-  containers.podman.podman_secret:
-    state: present
-    name: "{{ env + '-' + service + '-' + future_pod + '-' + container_type + '-' + secret_name }}"
-    data: "{{ secret_data }}"

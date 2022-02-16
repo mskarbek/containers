@@ -1,0 +1,10 @@
+---
+- name: Generate deployment id
+  ansible.builtin.set_fact:
+    current_id: "{{ deployment_id if deployment_id is defined else lookup('pipe', 'cat /proc/sys/kernel/random/uuid')[:8] }}"
+- name: Create deployment names
+  ansible.builtin.set_fact:
+    current_pod_name: "{{ env + '-' + service_name  + '-' +  current_id }}"
+    current_app_container_name: "{{ env + '-' + service_name  + '-' +  current_id + '-app' }}"
+    current_mesh_container_name: "{{ env + '-' + service_name  + '-' +  current_id + '-mesh' }}"
+    current_shell_container_name: "{{ env + '-' + service_name  + '-' +  current_id + '-shell' }}"

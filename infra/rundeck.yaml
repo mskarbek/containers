@@ -1,7 +1,0 @@
----
-- hosts: all
-  gather_facts: no
-  tasks:
-    - name: Crete rundeck
-      ansible.builtin.import_role:
-        name: rundeck

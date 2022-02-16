@@ -1,0 +1,13 @@
+---
+- name: Stop mesh dataplane container
+  ansible.builtin.include_role:
+    name: podman-container
+    tasks_from: stopped
+  vars:
+    container_name: "{{ current_mesh_container_name }}"
+- name: Destroy mesh dataplane container
+  ansible.builtin.include_role:
+    name: podman-container
+    tasks_from: absent
+  vars:
+    container_name: "{{ current_mesh_container_name }}"

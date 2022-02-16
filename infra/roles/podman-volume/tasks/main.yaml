@@ -1,9 +1,0 @@
----
-- name: Create volume
-  containers.podman.podman_volume:
-    state: present
-    name: "{{ env + '-' + service + '-' + future_pod + '-' + container_type + volume_mountpoint|replace('/', '-') }}"
-    label:
-      container: "{{ env + '-' + service + '-' + future_pod + '-' + container_type }}"
-      mountpoint: "{{ volume_mountpoint }}"
-    options:

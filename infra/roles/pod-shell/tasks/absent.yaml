@@ -1,0 +1,13 @@
+---
+- name: Stop shell container
+  ansible.builtin.include_role:
+    name: podman-container
+    tasks_from: stopped
+  vars:
+    container_name: "{{ current_shell_container_name }}"
+- name: Destroy shell container
+  ansible.builtin.include_role:
+    name: podman-container
+    tasks_from: absent
+  vars:
+    container_name: "{{ current_shell_container_name }}"

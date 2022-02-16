@@ -1,0 +1,28 @@
+---
+- name: Generate deployment id
+  ansible.builtin.include_role:
+    name: pod-id
+- name: Stop generic container
+  ansible.builtin.include_role:
+    name: podman-container
+    tasks_from: stopped
+  vars:
+    container_name: "{{ current_app_container_name }}"
+- name: Stop generic pod
+  ansible.builtin.include_role:
+    name: podman-pod
+    tasks_from: stopped
+  vars:
+    pod_name: "{{ current_pod_name }}"
+- name: Destroy generic container
+  ansible.builtin.include_role:
+    name: podman-container
+    tasks_from: absent
+  vars:
+    container_name: "{{ current_app_container_name }}"
+- name: Destroy generic pod
+  ansible.builtin.include_role:
+    name: podman-pod
+    tasks_from: absent
+  vars:
+    pod_name: "{{ current_pod_name }}"
