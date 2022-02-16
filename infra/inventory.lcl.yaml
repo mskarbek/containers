@@ -4,12 +4,10 @@ all:
     localhost:
       ansible_connection: local
       ansible_user: marcin
-      #ansible_become_password:
-      zfs_pool: "{{ lookup('consul_kv', env + '/hosts/localhost/zfs_pool', host=consul_host) }}"
+      zfs_pool: b51d7037-4cc1-4ad9-9e50-b533fd87b24e
   vars:
     ansible_python_interpreter: /usr/bin/python3
-    ansible_become: yes
+    ansible_become: true
     ansible_become_method: sudo
     ansible_become_user: root
     env: lcl
-    consul_host: 10.8.0.2

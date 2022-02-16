@@ -1,0 +1,14 @@
+---
+all:
+  hosts:
+    10.8.0.2:
+      ansible_connection: ssh
+      ansible_user: marcin
+      zfs_pool: "{{ lookup('consul_kv', env + '/hosts/10.8.0.2/zfs_pool', host=consul_host) }}"
+  vars:
+    ansible_python_interpreter: /usr/libexec/platform-python
+    ansible_become: yes
+    ansible_become_method: sudo
+    ansible_become_user: root
+    env: ref
+    consul_host: 10.8.0.2

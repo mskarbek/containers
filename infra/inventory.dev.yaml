@@ -4,7 +4,6 @@ all:
     10.8.0.2:
       ansible_connection: ssh
       ansible_user: marcin
-      #ansible_become_password:
       zfs_pool: "{{ lookup('consul_kv', env + '/hosts/10.8.0.2/zfs_pool', host=consul_host) }}"
   vars:
     ansible_python_interpreter: /usr/libexec/platform-python

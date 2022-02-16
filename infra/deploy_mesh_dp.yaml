@@ -1,0 +1,17 @@
+---
+- hosts: all
+  gather_facts: false
+  vars:
+    service_name: generic
+    deployment_id: 78a9fe33
+    remove_volumes: true
+  vars_files:
+    - "{{ env }}.yaml"
+  tasks:
+    - name: Generate deployment id
+      ansible.builtin.include_role:
+        name: pod-id
+    - name: Deploy mesh dataplane
+      ansible.builtin.include_role:
+        name: pod-mesh
+        tasks_from: present
