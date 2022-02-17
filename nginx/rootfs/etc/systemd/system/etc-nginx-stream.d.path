@@ -1,0 +1,9 @@
+[Unit]
+Description=Monitor nginx stream.d changes
+
+[Path]
+PathChanged=/etc/nginx/stream.d
+Unit=nginx-reload.service
+
+[Install]
+WantedBy=multi-user.target
