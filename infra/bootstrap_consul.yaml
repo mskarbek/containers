@@ -1,0 +1,80 @@
+---
+# vars:
+#   deployment_id: 78a9fe33
+#   remove_volumes: true
+- hosts: all
+  gather_facts: false
+  vars:
+    consul_host: &consul_opts
+      #host: "consul.lab.skarbek.name"
+      host: "10.8.0.2"
+      port: "8500"
+      scheme: "http"
+      validate_certs: no
+  vars_files:
+    - "vars/{{ env }}.yaml"
+  tasks:
+# Deploy
+## Deploy consul
+    - name: Deploy consul
+      ansible.builtin.include_role:
+        name: bootstrap-consul
+        tasks_from: present
+        apply:
+          tags:
+            - deploy
+            - consul
+      vars:
+        service_name: consul
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'consul' in ansible_run_tags else [] }}"
+# Deploy basic consul kv data
+    - name: Wait for consul
+      ansible.builtin.uri:
+        url: "{{ consul_host.scheme }}://{{ consul_host.host }}:{{ consul_host.port }}/v1/status/leader"
+        status_code: 200
+      register: result
+      until: result.status == 200
+      retries: 60
+      delay: 1
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and ('consul' in ansible_run_tags or 'consuldata' in ansible_run_tags) else [] }}"
+    - name: Add default pause image
+      community.general.consul_kv:
+        <<: *consul_opts
+        key: "{{ item }}"
+        value: "k8s.gcr.io/pause:3.5"
+      loop:
+        - "all/defaults/pause_image"
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'consuldata' in ansible_run_tags else [] }}"
+    - name: Add default registry url
+      community.general.consul_kv:
+        <<: *consul_opts
+        key: "{{ item }}"
+        value: "registry.lab.skarbek.name"
+      loop:
+        - "all/defaults/registry_url"
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'consuldata' in ansible_run_tags else [] }}"
+    - name: Set kuma ip as default
+      community.general.consul_kv:
+        host: "{{ consul_host }}"
+        key: "{{ env + '/defaults/kuma_ip' }}"
+        value: "{{ container_info.container.NetworkSettings.IPAddress }}"
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'consuldata' in ansible_run_tags else [] }}"
+    - name: Set kuma id as default
+      community.general.consul_kv:
+        host: "{{ consul_host }}"
+        key: "{{ env + '/defaults/kuma_id' }}"
+        value: "{{ future_pod }}"
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'consuldata' in ansible_run_tags else [] }}"
+# Destroy
+## Destroy consul
+    - name: Destroy consul
+      ansible.builtin.include_role:
+        name: bootstrap-consul
+        tasks_from: absent
+        apply:
+          tags:
+            - destroy
+            - consul
+      vars:
+        service_name: consul
+      tags: "{{ ['always'] if 'destroy' in ansible_run_tags and 'consul' in ansible_run_tags else [] }}"

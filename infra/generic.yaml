@@ -1,0 +1,35 @@
+---
+# vars:
+#   deployment_id: 78a9fe33
+#   remove_volumes: true
+- hosts: all
+  gather_facts: false
+  vars_files:
+    - "vars/{{ env }}.yaml"
+  tasks:
+# Deploy
+## Deploy generic
+    - name: Deploy generic
+      ansible.builtin.include_role:
+        name: generic
+        tasks_from: present
+        apply:
+          tags:
+            - deploy
+            - generic
+      vars:
+        service_name: generic
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'generic' in ansible_run_tags else [] }}"
+# Destroy
+## Destroy generic
+    - name: Destroy generic
+      ansible.builtin.include_role:
+        name: generic
+        tasks_from: absent
+        apply:
+          tags:
+            - destroy
+            - generic
+      vars:
+        service_name: generic
+      tags: "{{ ['always'] if 'destroy' in ansible_run_tags and 'generic' in ansible_run_tags else [] }}"

@@ -1,0 +1,101 @@
+---
+# vars:
+#   deployment_id: 78a9fe33
+#   remove_volumes: true
+- hosts: all
+  gather_facts: false
+  vars_files:
+    - "vars/{{ env }}.yaml"
+  tasks:
+# Deploy
+## Deploy kuma-cp
+    - name: Deploy kuma-cp
+      ansible.builtin.include_role:
+        name: kuma-controlplane
+        tasks_from: present
+        apply:
+          tags:
+            - deploy
+            - kuma
+      vars:
+        service_name: kuma-cp
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'kuma' in ansible_run_tags else [] }}"
+## Deploy kuma-cp mesh
+    - name: Get kuma-cp container info
+      containers.podman.podman_container_info:
+        name: "{{ current_app_container_name }}"
+      register: container_info
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and ('mesh' in ansible_run_tags or 'meshconfig' in ansible_run_tags) else [] }}"
+    - name: Remove config secret
+      containers.podman.podman_secret:
+        state: absent
+        name: "{{ env + '-kuma-config' }}"
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'mesh' in ansible_run_tags else [] }}"
+    - name: Create config secret
+      containers.podman.podman_secret:
+        state: present
+        name: "{{ env + '-kuma-config' }}"
+        data: "KUMA_CP_ADDRESS=https://{{ container_info.containers[0].NetworkSettings.IPAddress }}:5678/"
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'mesh' in ansible_run_tags else [] }}"
+    - name: Wait for kuma
+      ansible.builtin.uri:
+        url: "http://{{ container_info.containers[0].NetworkSettings.IPAddress }}:5681/"
+        status_code: 200
+      register: result
+      until: result.status == 200
+      retries: 60
+      delay: 1
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and ('mesh' in ansible_run_tags or 'meshconfig' in ansible_run_tags) else [] }}"
+    - name: Configure kuma mesh
+      ansible.builtin.include_role:
+        name: kuma-mesh
+        tasks_from: present
+        apply:
+          tags:
+            - deploy
+            - mesh
+      vars:
+        kuma_env: "{{ env }}"
+        service_name: kuma-cp
+        mesh_env:
+          - inf
+          - dev
+          - tst
+          - ref
+          - prd
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'meshconfig' in ansible_run_tags else [] }}"
+    - name: Deploy kuma-cp mesh dataplane
+      ansible.builtin.include_role:
+        name: pod-mesh
+        tasks_from: present
+      vars:
+        mesh_config:
+          mesh_inbound:
+            - port: 5681
+              service: kuma
+              protocol: http
+              address: 127.0.0.1
+      tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'mesh' in ansible_run_tags else [] }}"
+# Destroy
+## Destroy kuma-cp mesh
+    - name: Destroy kuma-cp mesh dataplane
+      ansible.builtin.include_role:
+        name: pod-mesh
+        tasks_from: absent
+        apply:
+          tags:
+            - destroy
+            - mesh
+      tags: "{{ ['always'] if 'destroy' in ansible_run_tags and 'mesh' in ansible_run_tags else [] }}"
+## Destroy kuma-cp
+    - name: Destroy kuma-cp
+      ansible.builtin.include_role:
+        name: kuma-controlplane
+        tasks_from: absent
+        apply:
+          tags:
+            - destroy
+            - kuma
+      vars:
+        service_name: kuma-cp
+      tags: "{{ ['always'] if 'destroy' in ansible_run_tags and 'kuma' in ansible_run_tags else [] }}"

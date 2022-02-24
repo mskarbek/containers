@@ -5,6 +5,13 @@ all:
       ansible_connection: ssh
       ansible_user: marcin
       zfs_pool: dfe93b5a-632d-44c4-98b9-7cff969b3a1d
+  children:
+    consul:
+      hosts:
+        10.8.0.2
+    kumacp:
+      hosts:
+        10.8.0.2
   vars:
     ansible_python_interpreter: /usr/libexec/platform-python
     ansible_become: true

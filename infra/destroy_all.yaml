@@ -1,0 +1,90 @@
+---
+- hosts: all
+  gather_facts: false
+  vars:
+    remove_volumes: true
+  tasks:
+    - name: Gather facts for all containers
+      containers.podman.podman_container_info:
+      register: containers_info
+    - name: Gather facts for all pods
+      containers.podman.podman_pod_info:
+      register: pods_info
+    - name: Stop shell container
+      ansible.builtin.include_role:
+        name: podman-container
+        tasks_from: stopped
+      vars:
+        container_name: "{{ item.Name }}"
+      when: item.Config.Labels["name.skarbek.lab.type"] is defined and item.Config.Labels["name.skarbek.lab.type"] == "shell"
+      loop: "{{ containers_info.containers }}"
+      loop_control:
+        label: "{{ item.Name }}"
+    - name: Destroy shell container
+      ansible.builtin.include_role:
+        name: podman-container
+        tasks_from: absent
+      vars:
+        container_name: "{{ item.Name }}"
+      when: item.Config.Labels["name.skarbek.lab.type"] is defined and item.Config.Labels["name.skarbek.lab.type"] == "shell"
+      loop: "{{ containers_info.containers }}"
+      loop_control:
+        label: "{{ item.Name }}"
+    - name: Stop mesh container
+      ansible.builtin.include_role:
+        name: podman-container
+        tasks_from: stopped
+      vars:
+        container_name: "{{ item.Name }}"
+      when: item.Config.Labels["name.skarbek.lab.type"] is defined and item.Config.Labels["name.skarbek.lab.type"] == "mesh"
+      loop: "{{ containers_info.containers }}"
+      loop_control:
+        label: "{{ item.Name }}"
+    - name: Destroy mesh container
+      ansible.builtin.include_role:
+        name: podman-container
+        tasks_from: absent
+      vars:
+        container_name: "{{ item.Name }}"
+      when: item.Config.Labels["name.skarbek.lab.type"] is defined and item.Config.Labels["name.skarbek.lab.type"] == "mesh"
+      loop: "{{ containers_info.containers }}"
+      loop_control:
+        label: "{{ item.Name }}"
+    - name: Stop app container
+      ansible.builtin.include_role:
+        name: podman-container
+        tasks_from: stopped
+      vars:
+        container_name: "{{ item.Name }}"
+      when: item.Config.Labels["name.skarbek.lab.type"] is defined and item.Config.Labels["name.skarbek.lab.type"] == "app"
+      loop: "{{ containers_info.containers }}"
+      loop_control:
+        label: "{{ item.Name }}"
+    - name: Destroy app container
+      ansible.builtin.include_role:
+        name: podman-container
+        tasks_from: absent
+      vars:
+        container_name: "{{ item.Name }}"
+      when: item.Config.Labels["name.skarbek.lab.type"] is defined and item.Config.Labels["name.skarbek.lab.type"] == "app"
+      loop: "{{ containers_info.containers }}"
+      loop_control:
+        label: "{{ item.Name }}"
+    - name: Stop generic pod
+      ansible.builtin.include_role:
+        name: podman-pod
+        tasks_from: stopped
+      vars:
+        pod_name: "{{ item.Name }}"
+      loop: "{{ pods_info.pods }}"
+      loop_control:
+        label: "{{ item.Name }}"
+    - name: Destroy generic pod
+      ansible.builtin.include_role:
+        name: podman-pod
+        tasks_from: absent
+      vars:
+        pod_name: "{{ item.Name }}"
+      loop: "{{ pods_info.pods }}"
+      loop_control:
+        label: "{{ item.Name }}"
