@@ -1,7 +1,12 @@
 ---
+- name: Get kuma id
+  local_action:
+    module: ansible.builtin.set_fact
+    kuma_app_container_name: "{{ lookup('consul_kv', env + '/defaults/kuma_env', host=consul_host) + '-kuma-cp-' + lookup('consul_kv', env + '/defaults/kuma_id', host=consul_host) + '-app' }}"
+  run_once: True
 - name: Generate token
   ansible.builtin.command:
-    cmd: "podman exec {{ lookup('consul_kv', env + '/defaults/kuma_env', host=consul_host) + '-kuma-cp-' + lookup('consul_kv', env + '/defaults/kuma_id', host=consul_host) + '-app' }} kumactl generate dataplane-token --mesh={{ env }} --name={{ current_app_container_name }}"
+    cmd: "podman exec {{ kuma_app_container_name }} kumactl generate dataplane-token --mesh={{ env }} --name={{ current_app_container_name }}"
   register: mesh_token
 - name: Get app container info
   containers.podman.podman_container_info:
@@ -15,6 +20,7 @@
     container_name: "{{ current_mesh_container_name }}"
     container_pod: "{{ current_pod_name }}"
     container_image: "registry.lab.skarbek.name/bootstrap/base/kuma-dp:latest"
+    container_type: mesh
     container_command:
       - /usr/local/bin/kuma-dp
       - run
@@ -33,6 +39,7 @@
         container_secret_data: "{{ mesh_token.stdout }}"
         container_secret_target: "kuma-token"
       - global_secret_name: "{{ env }}-kuma-config"
+        global_secret_target: "kuma-config"
     container_volumes:
       - container_volume_mountpoint: /etc/kuma
         container_volume_type: zfs

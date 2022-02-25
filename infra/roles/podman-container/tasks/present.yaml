@@ -48,6 +48,8 @@
     secrets: "{{ lookup('template', 'present-secrets.yaml.j2') | from_yaml }}"
     volumes: "{{ lookup('template', 'present-volumes.yaml.j2') | from_yaml }}"
     publish: "{{ container_publish if container_publish is defined else [] }}"
+    labels:
+      name.skarbek.lab.type: "{{ container_type if container_type is defined else 'app' }}"
 - name: Create podman container systemd service
   ansible.builtin.include_role:
     name: podman-systemd-service

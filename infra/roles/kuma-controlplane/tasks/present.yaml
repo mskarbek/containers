@@ -2,6 +2,7 @@
 - name: Generate deployment id
   ansible.builtin.include_role:
     name: pod-id
+    tasks_from: get
 - name: Deploy kuma-cp pod
   ansible.builtin.include_role:
     name: podman-pod
