@@ -15,7 +15,7 @@ else
 fi
 
 dnf_cache
-dnf_install "--enablerepo=${ENABLE_REPO} ansible openssh-clients git-core rsync ara"
+dnf_install "--enablerepo=${ENABLE_REPO} ansible openssh-clients git-core rsync ara https://download.copr.fedorainfracloud.org/results/mskarbek/epel-ext/epel-8-x86_64/03258221-python-consul/python3-consul-1.1.0-1.el8.noarch.rpm"
 dnf_clean_cache
 dnf_clean
 
