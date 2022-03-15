@@ -8,14 +8,14 @@
     name: podman-pod
     tasks_from: present
   vars:
-    pod_name: "{{ current_pod_name }}"
+    pod_name: "{{ future_pod_name }}"
 - name: Deploy kuma-cp container
   ansible.builtin.include_role:
     name: podman-container
     tasks_from: present
   vars:
-    container_name: "{{ current_app_container_name }}"
-    container_pod: "{{ current_pod_name }}"
+    container_name: "{{ future_app_container_name }}"
+    container_pod: "{{ future_pod_name }}"
     container_image: "registry.lab.skarbek.name/bootstrap/kuma-cp:latest"
     container_catatonit: false
     container_volumes:
@@ -30,10 +30,10 @@
     name: podman-pod
     tasks_from: started
   vars:
-    pod_name: "{{ current_pod_name }}"
+    pod_name: "{{ future_pod_name }}"
 - name: Start kuma-cp container
   ansible.builtin.include_role:
     name: podman-container
     tasks_from: started
   vars:
-    container_name: "{{ current_app_container_name }}"
+    container_name: "{{ future_app_container_name }}"

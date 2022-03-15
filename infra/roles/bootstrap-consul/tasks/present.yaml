@@ -7,7 +7,7 @@
     name: podman-pod
     tasks_from: present
   vars:
-    pod_name: "{{ current_pod_name }}"
+    pod_name: "{{ future_pod_name }}"
     pod_publish:
       - "8500:8500"
 - name: Deploy consul container
@@ -15,8 +15,8 @@
     name: podman-container
     tasks_from: present
   vars:
-    container_name: "{{ current_app_container_name }}"
-    container_pod: "{{ current_pod_name }}"
+    container_name: "{{ future_app_container_name }}"
+    container_pod: "{{ future_pod_name }}"
     container_image: "registry.lab.skarbek.name/bootstrap/consul:latest"
     container_catatonit: false
 - name: Start consul pod
@@ -24,10 +24,10 @@
     name: podman-pod
     tasks_from: started
   vars:
-    pod_name: "{{ current_pod_name }}"
+    pod_name: "{{ future_pod_name }}"
 - name: Start consul container
   ansible.builtin.include_role:
     name: podman-container
     tasks_from: started
   vars:
-    container_name: "{{ current_app_container_name }}"
+    container_name: "{{ future_app_container_name }}"

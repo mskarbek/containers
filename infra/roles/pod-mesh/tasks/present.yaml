@@ -6,19 +6,19 @@
   run_once: True
 - name: Generate token
   ansible.builtin.command:
-    cmd: "podman exec {{ kuma_app_container_name }} kumactl generate dataplane-token --mesh={{ env }} --name={{ current_app_container_name }}"
+    cmd: "podman exec {{ kuma_app_container_name }} kumactl generate dataplane-token --mesh={{ env }} --name={{ future_app_container_name }}"
   register: mesh_token
 - name: Get app container info
   containers.podman.podman_container_info:
-    name: "{{ current_app_container_name }}"
+    name: "{{ future_app_container_name }}"
   register: container_info
 - name: Deploy mesh dataplane container
   ansible.builtin.include_role:
     name: podman-container
     tasks_from: present
   vars:
-    container_name: "{{ current_mesh_container_name }}"
-    container_pod: "{{ current_pod_name }}"
+    container_name: "{{ future_mesh_container_name }}"
+    container_pod: "{{ future_pod_name }}"
     container_image: "registry.lab.skarbek.name/bootstrap/base/kuma-dp:latest"
     container_type: mesh
     container_command:
@@ -54,4 +54,4 @@
     name: podman-container
     tasks_from: started
   vars:
-    container_name: "{{ current_mesh_container_name }}"
+    container_name: "{{ future_mesh_container_name }}"

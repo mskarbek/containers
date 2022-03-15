@@ -2,19 +2,20 @@
 - name: Generate deployment id
   ansible.builtin.include_role:
     name: pod-id
+    tasks_from: get
 - name: Deploy generic pod
   ansible.builtin.include_role:
     name: podman-pod
     tasks_from: present
   vars:
-    pod_name: "{{ current_pod_name }}"
+    pod_name: "{{ future_pod_name }}"
 - name: Deploy generic container
   ansible.builtin.include_role:
     name: podman-container
     tasks_from: present
   vars:
-    container_name: "{{ current_app_container_name }}"
-    container_pod: "{{ current_pod_name }}"
+    container_name: "{{ future_app_container_name }}"
+    container_pod: "{{ future_pod_name }}"
     container_image: "registry.access.redhat.com/ubi8/ubi:8.5"
     container_command: ["sleep", "300"]
     container_catatonit: true
@@ -48,10 +49,10 @@
     name: podman-pod
     tasks_from: started
   vars:
-    pod_name: "{{ current_pod_name }}"
+    pod_name: "{{ future_pod_name }}"
 - name: Start generic container
   ansible.builtin.include_role:
     name: podman-container
     tasks_from: started
   vars:
-    container_name: "{{ current_app_container_name }}"
+    container_name: "{{ future_app_container_name }}"
