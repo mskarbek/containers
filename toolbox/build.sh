@@ -1,4 +1,5 @@
 . ../meta/common.sh
+. ./files/VERSIONS
 
 CONTAINER_UUID=$(create_container openssh:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
@@ -7,6 +8,12 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/pgdg-redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgdg-redhat.repo
     cp -v ./files/RPM-GPG-KEY-PGDG /etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
 fi
+
+if [ ! -f "./files/yq" ]; then
+    curl -L -o ./files/yq https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64
+fi
+cp -v ./files/yq ${CONTAINER_PATH}/usr/local/bin/yq
+chmod 0755 ${CONTAINER_PATH}/usr/local/bin/yq
 
 dnf_cache
 dnf_module "disable postgresql"
