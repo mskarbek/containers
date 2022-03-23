@@ -1,7 +1,7 @@
 ---
-- name: Stop podman container
+- name: Start podman container
   ansible.builtin.include_role:
-    name: podman-systemd-service
-    tasks_from: stopped
+    name: podman_systemd_service
+    tasks_from: started
   vars:
     systemd_service_name: "{{ container_name }}"

@@ -1,7 +1,16 @@
 ---
-- name: Generate deployment id
-  ansible.builtin.include_role:
-    name: pod-id
+- name: Generate future id
+  ansible.builtin.set_fact:
+    future_id: "{{ deployment_id if deployment_id is defined else lookup('pipe', 'cat /proc/sys/kernel/random/uuid')[:8] }}"
+- name: Set deployment id
+  ansible.builtin.set_fact:
+    deployment_id: "{{ future_id }}"
+- name: Create future names
+  ansible.builtin.set_fact:
+    future_pod_name: "{{ env + '-' + service_name  + '-' +  future_id }}"
+    future_app_container_name: "{{ env + '-' + service_name  + '-' +  future_id + '-app' }}"
+    future_mesh_container_name: "{{ env + '-' + service_name  + '-' +  future_id + '-mesh' }}"
+    future_shell_container_name: "{{ env + '-' + service_name  + '-' +  future_id + '-shell' }}"
 - name: Deploy consul pod
   ansible.builtin.include_role:
     name: podman-pod

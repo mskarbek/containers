@@ -9,7 +9,7 @@
     publish: "{{ pod_publish if pod_publish is defined else [] }}"
 - name: Create podman pod systemd service
   ansible.builtin.include_role:
-    name: podman-systemd-service
+    name: podman_systemd_service
     tasks_from: present
   vars:
     systemd_service_name: "{{ pod_name }}"

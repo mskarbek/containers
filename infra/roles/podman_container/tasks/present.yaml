@@ -25,7 +25,7 @@
     - debug
 - name: Create podman volume
   ansible.builtin.include_role:
-    name: podman-volume
+    name: podman_volume
     tasks_from: present
   vars:
     volume_name: "{{ container_name + container_volume_item.container_volume_mountpoint|replace('/', '-') }}"
@@ -52,7 +52,7 @@
       name.skarbek.lab.type: "{{ container_type if container_type is defined else 'app' }}"
 - name: Create podman container systemd service
   ansible.builtin.include_role:
-    name: podman-systemd-service
+    name: podman_systemd_service
     tasks_from: present
   vars:
     systemd_service_name: "{{ container_name }}"

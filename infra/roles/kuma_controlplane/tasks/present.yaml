@@ -1,17 +1,17 @@
 ---
 - name: Generate deployment id
   ansible.builtin.include_role:
-    name: pod-id
+    name: pod_id
     tasks_from: get
 - name: Deploy kuma-cp pod
   ansible.builtin.include_role:
-    name: podman-pod
+    name: podman_pod
     tasks_from: present
   vars:
     pod_name: "{{ future_pod_name }}"
 - name: Deploy kuma-cp container
   ansible.builtin.include_role:
-    name: podman-container
+    name: podman_container
     tasks_from: present
   vars:
     container_name: "{{ future_app_container_name }}"
@@ -27,13 +27,13 @@
         container_volume_type: zfs
 - name: Start kuma-cp pod
   ansible.builtin.include_role:
-    name: podman-pod
+    name: podman_pod
     tasks_from: started
   vars:
     pod_name: "{{ future_pod_name }}"
 - name: Start kuma-cp container
   ansible.builtin.include_role:
-    name: podman-container
+    name: podman_container
     tasks_from: started
   vars:
     container_name: "{{ future_app_container_name }}"

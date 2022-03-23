@@ -1,7 +1,7 @@
 ---
 type: TrafficLog
 name: traffic-all
-mesh: {{ env }}
+mesh: {{ mesh_env }}
 sources:
   - match:
       kuma.io/service: "*"
@@ -9,4 +9,4 @@ destinations:
   - match:
       kuma.io/service: "*"
 conf:
-  backend: {{ env }}-file
+  backend: {{ mesh_env }}-file

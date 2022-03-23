@@ -11,7 +11,7 @@
 ## Deploy kuma-cp
     - name: Deploy kuma-cp
       ansible.builtin.include_role:
-        name: kuma-controlplane
+        name: kuma_controlplane
         tasks_from: present
         apply:
           tags:
@@ -23,7 +23,7 @@
 ## Deploy kuma-cp mesh
     - name: Get kuma-cp container info
       containers.podman.podman_container_info:
-        name: "{{ current_app_container_name }}"
+        name: "{{ future_app_container_name }}"
       register: container_info
       tags: "{{ ['always'] if 'deploy' in ansible_run_tags and ('mesh' in ansible_run_tags or 'meshconfig' in ansible_run_tags) else [] }}"
     - name: "Debug: print container info"
@@ -52,7 +52,7 @@
     #  tags: "{{ ['always'] if 'deploy' in ansible_run_tags and ('mesh' in ansible_run_tags or 'meshconfig' in ansible_run_tags) else [] }}"
     - name: Configure kuma mesh
       ansible.builtin.include_role:
-        name: kuma-mesh
+        name: kuma_mesh
         tasks_from: present
         apply:
           tags:
@@ -61,12 +61,13 @@
       vars:
         kuma_env: "{{ env }}"
         service_name: kuma-cp
-        mesh_env:
-          - inf
-          - dev
-          - tst
-          - ref
-          - prd
+        mesh_env: "{{ item }}"
+      loop:
+        - inf
+        - dev
+        - tst
+        - ref
+        - prd
       tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'meshconfig' in ansible_run_tags else [] }}"
     - name: Set default kuma env for env 
       local_action:
@@ -86,7 +87,7 @@
         module: community.general.consul_kv
         host: "{{ consul_host }}"
         key: "{{ item + '/defaults/kuma_id' }}"
-        value: "{{ current_id }}"
+        value: "{{ future_id }}"
       loop:
         - inf
         - dev
@@ -109,7 +110,7 @@
       tags: "{{ ['always'] if 'deploy' in ansible_run_tags and 'meshconfig' in ansible_run_tags else [] }}"
     - name: Deploy kuma-cp mesh dataplane
       ansible.builtin.include_role:
-        name: pod-mesh
+        name: pod_mesh
         tasks_from: present
         apply:
           tags:
@@ -128,17 +129,17 @@
 ## Destroy kuma-cp mesh
     - name: Destroy kuma-cp mesh dataplane
       ansible.builtin.include_role:
-        name: pod-mesh
+        name: pod_mesh
         tasks_from: absent
         apply:
           tags:
             - destroy
-            - mesh
-      tags: "{{ ['always'] if 'destroy' in ansible_run_tags and 'mesh' in ansible_run_tags else [] }}"
+            - meshdataplane
+      tags: "{{ ['always'] if 'destroy' in ansible_run_tags and 'meshdataplane' in ansible_run_tags else [] }}"
 ## Destroy kuma-cp
     - name: Destroy kuma-cp
       ansible.builtin.include_role:
-        name: kuma-controlplane
+        name: kuma_controlplane
         tasks_from: absent
         apply:
           tags:

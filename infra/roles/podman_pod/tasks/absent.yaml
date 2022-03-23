@@ -5,7 +5,7 @@
     name: "{{ pod_name }}"
 - name: Destroy podman pod systemd service
   ansible.builtin.include_role:
-    name: podman-systemd-service
+    name: podman_systemd_service
     tasks_from: absent
   vars:
     systemd_service_name: "{{ pod_name }}"
