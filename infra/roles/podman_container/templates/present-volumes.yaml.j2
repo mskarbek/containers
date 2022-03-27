@@ -1,3 +1,0 @@
-{% if container_volumes is defined %}{% for item in container_volumes %}
-- {{ container_name + item.container_volume_mountpoint|replace('/', '-') }}:{{ item.container_volume_mountpoint }}:z
-{% endfor %}{% else %}[]{% endif %}

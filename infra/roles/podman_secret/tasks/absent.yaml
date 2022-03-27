@@ -1,5 +1,0 @@
----
-- name: Destroy secret
-  containers.podman.podman_secret:
-    state: absent
-    name: "{{ secret_name }}"

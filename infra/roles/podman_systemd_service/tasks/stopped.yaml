@@ -1,5 +1,0 @@
----
-- name: Stop podman service
-  ansible.builtin.systemd:
-    state: stopped
-    name: "{{ systemd_service_name }}.service"
