@@ -13,8 +13,15 @@ dnf_install "isc-kea isc-stork-agent"
 dnf_clean_cache
 dnf_clean
 
+mkdir -v ${CONTAINER_PATH}/usr/share/kea/etc
+mv -v ${CONTAINER_PATH}/etc/kea/* ${CONTAINER_PATH}/usr/share/kea/etc/
+
+rsync_rootfs
+
 buildah run -t ${CONTAINER_UUID} systemctl enable\
  kea-dhcp4.service
 # isc-stork-agent.service
+
+buildah config --volume /etc/kea ${CONTAINER_UUID}
 
 commit_container kea:latest
