@@ -1,0 +1,19 @@
+[Unit]
+Description="HashiCorp Vault"
+Documentation=https://www.vault.io/
+After=network.target nss-lookup.target
+AssertFileNotEmpty=/etc/vault.d/config.hcl
+
+[Service]
+ExecStart=/usr/local/bin/vault server -config-dir=/etc/vault.d
+ExecReload=/bin/kill --signal HUP $MAINPID
+EnvironmentFile=-/etc/sysconfig/vault
+User=vault
+Group=vault
+KillMode=process
+KillSignal=SIGTERM
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
