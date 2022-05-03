@@ -1,0 +1,20 @@
+[Unit]
+Description=Synapse Matrix homeserver
+Documentation=https://matrix-org.github.io/synapse/
+After=network.target nss-lookup.target
+AssertFileNotEmpty=/etc/synapse/homeserver.yaml
+
+[Service]
+Type=notify
+NotifyAccess=main
+User=synapse
+Group=synapse
+WorkingDirectory=/run/synapse
+# Environment=SYNAPSE_CACHE_FACTOR=2.0
+ExecStart=/usr/local/bin/synapse_homeserver --config-path=/etc/synapse/homeserver.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-abort
+SyslogIdentifier=synapse
+
+[Install]
+WantedBy=multi-user.target
