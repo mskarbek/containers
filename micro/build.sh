@@ -13,7 +13,8 @@ else
     exit 1
 fi
 
-dnf_install "--disablerepo=* --enablerepo=${ENABLE_REPO} glibc-minimal-langpack coreutils-single ca-certificates"
+dnf_install "--disablerepo=* --enablerepo=${ENABLE_REPO} glibc-minimal-langpack coreutils-single"
+dnf_install "--disablerepo=* --enablerepo=${ENABLE_REPO} ca-certificates"
 dnf_clean
 
 if [ -f ./files/proxy.repo ] && [ -z ${IMAGE_BOOTSTRAP} ]; then
