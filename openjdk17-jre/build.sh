@@ -4,7 +4,8 @@ CONTAINER_UUID=$(create_container base:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-dnf_install "java-17-openjdk-headless tomcat-native apr"
+dnf_install "java-17-openjdk-headless apr"
+# tomcat-native - not in EPEL 9 yet
 dnf_clean_cache
 dnf_clean
 
