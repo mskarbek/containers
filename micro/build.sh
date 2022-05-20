@@ -4,9 +4,9 @@ CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 buildah from --name=${CONTAINER_UUID} scratch
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-if [ ${BASE_OS} = "el8" ]; then
-    ENABLE_REPO="rhel-8-for-x86_64-baseos-rpms"
-elif [ ${BASE_OS} = "c8s" ]; then
+if [ ${BASE_OS} = "el9" ]; then
+    ENABLE_REPO="rhel-9-for-x86_64-baseos-rpms"
+elif [ ${BASE_OS} = "c9s" ]; then
     ENABLE_REPO="baseos"
 else
     printf "ERROR: Missing or incorrect BASE_OS variable." >&2
