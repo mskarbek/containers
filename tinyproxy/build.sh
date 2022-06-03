@@ -4,10 +4,10 @@ CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-if [ -f ./files/tinyproxy-1.11.0-1.el8.x86_64.rpm ] && [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-    dnf_install "./files/tinyproxy-1.11.0-1.el8.x86_64.rpm"
+if [ -f ./files/tinyproxy-1.11.0-1.el9.x86_64.rpm ] && [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    dnf_install "./files/tinyproxy-1.11.0-1.el9.x86_64.rpm"
 elif [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-    dnf_install "https://download.copr.fedorainfracloud.org/results/mskarbek/tinyproxy/epel-8-x86_64/02320604-tinyproxy/tinyproxy-1.11.0-1.el8.x86_64.rpm"
+    dnf_install "https://download.copr.fedorainfracloud.org/results/mskarbek/tinyproxy/epel-9-x86_64/04426720-tinyproxy/tinyproxy-1.11.0-1.el9.x86_64.rpm"
 else
     dnf_install "tinyproxy"
 fi
