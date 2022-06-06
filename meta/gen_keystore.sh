@@ -25,6 +25,7 @@ do
      -inkey ${ENTITLEMENT_PATH}/${PEM}-key.pem\
      -name ${PEM}\
      -out ./${PEM}.p12\
+     -legacy\
      -passout pass:${PASS}
 
     keytool\
