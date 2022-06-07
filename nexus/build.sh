@@ -35,7 +35,9 @@ if [ -f ./files/keystore.p12 ] && [ -f ./files/keystore.pass ]; then
     echo "-Djavax.net.ssl.keyStorePassword=$(cat ./files/keystore.pass)" >> ${CONTAINER_PATH}/usr/lib/sonatype/nexus/bin/nexus.vmoptions
 fi
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+# Unfortunately, some mirrors use TLS certificates that, to be accepted, force LEGACY crypto policies
+buildah run ${CONTAINER_UUID} update-crypto-policies --set LEGACY
+buildah run ${CONTAINER_UUID} systemctl enable\
  nexus.service
 
 buildah config --volume /var/lib/sonatype-work ${CONTAINER_UUID}
