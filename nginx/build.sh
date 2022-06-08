@@ -4,9 +4,7 @@ CONTAINER_UUID=$(create_container systemd:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-dnf_module "disable php"
-dnf_module "--disablerepo=epel-modular enable nginx:1.20"
-dnf_install "--disablerepo=epel-modular nginx nginx-mod-mail nginx-mod-stream"
+dnf_install "nginx nginx-mod-mail nginx-mod-stream"
 dnf_clean_cache
 dnf_clean
 
