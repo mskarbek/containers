@@ -10,29 +10,26 @@ Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, so
 ## Foundation
 Those images are intended to replace UBI in their function, but they drop entirely package management from the list of installed packages, so no `dnf` or `rpm`. Instead, all the other containers are built using `buildah` and host `dnf` with `--installroot`.
 
-* [base](./base/README.md) - equivalent of `ubi9/ubi`
 * [micro](./micro/README.md) - equivalent of `ubi9/ubi-micro`
+* [base](./base/README.md) - equivalent of `ubi9/ubi`
 * [systemd](./systemd/README.md) - equivalent of `ubi9/ubi-init`
 
 ## base-based
 ### build-related
 * [base/golang](./golang/README.md)
-* [base/nodejs14](./nodejs14/README.md)
 * [base/nodejs16](./nodejs16/README.md)
+* [base/openjdk8-jdk](./openjdk8-jdk/README.md)
 * [base/openjdk11-jdk](./openjdk10-jdk/README.md)
 * [base/openjdk17-jdk](./openjdk17-jdk/README.md)
-* [base/openjdk8-jdk](./openjdk8-jdk/README.md)
-* [base/python36-devel](./python36-devel/README.md)
 * [base/python39-devel](./python39-devel/README.md)
 * [base/rpmbuild](./rpmbuild/README.md)
 * [base/rust](./rust/README.md)
 
 ### runtime-related
 * [base/ansible](./ansible/README.md)
+* [base/openjdk8-jre](./openjdk8-jre/README.md)
 * [base/openjdk11-jre](./openjdk10-jre/README.md)
 * [base/openjdk17-jre](./openjdk17-jre/README.md)
-* [base/openjdk8-jre](./openjdk8-jre/README.md)
-* [base/python36](./python36/README.md)
 * [base/python39](./python39/README.md)
 * [base/toolbox](./toolbox/README.md)
 
@@ -48,12 +45,10 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [podman](./podman/README.md)
 
 ### runtime-related
-* [nodejs14](./nodejs14/README.md)
 * [nodejs16](./nodejs16/README.md)
+* [openjdk8-jre](./openjdk8-jre/README.md)
 * [openjdk11-jre](./openjdk10-jre/README.md)
 * [openjdk17-jre](./openjdk17-jre/README.md)
-* [openjdk8-jre](./openjdk8-jre/README.md)
-* [python36](./python36/README.md)
 * [python39](./python39/README.md)
 
 ### services
