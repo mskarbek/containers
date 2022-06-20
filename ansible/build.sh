@@ -1,7 +1,7 @@
 . ../meta/common.sh
 . ./files/VERSIONS
 
-CONTAINER_UUID=$(create_container base/python39:latest)
+CONTAINER_UUID=$(create_container base/python3:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
@@ -10,6 +10,7 @@ dnf_clean_cache
 dnf_clean
 
 buildah run -t ${CONTAINER_UUID} pip3 install ara==${ARA_VERSION} python-consul
+
 rm -rvf ${CONTAINER_PATH}/root/.cache
 
 commit_container base/ansible:latest

@@ -21,7 +21,7 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [base/openjdk8-jdk](./openjdk8-jdk/README.md)
 * [base/openjdk11-jdk](./openjdk10-jdk/README.md)
 * [base/openjdk17-jdk](./openjdk17-jdk/README.md)
-* [base/python39-devel](./python39-devel/README.md)
+* [base/python3-devel](./python3-devel/README.md)
 * [base/rpmbuild](./rpmbuild/README.md)
 * [base/rust](./rust/README.md)
 
@@ -30,7 +30,7 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [base/openjdk8-jre](./openjdk8-jre/README.md)
 * [base/openjdk11-jre](./openjdk10-jre/README.md)
 * [base/openjdk17-jre](./openjdk17-jre/README.md)
-* [base/python39](./python39/README.md)
+* [base/python3](./python3/README.md)
 * [base/toolbox](./toolbox/README.md)
 
 ## systemd-based
@@ -49,7 +49,7 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [openjdk8-jre](./openjdk8-jre/README.md)
 * [openjdk11-jre](./openjdk10-jre/README.md)
 * [openjdk17-jre](./openjdk17-jre/README.md)
-* [python39](./python39/README.md)
+* [python3](./python3/README.md)
 
 ### services
 #### development
