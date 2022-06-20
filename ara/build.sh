@@ -1,23 +1,15 @@
 . ../meta/common.sh
 . ./files/VERSIONS
 
-CONTAINER_UUID=$(create_container python36:latest)
+CONTAINER_UUID=$(create_container python39:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-dnf_install "python3-psycopg2 python3-gunicorn"
+dnf_install "python3-psycopg2 python3-attrs python3-certifi python3-charset-normalizer python3-idna python3-pbr python3-prettytable python3-requests python3-urllib3 python3-wcwidth python3-pygments python3-pyparsing python3-pytz python3-pyyaml python3-ruamel-yaml python3-ruamel-yaml-clib python3-sqlparse"
 dnf_clean_cache
 dnf_clean
 
-TMP_DIR=$(buildah run ${CONTAINER_UUID} mktemp -d)
-if [ -f "./files/ara-${ARA_VERSION}.tar.gz" ]; then
-    tar xvf ./files/ara-${ARA_VERSION}.tar.gz -C ${CONTAINER_PATH}/${TMP_DIR}
-else
-    pushd ${CONTAINER_PATH}/${TMP_DIR}
-        curl -L https://files.pythonhosted.org/packages/source/a/ara/ara-${ARA_VERSION}.tar.gz|tar xzv
-    popd
-fi
-buildah run -t ${CONTAINER_UUID} pip3 install ${TMP_DIR}/ara-${ARA_VERSION}[server]
+buildah run -t ${CONTAINER_UUID} pip3 install ara[server]==${ARA_VERSION} gunicorn
 rm -rf ${CONTAINER_PATH}/${TMP_DIR}
 
 rm -rvf ${CONTAINER_PATH}/root/.cache
