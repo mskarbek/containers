@@ -4,6 +4,11 @@
 CONTAINER_UUID=$(create_container python3:latest)
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
+if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    cp -v ./files/pgdg-redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgdg-redhat.repo
+    cp -v ./files/RPM-GPG-KEY-PGDG /etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+fi
+
 dnf_cache
 dnf_install "python3-psycopg2 python3-attrs python3-certifi python3-charset-normalizer python3-idna python3-pbr python3-prettytable python3-requests python3-urllib3 python3-wcwidth python3-pygments python3-pyparsing python3-pytz python3-pyyaml python3-ruamel-yaml python3-ruamel-yaml-clib python3-sqlparse"
 dnf_clean_cache
