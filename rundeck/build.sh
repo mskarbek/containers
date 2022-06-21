@@ -13,6 +13,8 @@ dnf_install "rundeck git-core"
 dnf_clean_cache
 dnf_clean
 
+ln -s $(ls -1 ${CONTAINER_PATH}/var/lib/rundeck/bootstrap) ${CONTAINER_PATH}/var/lib/rundeck/bootstrap/rundeck.war
+
 #mkdir -vp ${CONTAINER_PATH}/usr/share/rundeck
 #mv -v ${CONTAINER_PATH}/etc/rundeck/* ${CONTAINER_PATH}/usr/share/rundeck/
 rsync_rootfs

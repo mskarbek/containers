@@ -30,7 +30,7 @@ ExecStart=/usr/bin/java\
  -Xms256m\
  -XX:MaxMetaspaceSize=256m\
  -server\
- -jar /var/lib/rundeck/bootstrap/rundeck-3.4.10-20220118.war\
+ -jar /var/lib/rundeck/bootstrap/rundeck.war\
  --skipinstall
 Restart=on-failure
 
