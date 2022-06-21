@@ -16,7 +16,6 @@ cp -v ./files/yq ${CONTAINER_PATH}/usr/local/bin/yq
 chmod 0755 ${CONTAINER_PATH}/usr/local/bin/yq
 
 dnf_cache
-dnf_module "disable postgresql"
 dnf_install_with_docs "bash-completion"
 dnf_install "sudo less findutils curl vi nano telnet hostname iputils iproute mtr tmux lsof knot-utils tar unzip zstd gzip rsync jq htop openssh-clients tcpdump postgresql14"
 dnf_clean_cache
