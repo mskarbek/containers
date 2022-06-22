@@ -27,7 +27,9 @@ if [ -f ./files/*.pem ]; then
     buildah run -t ${CONTAINER_UUID} update-ca-trust
 fi
 
+rsync_rootfs "--links"
+
 buildah config --env='container=oci' ${CONTAINER_UUID}
-buildah config --cmd='[ "/usr/bin/bash" ]' ${CONTAINER_UUID}
+buildah config --cmd='[ "/usr/bin/bash", "-l" ]' ${CONTAINER_UUID}
 
 commit_container micro:latest

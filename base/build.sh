@@ -32,7 +32,6 @@ buildah run -t ${CONTAINER_UUID} systemctl mask\
  systemd-ask-password-console.path\
  systemd-ask-password-wall.path\
  systemd-homed.service\
- systemd-hostnamed.service\
  systemd-logind.service\
  systemd-machine-id-commit.service\
  systemd-random-seed.service\
@@ -41,5 +40,7 @@ buildah run -t ${CONTAINER_UUID} systemctl mask\
  systemd-udev-trigger.service\
  systemd-udevd.service\
  veritysetup.target
+
+rm -vf ${CONTAINER_PATH}/etc/machine-id
 
 commit_container base:latest
