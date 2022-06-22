@@ -17,19 +17,20 @@ Those images are intended to replace UBI in their function, but they drop entire
 ## base-based
 ### build-related
 * [base/golang](./golang/README.md)
-* [base/nodejs16](./nodejs16/README.md)
-* [base/openjdk8-jdk](./openjdk8-jdk/README.md)
-* [base/openjdk11-jdk](./openjdk10-jdk/README.md)
-* [base/openjdk17-jdk](./openjdk17-jdk/README.md)
-* [base/python3-devel](./python3-devel/README.md)
+* [base/nodejs16-devel](./nodejs16/README.md)
+* [base/openjdk8-jdk](./openjdk8/README.md)
+* [base/openjdk11-jdk](./openjdk11/README.md)
+* [base/openjdk17-jdk](./openjdk17/README.md)
+* [base/python3-devel](./python3/README.md)
 * [base/rpmbuild](./rpmbuild/README.md)
 * [base/rust](./rust/README.md)
 
 ### runtime-related
 * [base/ansible](./ansible/README.md)
-* [base/openjdk8-jre](./openjdk8-jre/README.md)
-* [base/openjdk11-jre](./openjdk10-jre/README.md)
-* [base/openjdk17-jre](./openjdk17-jre/README.md)
+* [base/nodejs16](./nodejs16/README.md)
+* [base/openjdk8-jre](./openjdk8/README.md)
+* [base/openjdk11-jre](./openjdk11/README.md)
+* [base/openjdk17-jre](./openjdk17/README.md)
 * [base/python3](./python3/README.md)
 * [base/toolbox](./toolbox/README.md)
 
@@ -46,9 +47,9 @@ Those images are intended to replace UBI in their function, but they drop entire
 
 ### runtime-related
 * [nodejs16](./nodejs16/README.md)
-* [openjdk8-jre](./openjdk8-jre/README.md)
-* [openjdk11-jre](./openjdk10-jre/README.md)
-* [openjdk17-jre](./openjdk17-jre/README.md)
+* [openjdk8-jre](./openjdk8/README.md)
+* [openjdk11-jre](./openjdk11/README.md)
+* [openjdk17-jre](./openjdk17/README.md)
 * [python3](./python3/README.md)
 
 ### services
