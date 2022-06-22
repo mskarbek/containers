@@ -6,8 +6,8 @@ This image is configured to use ZFS as a `podman` storage backend.
 * Command: N/A
 * Envs: N/A
 * Volumes:
-    * `/var/lib/containers/storage` - needs to be a ZFS dataset
-    * `/var/lib/volumes/storage` - needs to be a ZFS dataset
+    * `/var/lib/containers` - needs to be a ZFS dataset
+    * `/var/lib/volumes` - needs to be a ZFS dataset
 * Secrets: N/A
 
 ### Running
