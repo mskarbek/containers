@@ -14,7 +14,7 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
 fi
 
 dnf_cache
-dnf_install "hostname perl policycoreutils policycoreutils-python-utils checkpolicy git"
+dnf_install "hostname perl policycoreutils policycoreutils-python-utils checkpolicy git libxcrypt-compat"
 pushd ./files
     dnf download gitlab-${GITLAB_TYPE}-${GITALB_VERSION}
 popd
