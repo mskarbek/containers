@@ -1,1 +1,1 @@
-# gitlab-runner-podman
+# gitlab-runner

@@ -1,6 +1,6 @@
 # rundeck-runner
 ### Image configuration
-* From: [`openssh`](../systemd/README.md)
+* From: [`openssh`](../openssh/README.md)
 * Command: N/A
 * Envs: N/A
 * Volumes: N/A

@@ -35,12 +35,12 @@ Those images are intended to replace UBI in their function, but they drop entire
 
 ## systemd-based
 ### build-related
-* [buildah-zfs](./buildah-zfs/README.md)
+* [buildah-zfs](./buildah/README.md)
 * [buildah](./buildah/README.md)
-* [gitlab-runner-buildah-zfs](./gitlab-runner-buildah-zfs/README.md)
-* [gitlab-runner-buildah](./gitlab-runner-buildah/README.md)
-* [gitlab-runner-podman-zfs](./gitlab-runner-podman-zfs/README.md)
-* [gitlab-runner-podman](./gitlab-runner-podman/README.md)
+* [gitlab-runner-buildah-zfs](./gitlab-runner/README.md)
+* [gitlab-runner-buildah](./gitlab-runner/README.md)
+* [gitlab-runner-podman-zfs](./gitlab-runner/README.md)
+* [gitlab-runner-podman](./gitlab-runner/README.md)
 * [podman-zfs](./podman/README.md)
 * [podman](./podman/README.md)
 
