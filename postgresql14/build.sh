@@ -9,8 +9,9 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
 fi
 
 dnf_cache
-dnf_module "disable postgresql"
-dnf_install "postgresql14-server postgresql14-contrib citus_14 pg_auto_failover_14 pg_qualstats_14 pg_stat_kcache_14 pg_wait_sampling_14 pg_track_settings_14"
+dnf_install "postgresql14-server postgresql14-contrib citus_14 pg_auto_failover_14 pg_qualstats_14"
+# Not yet in rhel9 repo:
+#dnf_install "pg_stat_kcache_14 pg_wait_sampling_14 pg_track_settings_14"
 dnf_clean_cache
 dnf_clean
 
