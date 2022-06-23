@@ -21,6 +21,8 @@ buildah run -t ${CONTAINER_UUID} systemctl enable\
  rabbitmq-config.service\
  rabbitmq-server.service
 
+buildah config --volume /etc/rabbitmq ${CONTAINER_UUID}
 buildah config --volume /var/lib/rabbitmq ${CONTAINER_UUID}
+buildah config --volume /var/log/rabbitmq ${CONTAINER_UUID}
 
 commit_container rabbitmq:latest
