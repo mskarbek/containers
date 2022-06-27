@@ -3,11 +3,13 @@ Description=GitLab Runner Registration
 ConditionFileIsExecutable=/usr/local/bin/gitlab-runner
 ConditionPathExists=!/var/lib/gitlab-runner/.lock
 ConditionFileNotEmpty=/run/secrets/gitlab-token
+ConditionFileNotEmpty=/run/secrets/gitlab-runner-tags
 
 [Service]
 Type=oneshot
 EnvironmentFile=-/etc/sysconfig/gitlab-runner
 EnvironmentFile=/run/secrets/gitlab-token
-ExecStart=/usr/local/bin/gitlab-runner register --non-interactive --config=/etc/gitlab-runner/config.toml --url=${GITLAB_URL} --registration-token=${GITLAB_TOKEN} --run-untagged=false --builds-dir=/var/lib/gitlab-runner/builds --cache-dir=/var/lib/gitlab-runner/cache --custom_build_dir-enabled=true --executor=shell --shell=bash --tag-list=podman
+EnvironmentFile=/run/secrets/gitlab-runner-tags
+ExecStart=/usr/local/bin/gitlab-runner register --non-interactive --config=/etc/gitlab-runner/config.toml --url=${GITLAB_URL} --registration-token=${GITLAB_TOKEN} --run-untagged=false --builds-dir=/var/lib/gitlab-runner/builds --cache-dir=/var/lib/gitlab-runner/cache --custom_build_dir-enabled=true --executor=shell --shell=bash --tag-list=${GITLAB_RUNNER_TAGS}
 ExecStartPost=/usr/bin/touch /etc/gitlab-runner/.lock
 RemainAfterExit=no
