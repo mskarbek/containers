@@ -9,15 +9,13 @@ fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-dnf_install "buildah containernetworking-plugins skopeo rsync dnf tar"
+dnf_install "buildah skopeo containernetworking-plugins netavark iputils iproute iptables-nft rsync dnf tar"
 dnf_clean_cache
 dnf_clean
 
 mkdir -vp /var/lib/volumes
 cp -v ${CONTAINER_PATH}/usr/share/containers/containers.conf ${CONTAINER_PATH}/etc/containers/containers.conf
 sed -i 's/^# volume_path = .*/volume_path = "\/var\/lib\/volumes"/' ${CONTAINER_PATH}/etc/containers/containers.conf
-
-rsync_rootfs
 
 buildah config --volume /var/lib/containers ${CONTAINER_UUID}
 

@@ -9,7 +9,7 @@ fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-dnf_install "podman skopeo"
+dnf_install "podman skopeo containernetworking-plugins netavark iputils iproute iptables-nft"
 dnf_clean_cache
 dnf_clean
 
