@@ -1,9 +1,13 @@
 . ../meta/common.sh
 
-CONTAINER_UUID=$(create_container systemd:latest)
+if [ -z ${1} ]; then
+    CONTAINER_UUID=$(create_container systemd latest)
+else
+    CONTAINER_UUID=$(create_container systemd ${1})
+fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-buildah run -t ${CONTAINER_UUID} systemctl unmask\
+buildah run --network none ${CONTAINER_UUID} systemctl unmask\
  systemd-logind.service
 
 dnf_cache
@@ -17,4 +21,4 @@ done
 
 rsync_rootfs
 
-commit_container openssh:latest
+commit_container openssh ${IMAGE_TAG}
