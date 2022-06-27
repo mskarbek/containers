@@ -1,18 +1,36 @@
 create_container () {
     CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
-    if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-        buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY_URL}/bootstrap/${1}
+    if [ -z ${2} ]; then
+        if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+            buildah from --name=${CONTAINER_UUID} ${OCI_REGISTRY_URL}/bootstrap/${1}:latest
+        else
+            buildah from --name=${CONTAINER_UUID} ${OCI_REGISTRY_URL}/${1}:latest
+        fi
     else
-        buildah from --pull-never --name=${CONTAINER_UUID} ${REGISTRY_URL}/${1}
-    fi    
+        if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+            buildah from --name=${CONTAINER_UUID} ${OCI_REGISTRY_URL}/bootstrap/${1}:${2}
+        else
+            buildah from --name=${CONTAINER_UUID} ${OCI_REGISTRY_URL}/${1}:${2}
+        fi
+    fi
 }
 
 commit_container () {
     clean_files
-    if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-        buildah commit ${CONTAINER_UUID} ${REGISTRY_URL}/bootstrap/${1}
+    if [ -z ${2} ]; then
+        if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+            buildah commit ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/bootstrap/${1}:latest
+        else
+            buildah commit ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/${1}:latest
+        fi
     else
-        buildah commit ${CONTAINER_UUID} ${REGISTRY_URL}/${1}
+        if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+            buildah commit ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/bootstrap/${1}:${2}
+            buildah tag ${OCI_REGISTRY_URL}/bootstrap/${1}:${2} ${OCI_REGISTRY_URL}/bootstrap/${1}:latest
+        else
+            buildah commit ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/${1}:${2}
+            buildah tag ${OCI_REGISTRY_URL}/${1}:${2} ${OCI_REGISTRY_URL}/${1}:latest
+        fi
     fi
     buildah rm -a
 }
@@ -26,12 +44,12 @@ dnf_cache () {
 
 dnf_install () {
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        if [ ${BASE_OS} = "el9" ]; then
+        if [ ${OS_TYPE} = "el9" ]; then
             cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        elif [ ${BASE_OS} = "c9s" ]; then
+        elif [ ${OS_TYPE} = "c9s" ]; then
             cp -v /etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
         else
-            printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+            printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
             exit 1
         fi
     fi
@@ -43,12 +61,12 @@ dnf_install () {
      --nodocs\
      install ${@}
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        if [ ${BASE_OS} = "el9" ]; then
+        if [ ${OS_TYPE} = "el9" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        elif [ ${BASE_OS} = "c9s" ]; then
+        elif [ ${OS_TYPE} = "c9s" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo
         else
-            printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+            printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
             exit 1
         fi
     fi
@@ -56,12 +74,12 @@ dnf_install () {
 
 dnf_install_with_docs () {
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        if [ ${BASE_OS} = "el9" ]; then
+        if [ ${OS_TYPE} = "el9" ]; then
             cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        elif [ ${BASE_OS} = "c9s" ]; then
+        elif [ ${OS_TYPE} = "c9s" ]; then
             cp -v /etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
         else
-            printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+            printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
             exit 1
         fi
     fi
@@ -72,12 +90,12 @@ dnf_install_with_docs () {
      --setopt=install_weak_deps=false\
      install ${@}
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        if [ ${BASE_OS} = "el9" ]; then
+        if [ ${OS_TYPE} = "el9" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        elif [ ${BASE_OS} = "c9s" ]; then
+        elif [ ${OS_TYPE} = "c9s" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo
         else
-            printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+            printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
             exit 1
         fi
     fi
@@ -85,12 +103,12 @@ dnf_install_with_docs () {
 
 dnf_module () {
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        if [ ${BASE_OS} = "el9" ]; then
+        if [ ${OS_TYPE} = "el9" ]; then
             cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        elif [ ${BASE_OS} = "c9s" ]; then
+        elif [ ${OS_TYPE} = "c9s" ]; then
             cp -v /etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
         else
-            printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+            printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
             exit 1
         fi
     fi
@@ -102,12 +120,12 @@ dnf_module () {
      --nodocs\
      module ${1}
     if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        if [ ${BASE_OS} = "el9" ]; then
+        if [ ${OS_TYPE} = "el9" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        elif [ ${BASE_OS} = "c9s" ]; then
+        elif [ ${OS_TYPE} = "c9s" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo
         else
-            printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+            printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
             exit 1
         fi
     fi
@@ -141,4 +159,26 @@ clean_files () {
 clean_repos () {
     rm -rvf\
      ${CONTAINER_PATH}/etc/yum.repos.d/*
+}
+
+skopeo_login () {
+    echo ${OCI_REGISTRY_PASSWORD} | skopeo login --tls-verify=false -u ${OCI_REGISTRY_USER} --password-stdin ${OCI_REGISTRY_URL}
+}
+
+skopeo_copy () {
+    if [ -z ${2} ]; then
+        if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+            buildah commit ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/bootstrap/${1}:latest
+        else
+            buildah commit ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/${1}:latest
+        fi
+    else
+        if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+            skopeo copy --format oci containers-storage:${OCI_REGISTRY_URL}/bootstrap/${1}:${2} docker://${OCI_REGISTRY_URL}/bootstrap/${1}:${2}
+            skopeo copy --format oci containers-storage:${OCI_REGISTRY_URL}/bootstrap/${1}:latest docker://${OCI_REGISTRY_URL}/bootstrap/${1}:latest
+        else
+            skopeo copy --format oci containers-storage:${OCI_REGISTRY_URL}/${1}:${2} docker://${OCI_REGISTRY_URL}/${1}:${2}
+            skopeo copy --format oci containers-storage:${OCI_REGISTRY_URL}/${1}:latest docker://${OCI_REGISTRY_URL}/${1}:latest
+        fi
+    fi
 }
