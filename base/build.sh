@@ -1,6 +1,10 @@
 . ../meta/common.sh
 
-CONTAINER_UUID=$(create_container micro:latest)
+if [ -z ${1} ]; then
+    CONTAINER_UUID=$(create_container micro latest)
+else
+    CONTAINER_UUID=$(create_container micro ${1})
+fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
@@ -18,8 +22,8 @@ dnf_clean
 
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl set-default multi-user.target
-buildah run -t ${CONTAINER_UUID} systemctl mask\
+buildah run --network none ${CONTAINER_UUID} systemctl set-default multi-user.target
+buildah run --network none ${CONTAINER_UUID} systemctl mask\
  console-getty.service\
  dev-hugepages.mount\
  dnf-makecache.timer\
@@ -43,4 +47,4 @@ buildah run -t ${CONTAINER_UUID} systemctl mask\
 
 rm -vf ${CONTAINER_PATH}/etc/machine-id
 
-commit_container base:latest
+commit_container base ${BASE_TAG}
