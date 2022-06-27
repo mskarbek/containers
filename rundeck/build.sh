@@ -1,6 +1,10 @@
 . ../meta/common.sh
 
-CONTAINER_UUID=$(create_container openjdk11-jre:latest)
+if [ -z ${1} ]; then
+    CONTAINER_UUID=$(create_container openjdk11-jre latest)
+else
+    CONTAINER_UUID=$(create_container openjdk11-jre ${1})
+fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
@@ -19,10 +23,10 @@ ln -s $(ls -1 ${CONTAINER_PATH}/var/lib/rundeck/bootstrap) ${CONTAINER_PATH}/var
 #mv -v ${CONTAINER_PATH}/etc/rundeck/* ${CONTAINER_PATH}/usr/share/rundeck/
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  rundeckd.service
 
 #buildah config --volume /etc/rundeck ${CONTAINER_UUID}
 buildah config --volume /var/log/rundeck ${CONTAINER_UUID}
 
-commit_container rundeck:latest
+commit_container rundeck ${IMAGE_TAG}
