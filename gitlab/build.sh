@@ -5,7 +5,11 @@ if [ -z ${GITLAB_TYPE} ] || [ ${GITLAB_TYPE} != "ee" ]; then
     GITLAB_TYPE="ce"
 fi
 
-CONTAINER_UUID=$(create_container openssh:latest)
+if [ -z ${1} ]; then
+    CONTAINER_UUID=$(create_container openssh latest)
+else
+    CONTAINER_UUID=$(create_container openssh ${1})
+fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
@@ -24,11 +28,11 @@ dnf_clean
 
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  gitlab-config.service
 
 buildah config --volume /etc/gitlab ${CONTAINER_UUID}
 buildah config --volume /var/log/gitlab ${CONTAINER_UUID}
 buildah config --volume /var/opt/gitlab ${CONTAINER_UUID}
 
-commit_container gitlab:latest
+commit_container gitlab ${IMAGE_TAG}
