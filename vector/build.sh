@@ -7,11 +7,12 @@ else
 fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-dnf_cache
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/vector.repo ${CONTAINER_PATH}/etc/yum.repos.d/vector.repo
     cp -v ./files/RPM-GPG-KEY-vector /etc/pki/rpm-gpg/RPM-GPG-KEY-vector
 fi
+
+dnf_cache
 dnf_install "vector"
 dnf_clean_cache
 dnf_clean
