@@ -1,7 +1,11 @@
 . ../meta/common.sh
 . ./files/VERSIONS
 
-CONTAINER_UUID=$(create_container openjdk8-jre:latest)
+if [ -z ${1} ]; then
+    CONTAINER_UUID=$(create_container openjdk8-jre latest)
+else
+    CONTAINER_UUID=$(create_container openjdk8-jre ${1})
+fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
@@ -10,13 +14,9 @@ dnf_clean_cache
 dnf_clean
 
 TMP_DIR=$(mktemp -d)
-if [ -f "./files/nexus-${NEXUS_VERSION}-unix.tar.gz" ]; then
-    tar xvf ./files/nexus-${NEXUS_VERSION}-unix.tar.gz -C ${TMP_DIR}
-else
-    pushd ${TMP_DIR}
-        curl -L https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz|tar xzv
-    popd
-fi
+pushd ${TMP_DIR}
+    curl -L https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz|tar xzv
+popd
 mkdir ${CONTAINER_PATH}/usr/lib/sonatype
 pushd ${CONTAINER_PATH}/usr/lib/sonatype
     mv -v ${TMP_DIR}/nexus-${NEXUS_VERSION} ./
@@ -36,10 +36,10 @@ if [ -f ./files/keystore.p12 ] && [ -f ./files/keystore.pass ]; then
 fi
 
 # Unfortunately, some mirrors use TLS certificates that, to be accepted, force LEGACY crypto policies
-buildah run ${CONTAINER_UUID} update-crypto-policies --set LEGACY
-buildah run ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} update-crypto-policies --set LEGACY
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  nexus.service
 
 buildah config --volume /var/lib/sonatype-work ${CONTAINER_UUID}
 
-commit_container nexus:latest
+commit_container nexus ${IMAGE_TAG}
