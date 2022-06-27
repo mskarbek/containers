@@ -1,0 +1,46 @@
+default:
+  tags:
+    - buildah
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+
+stages:
+  - build
+  - push
+  - trigger
+
+build-image:
+  stage: build
+  before_script:
+    - BASE_URL=`echo $CI_REPOSITORY_URL | sed "s;\/*$CI_PROJECT_PATH.*;;"`
+    - REPO_URL="$BASE_URL/containers/meta.git"
+    - REPO_DIR=../meta
+    - rm -fr $REPO_DIR
+    - git clone $REPO_URL $REPO_DIR
+    - export IMAGE_TAG=$(bash ../meta/tag.sh)
+    - echo "IMAGE_TAG=$IMAGE_TAG" > ./build.env
+  script:
+    - source ../meta/ENV
+    - bash -ex ./build.sh $FROM_TAG
+    - PUSH_URL=`echo $CI_REPOSITORY_URL | sed "s;^.*@;http:\/\/oauth2:$CI_RW_TOKEN@;"`
+    - git remote add origin-tag $PUSH_URL
+    - git tag v$IMAGE_TAG
+    - git push -o ci.skip origin-tag --tags
+  artifacts:
+    reports:
+      dotenv: ./build.env
+
+push-image:
+  stage: push
+  script:
+    - source ../meta/ENV
+    - source ../meta/common.sh
+    - skopeo_login
+    - skopeo_copy toolbox $IMAGE_TAG
+  needs:
+    - build-image

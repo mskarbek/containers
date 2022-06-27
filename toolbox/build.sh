@@ -1,7 +1,11 @@
 . ../meta/common.sh
 . ./files/VERSIONS
 
-CONTAINER_UUID=$(create_container openssh:latest)
+if [ -z ${1} ]; then
+    CONTAINER_UUID=$(create_container openssh latest)
+else
+    CONTAINER_UUID=$(create_container openssh ${1})
+fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
@@ -9,9 +13,7 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/RPM-GPG-KEY-PGDG /etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
 fi
 
-if [ ! -f "./files/yq" ]; then
-    curl -L -o ./files/yq https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64
-fi
+curl -L -o ./files/yq https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64
 cp -v ./files/yq ${CONTAINER_PATH}/usr/local/bin/yq
 chmod 0755 ${CONTAINER_PATH}/usr/local/bin/yq
 
@@ -27,10 +29,10 @@ buildah run ${CONTAINER_UUID} useradd --comment "ToolBox" --create-home --shell 
 
 buildah config --volume /home/toolbox/.ssh ${CONTAINER_UUID}
 
-commit_container toolbox:latest
+commit_container toolbox ${IMAGE_TAG}
 
 
-CONTAINER_UUID=$(create_container toolbox:latest)
+CONTAINER_UUID=$(create_container toolbox ${IMAGE_TAG})
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 buildah config --cmd '[ "/usr/bin/bash" ]' ${CONTAINER_UUID}
@@ -39,4 +41,4 @@ buildah config --volume - ${CONTAINER_UUID}
 buildah config --user toolbox ${CONTAINER_UUID}
 buildah config --workingdir /home/toolbox ${CONTAINER_UUID}
 
-commit_container base/toolbox:latest
+commit_container base/toolbox ${IMAGE_TAG}
