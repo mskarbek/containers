@@ -32,4 +32,4 @@ rsync_rootfs "--links"
 buildah config --env='container=oci' ${CONTAINER_UUID}
 buildah config --cmd='[ "/usr/bin/bash", "-l" ]' ${CONTAINER_UUID}
 
-commit_container micro ${MICRO_TAG}
+commit_container micro ${IMAGE_TAG}

@@ -47,4 +47,4 @@ buildah run --network none ${CONTAINER_UUID} systemctl mask\
 
 rm -vf ${CONTAINER_PATH}/etc/machine-id
 
-commit_container base ${BASE_TAG}
+commit_container base ${IMAGE_TAG}

@@ -22,15 +22,14 @@ build-image:
     - REPO_DIR=../meta
     - rm -fr $REPO_DIR
     - git clone $REPO_URL $REPO_DIR
-    - export BASE_TAG=$(bash ../meta/tag.sh)
-    - echo "BASE_TAG=$BASE_TAG" > ./build.env
+    - export IMAGE_TAG=$(bash ../meta/tag.sh)
+    - echo "IMAGE_TAG=$IMAGE_TAG" > ./build.env
   script:
     - source ../meta/ENV
-    - echo $MICRO_TAG
-    - bash -ex ./build.sh $MICRO_TAG
+    - bash -ex ./build.sh $FROM_TAG
     - PUSH_URL=`echo $CI_REPOSITORY_URL | sed "s;^.*@;http:\/\/oauth2:$CI_RW_TOKEN@;"`
     - git remote add origin-tag $PUSH_URL
-    - git tag v$BASE_TAG
+    - git tag v$IMAGE_TAG
     - git push -o ci.skip origin-tag --tags
   artifacts:
     reports:
@@ -42,7 +41,7 @@ push-image:
     - source ../meta/ENV
     - source ../meta/common.sh
     - skopeo_login
-    - skopeo_copy base $BASE_TAG
+    - skopeo_copy base $IMAGE_TAG
   needs:
     - build-image
 
@@ -50,7 +49,7 @@ trigger-systemd:
   stage: trigger
   trigger: containers/systemd
   variables:
-    BASE_TAG: $BASE_TAG
+    FROM_TAG: $IMAGE_TAG
   needs:
     - build-image
     - push-image
@@ -59,7 +58,7 @@ trigger-systemd:
 #  stage: trigger
 #  trigger: containers/ansible
 #  variables:
-#    BASE_TAG: $BASE_TAG
+#    FROM_TAG: $IMAGE_TAG
 #  needs:
 #    - build-image
 #    - push-image
