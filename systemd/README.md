@@ -1,5 +1,5 @@
 # systemd
-Equivalent of [ubi8/ubi-init](https://catalog.redhat.com/software/containers/ubi8/ubi-init/5c359b97d70cc534b3a378c8).
+Equivalent of [ubi9/ubi-init](https://catalog.redhat.com/software/containers/ubi9/ubi-init/615bdc22075b022acc111bf6).
 
 ### Image configuration
 * From: [`base`](../base/README.md)
