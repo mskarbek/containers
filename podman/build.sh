@@ -9,12 +9,16 @@ fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
-dnf_install "podman skopeo containernetworking-plugins netavark iputils iproute iptables-nft"
+dnf_install "podman skopeo fuse-overlayfs netavark iputils iproute iptables-nft"
 dnf_clean_cache
 dnf_clean
 
+sed -i 's/^#mount_program = .*/mount_program = "\/usr\/bin\/fuse-overlayfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
+
 cp -v ${CONTAINER_PATH}/usr/share/containers/containers.conf ${CONTAINER_PATH}/etc/containers/containers.conf
 sed -i 's/^# volume_path = .*/volume_path = "\/var\/lib\/volumes"/' ${CONTAINER_PATH}/etc/containers/containers.conf
+sed -i 's/^#network_backend = .*/network_backend = "netavark"/' ${CONTAINER_PATH}/etc/containers/containers.conf
+sed -i 's/^#default_network = .*/default_network = "ci"/' ${CONTAINER_PATH}/etc/containers/containers.conf
 
 buildah run --network none ${CONTAINER_UUID} systemctl enable\
  podman.socket
