@@ -4,6 +4,7 @@ default:
 
 workflow:
   rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web"
     - if: $CI_PIPELINE_SOURCE == "trigger"
     - if: $CI_PIPELINE_SOURCE == "pipeline"
@@ -17,22 +18,38 @@ build-image:
   stage: build
   before_script:
     - BASE_URL=`echo $CI_REPOSITORY_URL | sed "s;\/*$CI_PROJECT_PATH.*;;"`
-    - REPO_URL="$BASE_URL/cnt/meta.git"
+    - REPO_URL="$BASE_URL/containers/meta.git"
     - REPO_DIR=../meta
     - rm -fr $REPO_DIR
     - git clone $REPO_URL $REPO_DIR
+    - export MICRO_TAG=$(bash ../meta/tag.sh)
+    - echo "MICRO_TAG=$MICRO_TAG" > ./build.env
   script:
+    - source ../meta/ENV
     - bash -ex ./build.sh
+    - PUSH_URL=`echo $CI_REPOSITORY_URL | sed "s;^.*@;http:\/\/oauth2:$CI_RW_TOKEN@;"`
+    - git remote add origin-tag $PUSH_URL
+    - git tag v$MICRO_TAG
+    - git push -o ci.skip origin-tag --tags
+  artifacts:
+    reports:
+      dotenv: ./build.env
 
 push-image:
   stage: push
   script:
-    - skopeo copy containers-storage:$REGISTRY_URL/micro:latest oci:$REGISTRY_URL/micro:latest
+    - source ../meta/ENV
+    - source ../meta/common.sh
+    - skopeo_login
+    - skopeo_copy micro $MICRO_TAG
   needs:
     - build-image
 
 trigger-base:
   stage: trigger
-  trigger: cnt/base
+  trigger: containers/base
+  variables:
+    MICRO_TAG: $MICRO_TAG
   needs:
+    - build-image
     - push-image

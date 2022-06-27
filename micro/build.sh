@@ -4,12 +4,12 @@ CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 buildah from --name=${CONTAINER_UUID} scratch
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-if [ ${BASE_OS} = "el9" ]; then
+if [ ${OS_TYPE} = "el9" ]; then
     ENABLE_REPO="rhel-9-for-x86_64-baseos-rpms"
-elif [ ${BASE_OS} = "c9s" ]; then
+elif [ ${OS_TYPE} = "c9s" ]; then
     ENABLE_REPO="baseos"
 else
-    printf "ERROR: Missing or incorrect BASE_OS variable." >&2
+    printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
     exit 1
 fi
 
@@ -32,4 +32,4 @@ rsync_rootfs "--links"
 buildah config --env='container=oci' ${CONTAINER_UUID}
 buildah config --cmd='[ "/usr/bin/bash", "-l" ]' ${CONTAINER_UUID}
 
-commit_container micro:latest
+commit_container micro ${MICRO_TAG}
