@@ -54,11 +54,29 @@ trigger-systemd:
     - build-image
     - push-image
 
-#trigger-ansible:
-#  stage: trigger
-#  trigger: containers/ansible
-#  variables:
-#    FROM_TAG: $IMAGE_TAG
-#  needs:
-#    - build-image
-#    - push-image
+trigger-systemd:
+  stage: trigger
+  trigger: containers/openjdk8
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+    - push-image
+
+trigger-systemd:
+  stage: trigger
+  trigger: containers/openjdk11
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+    - push-image
+
+trigger-systemd:
+  stage: trigger
+  trigger: containers/openjdk17
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+    - push-image
