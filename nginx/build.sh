@@ -1,6 +1,10 @@
 . ../meta/common.sh
 
-CONTAINER_UUID=$(create_container systemd:latest)
+if [ -z ${1} ]; then
+    CONTAINER_UUID=$(create_container systemd latest)
+else
+    CONTAINER_UUID=$(create_container systemd ${1})
+fi
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
 dnf_cache
@@ -14,7 +18,7 @@ touch ${CONTAINER_PATH}/usr/share/nginx/html/index.html
 
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  etc-nginx-conf.d.path\
  etc-nginx-stream.d.path\
  nginx.service
@@ -24,4 +28,4 @@ buildah config --volume /etc/nginx/stream.d ${CONTAINER_UUID}
 buildah config --volume /etc/pki/tls/private ${CONTAINER_UUID}
 buildah config --volume /var/log/nginx ${CONTAINER_UUID}
 
-commit_container nginx:latest
+commit_container nginx ${IMAGE_TAG}
