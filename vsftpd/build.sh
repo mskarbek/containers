@@ -1,14 +1,16 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container systemd:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+
+container_create systemd ${1}
 
 dnf_cache
 dnf_install "vsftpd passwd"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  vsftpd.service
 
-commit_container vsftpd:latest
+container_commit vsftpd ${IMAGE_TAG}

@@ -1,11 +1,9 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-if [ -z ${1} ]; then
-    CONTAINER_UUID=$(create_container systemd latest)
-else
-    CONTAINER_UUID=$(create_container systemd ${1})
-fi
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+
+container_create systemd ${1}
 
 dnf_cache
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
@@ -13,7 +11,7 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
 else
     dnf_install "tinyproxy"
 fi
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
 buildah run --network none ${CONTAINER_UUID} systemctl enable\
@@ -21,4 +19,4 @@ buildah run --network none ${CONTAINER_UUID} systemctl enable\
 
 buildah config --volume /etc/tinyproxy ${CONTAINER_UUID}
 
-commit_container tinyproxy ${IMAGE_TAG}
+container_commit tinyproxy ${IMAGE_TAG}

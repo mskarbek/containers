@@ -1,11 +1,13 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container base:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+
+container_create base ${1}
 
 dnf_cache
 dnf_install "git gcc gcc-c++ clang llvm rpm-build"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
-commit_container base/rpmbuild:latest
+container_commit base/rpmbuild ${IMAGE_TAG}

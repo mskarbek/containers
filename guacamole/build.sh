@@ -1,8 +1,10 @@
-. ../meta/common.sh
-. ./files/VERSIONS
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container openjdk11-jre:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+source ./files/VERSIONS
+
+container_create openjdk11-jre ${1}
 
 TMP_DIR=$(mktemp -d)
 pushd ${TMP_DIR}
@@ -13,20 +15,20 @@ pushd ${TMP_DIR}
     curl -Lo guacamole-auth-totp-${GUACAMOLE_VERSION}.tar.gz https://apache.org/dyn/closer.lua/guacamole/${GUACAMOLE_VERSION}/binary/guacamole-auth-totp-${GUACAMOLE_VERSION}.tar.gz?action=download
     curl -Lo guacamole-auth-sso-${GUACAMOLE_VERSION}.tar.gz https://apache.org/dyn/closer.lua/guacamole/${GUACAMOLE_VERSION}/binary/guacamole-auth-sso-${GUACAMOLE_VERSION}.tar.gz?action=download
 popd
-mkdir -p ${CONTAINER_PATH}/usr/lib/guacamole/{extensions,lib}
+mkdir -vp ${CONTAINER_PATH}/usr/lib/guacamole/{extensions,lib}
 pushd ${CONTAINER_PATH}/usr/lib/guacamole
     tar -xvf --strip-components=1 ${TMP_DIR}/apache-tomcat-${TOMCAT_VERSION}.tar.gz
     mv -v ${TMP_DIR}/guacamole-${GUACAMOLE_VERSION}.war ./webapp/guacamole.war
     mv -v ${TMP_DIR}/sonatype-work ./
     ln -s ./nexus-${NEXUS_VERSION} nexus
 popd 
-rm -rf ${TMP_DIR}
+rm -vrf ${TMP_DIR}
 
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  guacamole.service
 
 buildah config --volume /etc/guacamole ${CONTAINER_UUID}
 
-commit_container guacamole:latest
+container_commit guacamole ${IMAGE_TAG}

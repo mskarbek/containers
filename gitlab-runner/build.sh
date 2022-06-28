@@ -1,5 +1,8 @@
-. ../meta/common.sh
-. ./files/VERSIONS
+#!/usr/bin/env bash
+set -e
+
+source ../meta/common.sh
+source ./files/VERSIONS
 
 if [ ! -z ${FROM_IMAGE} ]; then
     if [ ${FROM_IMAGE} == "buildah" ]; then
@@ -14,16 +17,11 @@ else
 fi
 
 for IMAGE in ${IMAGES}; do
-    if [ -z ${1} ]; then
-        CONTAINER_UUID=$(create_container ${IMAGE} latest)
-    else
-        CONTAINER_UUID=$(create_container ${IMAGE} ${1})
-    fi
-    CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+    container_create systemd ${IMAGE} ${1}
 
     dnf_cache
     dnf_install "openssh-clients git-core hostname"
-    dnf_clean_cache
+    dnf_cache_clean
     dnf_clean
 
     curl -L -o ${CONTAINER_PATH}/usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/v${GITLAB_RUNNER_VERSION}/binaries/gitlab-runner-linux-amd64
@@ -37,5 +35,5 @@ for IMAGE in ${IMAGES}; do
     buildah config --volume /etc/gitlab-runner ${CONTAINER_UUID}
     buildah config --volume /var/lib/gitlab-runner ${CONTAINER_UUID}
 
-    commit_container gitlab-runner-${IMAGE} ${IMAGE_TAG}
+    container_commit gitlab-runner-${IMAGE} ${IMAGE_TAG}
 done

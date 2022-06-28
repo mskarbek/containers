@@ -1,29 +1,27 @@
-. ../meta/common.sh
-. ./files/VERSIONS
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container systemd:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+source ./files/VERSIONS
+
+container_create systemd ${1}
 
 TMP_DIR=$(mktemp -d)
-if [ -f "./files/prometheus-${PROMETHEUS_VERSION}.linux-amd64.tar.gz" ]; then
-    tar xvf ./files/prometheus-${PROMETHEUS_VERSION}.linux-amd64.tar.gz -C ${TMP_DIR}
-else
-    pushd ${TMP_DIR}
-        curl -L https://github.com/prometheus/prometheus/releases/download/v${PROMETHEUS_VERSION}/prometheus-${PROMETHEUS_VERSION}.linux-amd64.tar.gz|tar xzv
-    popd
-fi
+pushd ${TMP_DIR}
+    curl -L https://github.com/prometheus/prometheus/releases/download/v${PROMETHEUS_VERSION}/prometheus-${PROMETHEUS_VERSION}.linux-amd64.tar.gz|tar xzv
+popd
 mv -v ${TMP_DIR}/prometheus-${PROMETHEUS_VERSION}.linux-amd64/{prometheus,promtool} ${CONTAINER_PATH}/usr/local/bin/
-chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/*
+chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/{prometheus,promtool}
 mkdir -vp ${CONTAINER_PATH}/usr/share/prometheus
 mv -v ${TMP_DIR}/prometheus-${PROMETHEUS_VERSION}.linux-amd64/{consoles,console_libraries,prometheus.yml} ${CONTAINER_PATH}/usr/share/prometheus/
-rm -rf ${TMP_DIR}
+rm -vrf ${TMP_DIR}
 
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  prometheus.service
 
 buildah config --volume /etc/prometheus ${CONTAINER_UUID}
 buildah config --volume /var/lib/prometheus ${CONTAINER_UUID}
 
-commit_container prometheus:latest
+container_commit prometheus ${IMAGE_TAG}

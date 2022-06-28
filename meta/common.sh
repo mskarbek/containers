@@ -1,4 +1,4 @@
-create_container () {
+container_create () {
     CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
     if [ -z ${2} ]; then
         if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
@@ -13,10 +13,11 @@ create_container () {
             buildah from --name=${CONTAINER_UUID} ${OCI_REGISTRY_URL}/${1}:${2}
         fi
     fi
+    CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 }
 
-commit_container () {
-    clean_files
+container_commit () {
+    files_clean
     if [ -z ${2} ]; then
         if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
             buildah commit ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/bootstrap/${1}:latest
@@ -138,17 +139,17 @@ dnf_clean () {
      clean all
 }
 
-dnf_clean_cache () {
+dnf_cache_clean () {
     umount ${CONTAINER_PATH}/var/cache/dnf
-    rm -rvf ${UPPERDIR} ${WORKDIR}
+    rm -vrf ${UPPERDIR} ${WORKDIR}
 }
 
 rsync_rootfs () {
     rsync -hrvP --exclude '.gitkeep' --ignore-existing ${@} rootfs/ ${CONTAINER_PATH}/
 }
 
-clean_files () {
-    rm -rvf\
+files_clean () {
+    rm -vrf\
      ${CONTAINER_PATH}/var/cache/*\
      ${CONTAINER_PATH}/var/log/dnf*\
      ${CONTAINER_PATH}/var/log/yum*\
@@ -156,8 +157,8 @@ clean_files () {
      ${CONTAINER_PATH}/var/log/rhsm
 }
 
-clean_repos () {
-    rm -rvf\
+repos_clean () {
+    rm -vrf\
      ${CONTAINER_PATH}/etc/yum.repos.d/*
 }
 
@@ -168,9 +169,9 @@ skopeo_login () {
 skopeo_copy () {
     if [ -z ${2} ]; then
         if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-            buildah commit ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/bootstrap/${1}:latest
+            skopeo copy --format oci containers-storage:${OCI_REGISTRY_URL}/bootstrap/${1}:latest docker://${OCI_REGISTRY_URL}/bootstrap/${1}:latest
         else
-            buildah commit ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/${1}:latest
+            skopeo copy --format oci containers-storage:${OCI_REGISTRY_URL}/${1}:latest docker://${OCI_REGISTRY_URL}/${1}:latest
         fi
     else
         if [ ! -z ${IMAGE_BOOTSTRAP} ]; then

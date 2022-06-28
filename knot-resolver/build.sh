@@ -1,21 +1,23 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container systemd:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+
+container_create systemd ${1}
 
 dnf_cache
 dnf_install "knot-resolver knot-resolver-module-dnstap knot-resolver-module-http"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
 mkdir -vp ${CONTAINER_PATH}/usr/share/knot-resolver
-mv -v ${CONTAINER_PATH}/etc/knot-resolver/* ${CONTAINER_PATH}/usr/share/knot-resolver
+mv -v ${CONTAINER_PATH}/etc/knot-resolver/* ${CONTAINER_PATH}/usr/share/knot-resolver/
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  kres-cache-gc.service\
  kresd@1.service
 
 buildah config --volume /etc/knot-resolver ${CONTAINER_UUID}
 
-commit_container knot-resolver:latest
+container_commit knot-resolver ${IMAGE_TAG}

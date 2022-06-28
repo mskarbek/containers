@@ -1,19 +1,21 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container systemd:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+
+container_create systemd ${1}
 
 dnf_cache
 dnf_install "knot knot-module-dnstap knot-utils"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  knot.service
 
 buildah config --volume /etc/knot ${CONTAINER_UUID}
 buildah config --volume /var/lib/knot ${CONTAINER_UUID}
 
-commit_container knot-dns:latest
+container_commit knot-dns ${IMAGE_TAG}

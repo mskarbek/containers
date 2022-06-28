@@ -1,25 +1,26 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container systemd:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
 
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-    cp -v ./files/pgdg-redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgdg-redhat.repo
-    cp -v ./files/RPM-GPG-KEY-PGDG /etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
-fi
+container_create systemd ${1}
 
 dnf_cache
+if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    cp -v ./files/pgdg-redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgdg-redhat.repo
+fi
+rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-PGDG
 dnf_install "postgresql14-server postgresql14-contrib citus_14 pg_auto_failover_14 pg_qualstats_14"
 # Not yet in rhel9 repo:
 #dnf_install "pg_stat_kcache_14 pg_wait_sampling_14 pg_track_settings_14"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  postgresql-14.service
 
 buildah config --volume /var/lib/pgsql/14/data ${CONTAINER_UUID}
 
-commit_container postgresql14:latest
+container_commit postgresql14 ${IMAGE_TAG}

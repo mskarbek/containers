@@ -1,4 +1,7 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
+
+source ../meta/common.sh
 
 CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 buildah from --name=${CONTAINER_UUID} scratch
@@ -24,7 +27,7 @@ fi
 
 if [ -f ./files/*.pem ]; then
     cp -v ./files/*.pem ${CONTAINER_PATH}/etc/pki/ca-trust/source/anchors/
-    buildah run -t ${CONTAINER_UUID} update-ca-trust
+    buildah run --network none ${CONTAINER_UUID} update-ca-trust
 fi
 
 rsync_rootfs "--links"
@@ -32,4 +35,4 @@ rsync_rootfs "--links"
 buildah config --env='container=oci' ${CONTAINER_UUID}
 buildah config --cmd='[ "/usr/bin/bash", "-l" ]' ${CONTAINER_UUID}
 
-commit_container micro ${IMAGE_TAG}
+container_commit micro ${IMAGE_TAG}

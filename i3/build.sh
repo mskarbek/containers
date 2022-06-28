@@ -1,14 +1,16 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container systemd:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
 
-buildah run -t ${CONTAINER_UUID} systemctl unmask\
+container_create systemd ${1}
+
+buildah run --network none ${CONTAINER_UUID} systemctl unmask\
  systemd-logind.service
 
 dnf_cache
 dnf_install "i3 i3status xrdp xorgxrdp passwd firefox vi dmenu rxvt-unicode"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
 for FILE in {remote,login,systemd-user}; do
@@ -18,14 +20,14 @@ done
 rm -vf ${CONTAINER_PATH}/usr/libexec/xrdp/startwm.sh
 rsync_rootfs
 
-buildah run ${CONTAINER_UUID} systemctl set-default\
+buildah run --network none ${CONTAINER_UUID} systemctl set-default\
  graphical.target
 
-buildah run ${CONTAINER_UUID} systemctl mask\
+buildah run --network none ${CONTAINER_UUID} systemctl mask\
  power-profiles-daemon.service\
  upower.service
 
-buildah run ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  xrdp.service
 
-commit_container i3:latest
+container_commit i3 ${IMAGE_TAG}

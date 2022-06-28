@@ -1,27 +1,30 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container systemd:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
 
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-    cp -v ./files/*.repo ${CONTAINER_PATH}/etc/yum.repos.d/
-    cp -v ./files/RPM-GPG-KEY-* /etc/pki/rpm-gpg/
-fi
+container_create systemd ${1}
 
 dnf_cache
+if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    cp -v ./files/isc-kea-2-0.repo ${CONTAINER_PATH}/etc/yum.repos.d/isc-kea-2-0.repo
+    cp -v ./files/isc-stork.repo ${CONTAINER_PATH}/etc/yum.repos.d/isc-stork.repo
+fi
+rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-ISC-Kea
+rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-ISC-Stork
 dnf_install "isc-kea isc-stork-agent"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
-mkdir -v ${CONTAINER_PATH}/usr/share/kea/etc
+mkdir -vp ${CONTAINER_PATH}/usr/share/kea/etc
 mv -v ${CONTAINER_PATH}/etc/kea/* ${CONTAINER_PATH}/usr/share/kea/etc/
 
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  kea-dhcp4.service
 # isc-stork-agent.service
 
 buildah config --volume /etc/kea ${CONTAINER_UUID}
 
-commit_container kea:latest
+container_commit kea ${IMAGE_TAG}

@@ -1,21 +1,18 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-if [ -z ${1} ]; then
-    CONTAINER_UUID=$(create_container micro latest)
-else
-    CONTAINER_UUID=$(create_container micro ${1})
-fi
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
 
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-    cp -v ./files/epel.repo ${CONTAINER_PATH}/etc/yum.repos.d/
-    cp -v ./files/RPM-GPG-KEY-EPEL-9 /etc/pki/rpm-gpg/
-    if [ ${BASE_OS} = "c9s" ]; then
-        cp -v ./files/epel-next.repo ${CONTAINER_PATH}/etc/yum.repos.d/
-    fi
-fi
+container_create micro ${1}
 
 dnf_cache
+if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    cp -v ./files/epel.repo ${CONTAINER_PATH}/etc/yum.repos.d/epel.repo
+    if [ ${BASE_OS} = "c9s" ]; then
+        cp -v ./files/epel-next.repo ${CONTAINER_PATH}/etc/yum.repos.d/epel-next.repo
+    fi
+fi
+rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-EPEL-9
 dnf_install "systemd procps-ng"
 dnf_clean_cache
 dnf_clean
@@ -47,4 +44,4 @@ buildah run --network none ${CONTAINER_UUID} systemctl mask\
 
 rm -vf ${CONTAINER_PATH}/etc/machine-id
 
-commit_container base ${IMAGE_TAG}
+container_commit base ${IMAGE_TAG}

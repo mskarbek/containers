@@ -1,24 +1,22 @@
-. ../meta/common.sh
-. ./files/VERSIONS
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container systemd:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+source ./files/VERSIONS
+
+container_create systemd ${1}
 
 TMP_DIR=$(mktemp -d)
-if [ -f "./files/pushgateway-${PUSHGATEWAY_VERSION}.linux-amd64.tar.gz" ]; then
-    tar xvf ./files/pushgateway-${PUSHGATEWAY_VERSION}.linux-amd64.tar.gz -C ${TMP_DIR}
-else
-    pushd ${TMP_DIR}
-        curl -L https://github.com/prometheus/pushgateway/releases/download/v${PUSHGATEWAY_VERSION}/pushgateway-${PUSHGATEWAY_VERSION}.linux-amd64.tar.gz|tar xzv
-    popd
-fi
-mv -v ${TMP_DIR}/pushgateway-${PUSHGATEWAY_VERSION}.linux-amd64/pushgateway ${CONTAINER_PATH}/usr/local/bin/
-chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/*
-rm -rf ${TMP_DIR}
+pushd ${TMP_DIR}
+    curl -L https://github.com/prometheus/pushgateway/releases/download/v${PUSHGATEWAY_VERSION}/pushgateway-${PUSHGATEWAY_VERSION}.linux-amd64.tar.gz|tar xzv
+popd
+mv -v ${TMP_DIR}/pushgateway-${PUSHGATEWAY_VERSION}.linux-amd64/pushgateway ${CONTAINER_PATH}/usr/local/bin/pushgateway
+chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/pushgateway
+rm -vrf ${TMP_DIR}
 
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  pushgateway.service
 
-commit_container pushgateway:latest
+container_commit pushgateway ${IMAGE_TAG}

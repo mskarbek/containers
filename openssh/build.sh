@@ -1,18 +1,16 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-if [ -z ${1} ]; then
-    CONTAINER_UUID=$(create_container systemd latest)
-else
-    CONTAINER_UUID=$(create_container systemd ${1})
-fi
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+
+container_create systemd ${1}
 
 buildah run --network none ${CONTAINER_UUID} systemctl unmask\
  systemd-logind.service
 
 dnf_cache
 dnf_install "openssh-server openssh-clients"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
 for FILE in {sshd,remote,login,systemd-user}; do
@@ -21,4 +19,4 @@ done
 
 rsync_rootfs
 
-commit_container openssh ${IMAGE_TAG}
+container_commit openssh ${IMAGE_TAG}

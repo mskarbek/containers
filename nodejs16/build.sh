@@ -1,32 +1,32 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container base:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+
+container_create base ${1}
 
 dnf_cache
 dnf_install "nodejs npm"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
-commit_container base/nodejs16:latest
+container_commit base/nodejs16 ${IMAGE_TAG}
 
 
-CONTAINER_UUID=$(create_container base/nodejs16:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+container_create base/nodejs16 ${IMAGE_TAG}
 
 buildah config --cmd '[ "/usr/sbin/init" ]' ${CONTAINER_UUID}
 buildah config --stop-signal 'SIGRTMIN+3' ${CONTAINER_UUID}
 buildah config --volume /var/log/journal ${CONTAINER_UUID}
 
-commit_container nodejs16:latest
+container_commit nodejs16 ${IMAGE_TAG}
 
 
-CONTAINER_UUID=$(create_container base/nodejs16:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+container_create base/nodejs16 ${IMAGE_TAG}
 
 dnf_cache
 dnf_install "git-core tar unzip gzip make gcc gcc-c++"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
-commit_container base/nodejs16-devel:latest
+container_commit base/nodejs16-devel ${IMAGE_TAG}

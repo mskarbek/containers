@@ -1,29 +1,27 @@
-. ../meta/common.sh
-. ./files/VERSIONS
+#!/usr/bin/env bash
+set -e
 
-if [ -z ${1} ]; then
-    CONTAINER_UUID=$(create_container openjdk8-jre latest)
-else
-    CONTAINER_UUID=$(create_container openjdk8-jre ${1})
-fi
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+source ./files/VERSIONS
+
+container_create openjdk8-jre ${1}
 
 dnf_cache
 dnf_install "curl"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
 TMP_DIR=$(mktemp -d)
 pushd ${TMP_DIR}
     curl -L https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz|tar xzv
 popd
-mkdir ${CONTAINER_PATH}/usr/lib/sonatype
+mkdir -vp ${CONTAINER_PATH}/usr/lib/sonatype
 pushd ${CONTAINER_PATH}/usr/lib/sonatype
     mv -v ${TMP_DIR}/nexus-${NEXUS_VERSION} ./
     mv -v ${TMP_DIR}/sonatype-work ./
     ln -s ./nexus-${NEXUS_VERSION} nexus
 popd
-rm -rf ${TMP_DIR}
+rm -vrf ${TMP_DIR}
 
 rsync_rootfs
 
@@ -42,4 +40,4 @@ buildah run --network none ${CONTAINER_UUID} systemctl enable\
 
 buildah config --volume /var/lib/sonatype-work ${CONTAINER_UUID}
 
-commit_container nexus ${IMAGE_TAG}
+container_commit nexus ${IMAGE_TAG}

@@ -1,12 +1,10 @@
-. ../meta/common.sh
-. ./files/VERSIONS
+#!/usr/bin/env bash
+set -e
 
-if [ -z ${1} ]; then
-    CONTAINER_UUID=$(create_container systemd latest)
-else
-    CONTAINER_UUID=$(create_container systemd ${1})
-fi
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+source ./files/VERSIONS
+
+container_create systemd ${1}
 
 curl -L -o ${CONTAINER_PATH}/usr/local/bin/minio-console https://github.com/minio/console/releases/download/v${MINIO_CONSOLE_VERSION}/console-linux-amd64
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/minio-console
@@ -18,4 +16,4 @@ buildah run --network none ${CONTAINER_UUID} systemctl enable\
 
 buildah config --volume /etc/minio-console ${CONTAINER_UUID}
 
-commit_container minio-console ${IMAGE_TAG}
+container_commit minio-console ${IMAGE_TAG}

@@ -1,25 +1,26 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container systemd:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
 
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-    cp -v ./files/couchdb.repo ${CONTAINER_PATH}/etc/yum.repos.d/couchdb.repo
-    cp -v ./files/RPM-GPG-KEY-couchdb /etc/pki/rpm-gpg/RPM-GPG-KEY-couchdb
-fi
+container_create systemd ${1}
 
 dnf_cache
+if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    cp -v ./files/couchdb.repo ${CONTAINER_PATH}/etc/yum.repos.d/couchdb.repo
+fi
+rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-couchdb
 dnf_install "couchdb"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  couchdb.service
 
 buildah config --volume /opt/couchdb/etc/local.d ${CONTAINER_UUID}
 buildah config --volume /var/lib/couchdb ${CONTAINER_UUID}
 buildah config --volume /var/log/couchdb ${CONTAINER_UUID}
 
-commit_container couchdb:latest
+container_commit couchdb ${IMAGE_TAG}

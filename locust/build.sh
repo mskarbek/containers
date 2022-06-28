@@ -1,8 +1,10 @@
-. ../meta/common.sh
-. ./files/VERSIONS
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container base/python36-devel:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+source ./files/VERSIONS
+
+container_create base/python3-devel ${1}
 
 # Packages in repos that are unfortunately outdated:
 #   python3-greenlet
@@ -34,15 +36,15 @@ dnf_install "libevent-devel\
  python3-charset-normalizer\
  python3-urllib3\
  python3-idna"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
-buildah run -t ${CONTAINER_UUID} pip3 install locust==${LOCUST_VERSION}
+buildah run ${CONTAINER_UUID} pip3 install locust==${LOCUST_VERSION}
 
-rm -rvf ${CONTAINER_PATH}/root/.cache
+rm -vrf ${CONTAINER_PATH}/root/.cache
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  locust.service
 
 buildah config --volume /var/lib/locust ${CONTAINER_UUID}
@@ -50,4 +52,4 @@ buildah config --cmd '[ "/usr/sbin/init" ]' ${CONTAINER_UUID}
 buildah config --stop-signal 'SIGRTMIN+3' ${CONTAINER_UUID}
 buildah config --volume /var/log/journal ${CONTAINER_UUID}
 
-commit_container locust:latest
+container_commit locust ${IMAGE_TAG}

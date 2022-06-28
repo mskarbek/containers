@@ -1,11 +1,13 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-CONTAINER_UUID=$(create_container base:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+
+container_create base ${1}
 
 dnf_cache
 dnf_install "golang"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
-commit_container base/golang:latest
+container_commit base/golang ${IMAGE_TAG}

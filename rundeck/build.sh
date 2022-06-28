@@ -1,20 +1,17 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-if [ -z ${1} ]; then
-    CONTAINER_UUID=$(create_container openjdk11-jre latest)
-else
-    CONTAINER_UUID=$(create_container openjdk11-jre ${1})
-fi
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
 
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-    cp -v ./files/rundeck.repo ${CONTAINER_PATH}/etc/yum.repos.d/rundeck.repo
-    cp -v ./files/RPM-GPG-KEY-rundeck /etc/pki/rpm-gpg/RPM-GPG-KEY-rundeck
-fi
+container_create openjdk11-jre ${1}
 
 dnf_cache
+if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+    cp -v ./files/rundeck.repo ${CONTAINER_PATH}/etc/yum.repos.d/rundeck.repo
+fi
+rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-rundeck
 dnf_install "rundeck git-core"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
 ln -s $(ls -1 ${CONTAINER_PATH}/var/lib/rundeck/bootstrap) ${CONTAINER_PATH}/var/lib/rundeck/bootstrap/rundeck.war
@@ -29,4 +26,4 @@ buildah run --network none ${CONTAINER_UUID} systemctl enable\
 #buildah config --volume /etc/rundeck ${CONTAINER_UUID}
 buildah config --volume /var/log/rundeck ${CONTAINER_UUID}
 
-commit_container rundeck ${IMAGE_TAG}
+container_commit rundeck ${IMAGE_TAG}

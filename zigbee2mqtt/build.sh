@@ -1,8 +1,15 @@
 . ../meta/common.sh
 . ./files/VERSIONS
 
-BUILD_UUID=$(create_container base/nodejs16-devel:latest)
+BUILD_UUID=$(create_container base/nodejs16-devel ${IMAGE_TAG})
 BUILD_PATH=$(buildah mount ${BUILD_UUID})
+#!/usr/bin/env bash
+set -e
+
+source ../meta/common.sh
+source ./files/VERSIONS
+
+container_create systemd ${1}
 
 TMP_DIR=$(buildah run ${BUILD_UUID} mktemp -d)
 if [ -f ./files/${ZIGBEE2MQTT_VERSION}.tar.gz ]; then
@@ -13,18 +20,18 @@ else
     popd
 fi
 
-buildah run -t --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} npm ci --no-audit --no-optional --no-update-notifier
-buildah run -t --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} npm run build
-buildah run -t --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} rm -rf ./node_modules
-buildah run -t --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} npm ci --production --no-audit --no-optional --no-update-notifier 
+buildah run --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} npm ci --no-audit --no-optional --no-update-notifier
+buildah run --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} npm run build
+buildah run --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} rm -vrf ./node_modules
+buildah run --workingdir=${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${BUILD_UUID} npm ci --production --no-audit --no-optional --no-update-notifier 
 
-CONTAINER_UUID=$(create_container base/nodejs16:latest)
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+
+container_create base/nodejs16 ${1}
 
 mv -v ${BUILD_PATH}${TMP_DIR}/zigbee2mqtt-${ZIGBEE2MQTT_VERSION} ${CONTAINER_PATH}/usr/lib/zigbee2mqtt
 rsync_rootfs
 
-buildah run -t ${CONTAINER_UUID} systemctl enable\
+buildah run --network none ${CONTAINER_UUID} systemctl enable\
  zigbee2mqtt.service
 
 buildah config --volume /var/lib/zigbee2mqtt ${CONTAINER_UUID}
@@ -32,4 +39,4 @@ buildah config --cmd '[ "/usr/sbin/init" ]' ${CONTAINER_UUID}
 buildah config --stop-signal 'SIGRTMIN+3' ${CONTAINER_UUID}
 buildah config --volume /var/log/journal ${CONTAINER_UUID}
 
-commit_container zigbee2mqtt:latest
+container_commit zigbee2mqtt ${IMAGE_TAG}

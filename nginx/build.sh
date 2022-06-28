@@ -1,15 +1,13 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-if [ -z ${1} ]; then
-    CONTAINER_UUID=$(create_container systemd latest)
-else
-    CONTAINER_UUID=$(create_container systemd ${1})
-fi
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+
+container_create systemd ${1}
 
 dnf_cache
 dnf_install "nginx nginx-mod-stream"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
 rm -vf ${CONTAINER_PATH}/etc/nginx/nginx.conf
@@ -28,4 +26,4 @@ buildah config --volume /etc/nginx/stream.d ${CONTAINER_UUID}
 buildah config --volume /etc/pki/tls/private ${CONTAINER_UUID}
 buildah config --volume /var/log/nginx ${CONTAINER_UUID}
 
-commit_container nginx ${IMAGE_TAG}
+container_commit nginx ${IMAGE_TAG}

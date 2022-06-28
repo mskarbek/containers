@@ -1,14 +1,12 @@
-. ../meta/common.sh
+#!/usr/bin/env bash
+set -e
 
-if [ -z ${1} ]; then
-    CONTAINER_UUID=$(create_container base latest)
-else
-    CONTAINER_UUID=$(create_container base ${1})
-fi
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+source ../meta/common.sh
+
+container_create base ${1}
 
 buildah config --cmd '[ "/usr/sbin/init" ]' ${CONTAINER_UUID}
 buildah config --stop-signal 'SIGRTMIN+3' ${CONTAINER_UUID}
 buildah config --volume /var/log/journal ${CONTAINER_UUID}
 
-commit_container systemd $IMAGE_TAG
+container_commit systemd $IMAGE_TAG

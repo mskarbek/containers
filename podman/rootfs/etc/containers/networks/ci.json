@@ -3,7 +3,6 @@
          "name": "ci",
          "driver": "bridge",
          "network_interface": "cni0",
-         "created": "2022-06-27T20:15:42.449495678+02:00",
          "subnets": [
               {
                    "subnet": "172.16.0..0/24",
