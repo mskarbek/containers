@@ -11,109 +11,386 @@ workflow:
 
 stages:
   - build
-  - push
   - trigger
 
 build-image:
   stage: build
   before_script:
-    - BASE_URL=`echo $CI_REPOSITORY_URL | sed "s;\/*$CI_PROJECT_PATH.*;;"`
+    # downlowad meta repo
+    - BASE_URL=`printf $CI_REPOSITORY_URL | sed "s;\/*$CI_PROJECT_PATH.*;;"`
     - REPO_URL="$BASE_URL/containers/meta.git"
     - REPO_DIR=../meta
     - rm -fr $REPO_DIR
     - git clone $REPO_URL $REPO_DIR
+    # source meta
+    - source ../meta/common.sh
+    # login to registry
+    - skopeo_login
+    # generate tag
     - export IMAGE_TAG=$(bash ../meta/tag.sh)
-    - echo "IMAGE_TAG=$IMAGE_TAG" > ./build.env
+    - printf "IMAGE_TAG=$IMAGE_TAG" > ./build.env
   script:
-    - source ../meta/ENV
-    - echo $FROM_TAG
-    - bash -ex ./build.sh $IMAGE_TAG
-    - PUSH_URL=`echo $CI_REPOSITORY_URL | sed "s;^.*@;http:\/\/oauth2:$CI_RW_TOKEN@;"`
+    # build image
+    - bash -ex ./build.sh
+    # tag repo
+    - PUSH_URL=`printf $CI_REPOSITORY_URL | sed "s;:\/\/.*@;:\/\/oauth2:$CONTAINERS_CI_TOKEN@;"`
     - git remote add origin-tag $PUSH_URL
     - git tag v$IMAGE_TAG
     - git push -o ci.skip origin-tag --tags
+    # push image
+    - skopeo_copy systemd $IMAGE_TAG
   artifacts:
     reports:
       dotenv: ./build.env
 
-push-image:
-  stage: push
-  script:
-    - source ../meta/ENV
-    - source ../meta/common.sh
-    - skopeo_login
-    - skopeo_copy systemd $IMAGE_TAG
+trigger-alertmanager:
+  stage: trigger
+  trigger: containers/alertmanager
+  variables:
+    FROM_TAG: $IMAGE_TAG
   needs:
     - build-image
 
-#trigger-openssh:
-#  stage: trigger
-#  trigger: containers/openssh
-#  variables:
-#    FROM_TAG: $IMAGE_TAG
-#  needs:
-#    - build-image
-#    - push-image
-#
-#trigger-podman:
-#  stage: trigger
-#  trigger: containers/podman
-#  variables:
-#    FROM_TAG: $IMAGE_TAG
-#  needs:
-#    - build-image
-#    - push-image
-#
-#trigger-buildah:
-#  stage: trigger
-#  trigger: containers/buildah
-#  variables:
-#    FROM_TAG: $IMAGE_TAG
-#  needs:
-#    - build-image
-#    - push-image
-#
-#trigger-nginx:
-#  stage: trigger
-#  trigger: containers/nginx
-#  variables:
-#    FROM_TAG: $IMAGE_TAG
-#  needs:
-#    - build-image
-#    - push-image
-#
-#trigger-kuma-cp:
-#  stage: trigger
-#  trigger: containers/kuma-cp
-#  variables:
-#    FROM_TAG: $IMAGE_TAG
-#  needs:
-#    - build-image
-#    - push-image
-#
-#trigger-kuma-dp:
-#  stage: trigger
-#  trigger: containers/kuma-dp
-#  variables:
-#    FROM_TAG: $IMAGE_TAG
-#  needs:
-#    - build-image
-#    - push-image
-#
-#trigger-fake-service:
-#  stage: trigger
-#  trigger: containers/fake-service
-#  variables:
-#    FROM_TAG: $IMAGE_TAG
-#  needs:
-#    - build-image
-#    - push-image
-#
-#trigger-minio:
-#  stage: trigger
-#  trigger: containers/minio
-#  variables:
-#    FROM_TAG: $IMAGE_TAG
-#  needs:
-#    - build-image
-#    - push-image
+trigger-apisix:
+  stage: trigger
+  trigger: containers/apisix
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-apisix-dashboard:
+  stage: trigger
+  trigger: containers/apisix-dashboard
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-boundary:
+  stage: trigger
+  trigger: containers/boundary
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-consul:
+  stage: trigger
+  trigger: containers/consul
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-couchdb:
+  stage: trigger
+  trigger: containers/couchdb
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-fake-service:
+  stage: trigger
+  trigger: containers/fake-service
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-fleet:
+  stage: trigger
+  trigger: containers/fleet
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-gitlab-runner:
+  stage: trigger
+  trigger: containers/gitlab-runner
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-gnome:
+  stage: trigger
+  trigger: containers/gnome
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-grafana:
+  stage: trigger
+  trigger: containers/grafana
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-guacamole-server:
+  stage: trigger
+  trigger: containers/guacamole-server
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-haproxy:
+  stage: trigger
+  trigger: containers/haproxy
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-i3:
+  stage: trigger
+  trigger: containers/i3
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-influxdb:
+  stage: trigger
+  trigger: containers/influxdb
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-kea:
+  stage: trigger
+  trigger: containers/kea
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-knot-dns:
+  stage: trigger
+  trigger: containers/knot-dns
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-knot-resolver:
+  stage: trigger
+  trigger: containers/knot-resolver
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-krakend:
+  stage: trigger
+  trigger: containers/krakend
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-kuma-cp:
+  stage: trigger
+  trigger: containers/kuma-cp
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-kuma-dp:
+  stage: trigger
+  trigger: containers/kuma-dp
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-loki:
+  stage: trigger
+  trigger: containers/loki
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-loki-canary:
+  stage: trigger
+  trigger: containers/loki-canary
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-mimir:
+  stage: trigger
+  trigger: containers/mimir
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-minio:
+  stage: trigger
+  trigger: containers/minio
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-minio-console:
+  stage: trigger
+  trigger: containers/minio-console
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-mysql8:
+  stage: trigger
+  trigger: containers/mysql8
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-nats:
+  stage: trigger
+  trigger: containers/nats
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-nats-kafka:
+  stage: trigger
+  trigger: containers/nats-kafka
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-nginx:
+  stage: trigger
+  trigger: containers/nginx
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-openssh:
+  stage: trigger
+  trigger: containers/openssh
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-openvscode:
+  stage: trigger
+  trigger: containers/openvscode
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-postgresql14:
+  stage: trigger
+  trigger: containers/postgresql14
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-prometheus:
+  stage: trigger
+  trigger: containers/prometheus
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-pushgateway:
+  stage: trigger
+  trigger: containers/pushgateway
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-rabbitmq:
+  stage: trigger
+  trigger: containers/rabbitmq
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-redis:
+  stage: trigger
+  trigger: containers/redis
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-step-ca:
+  stage: trigger
+  trigger: containers/step-ca
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-tinyproxy:
+  stage: trigger
+  trigger: containers/tinyproxy
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-vault:
+  stage: trigger
+  trigger: containers/vault
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-vector:
+  stage: trigger
+  trigger: containers/vector
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-vsftpd:
+  stage: trigger
+  trigger: containers/vsftpd
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-yugabytedb:
+  stage: trigger
+  trigger: containers/yugabytedb
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
+
+trigger-zigbee2mqtt:
+  stage: trigger
+  trigger: containers/zigbee2mqtt
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

@@ -4,29 +4,40 @@ default:
 
 workflow:
   rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web"
     - if: $CI_PIPELINE_SOURCE == "trigger"
     - if: $CI_PIPELINE_SOURCE == "pipeline"
 
 stages:
   - build
-  - push
-  - trigger
 
 build-image:
   stage: build
   before_script:
-    - BASE_URL=`echo $CI_REPOSITORY_URL | sed "s;\/*$CI_PROJECT_PATH.*;;"`
-    - REPO_URL="$BASE_URL/cnt/meta.git"
+    # downlowad meta repo
+    - BASE_URL=`printf $CI_REPOSITORY_URL | sed "s;\/*$CI_PROJECT_PATH.*;;"`
+    - REPO_URL="$BASE_URL/containers/meta.git"
     - REPO_DIR=../meta
     - rm -fr $REPO_DIR
     - git clone $REPO_URL $REPO_DIR
+    # source meta
+    - source ../meta/common.sh
+    # login to registry
+    - skopeo_login
+    # generate tag
+    - export IMAGE_TAG=$(bash ../meta/tag.sh)
+    - printf "IMAGE_TAG=$IMAGE_TAG" > ./build.env
   script:
+    # build image
     - bash -ex ./build.sh
-
-push-image:
-  stage: push
-  script:
-    - skopeo copy containers-storage:$REGISTRY_URL/base/ansible:latest oci:$REGISTRY_URL/base/ansible:latest
-  needs:
-    - build-image
+    # tag repo
+    - PUSH_URL=`printf $CI_REPOSITORY_URL | sed "s;:\/\/.*@;:\/\/oauth2:$CONTAINERS_CI_TOKEN@;"`
+    - git remote add origin-tag $PUSH_URL
+    - git tag v$IMAGE_TAG
+    - git push -o ci.skip origin-tag --tags
+    # push image
+    - skopeo_copy base/ansible $IMAGE_TAG
+  artifacts:
+    reports:
+      dotenv: ./build.env

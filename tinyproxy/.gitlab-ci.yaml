@@ -11,36 +11,33 @@ workflow:
 
 stages:
   - build
-  - push
-  - trigger
 
 build-image:
   stage: build
   before_script:
-    - BASE_URL=`echo $CI_REPOSITORY_URL | sed "s;\/*$CI_PROJECT_PATH.*;;"`
+    # downlowad meta repo
+    - BASE_URL=`printf $CI_REPOSITORY_URL | sed "s;\/*$CI_PROJECT_PATH.*;;"`
     - REPO_URL="$BASE_URL/containers/meta.git"
     - REPO_DIR=../meta
     - rm -fr $REPO_DIR
     - git clone $REPO_URL $REPO_DIR
+    # source meta
+    - source ../meta/common.sh
+    # login to registry
+    - skopeo_login
+    # generate tag
     - export IMAGE_TAG=$(bash ../meta/tag.sh)
-    - echo "IMAGE_TAG=$IMAGE_TAG" > ./build.env
+    - printf "IMAGE_TAG=$IMAGE_TAG" > ./build.env
   script:
-    - source ../meta/ENV
-    - bash -ex ./build.sh $FROM_TAG
-    - PUSH_URL=`echo $CI_REPOSITORY_URL | sed "s;^.*@;http:\/\/oauth2:$CI_RW_TOKEN@;"`
+    # build image
+    - bash -ex ./build.sh
+    # tag repo
+    - PUSH_URL=`printf $CI_REPOSITORY_URL | sed "s;:\/\/.*@;:\/\/oauth2:$CONTAINERS_CI_TOKEN@;"`
     - git remote add origin-tag $PUSH_URL
     - git tag v$IMAGE_TAG
     - git push -o ci.skip origin-tag --tags
+    # push image
+    - skopeo_copy tinyproxy $IMAGE_TAG
   artifacts:
     reports:
       dotenv: ./build.env
-
-push-image:
-  stage: push
-  script:
-    - source ../meta/ENV
-    - source ../meta/common.sh
-    - skopeo_login
-    - skopeo_copy tinyproxy $IMAGE_TAG
-  needs:
-    - build-image

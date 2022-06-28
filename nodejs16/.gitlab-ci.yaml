@@ -1,0 +1,54 @@
+default:
+  tags:
+    - buildah
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+
+stages:
+  - build
+  - trigger
+
+build-image:
+  stage: build
+  before_script:
+    # downlowad meta repo
+    - BASE_URL=`printf $CI_REPOSITORY_URL | sed "s;\/*$CI_PROJECT_PATH.*;;"`
+    - REPO_URL="$BASE_URL/containers/meta.git"
+    - REPO_DIR=../meta
+    - rm -fr $REPO_DIR
+    - git clone $REPO_URL $REPO_DIR
+    # source meta
+    - source ../meta/common.sh
+    # login to registry
+    - skopeo_login
+    # generate tag
+    - export IMAGE_TAG=$(bash ../meta/tag.sh)
+    - printf "IMAGE_TAG=$IMAGE_TAG" > ./build.env
+  script:
+    # build image
+    - bash -ex ./build.sh
+    # tag repo
+    - PUSH_URL=`printf $CI_REPOSITORY_URL | sed "s;:\/\/.*@;:\/\/oauth2:$CONTAINERS_CI_TOKEN@;"`
+    - git remote add origin-tag $PUSH_URL
+    - git tag v$IMAGE_TAG
+    - git push -o ci.skip origin-tag --tags
+    # push image
+    - skopeo_copy base/nodejs16 $IMAGE_TAG
+    - skopeo_copy nodejs16 $IMAGE_TAG
+    - skopeo_copy base/nodejs16-devel $IMAGE_TAG
+  artifacts:
+    reports:
+      dotenv: ./build.env
+
+trigger-zigbee2mqtt:
+  stage: trigger
+  trigger: containers/zigbee2mqtt
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
