@@ -10,8 +10,6 @@ dnf_cache
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/pgdg-redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgdg-redhat.repo
 fi
-cp -v ./files/RPM-GPG-KEY-PGDG ${CONTAINER_PATH}/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
-rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-PGDG
 dnf_install_with_docs "bash-completion"
 dnf_install "sudo less findutils curl vi nano telnet hostname iputils iproute mtr tmux lsof knot-utils tar unzip zstd gzip rsync jq htop openssh-clients tcpdump postgresql14"
 dnf_cache_clean
