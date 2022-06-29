@@ -9,6 +9,7 @@ dnf_cache
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/krakend.repo ${CONTAINER_PATH}/etc/yum.repos.d/krakend.repo
 fi
+cp -v ./files/RPM-GPG-KEY-krakend ${CONTAINER_PATH}/etc/pki/rpm-gpg/RPM-GPG-KEY-krakend
 rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-krakend
 dnf_install "krakend"
 dnf_cache_clean

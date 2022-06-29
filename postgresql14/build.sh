@@ -9,6 +9,7 @@ dnf_cache
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/pgdg-redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgdg-redhat.repo
 fi
+cp -v ./files/RPM-GPG-KEY-PGDG ${CONTAINER_PATH}/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
 rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-PGDG
 dnf_install "postgresql14-server postgresql14-contrib citus_14 pg_auto_failover_14 pg_qualstats_14"
 # Not yet in rhel9 repo:

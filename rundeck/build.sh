@@ -9,6 +9,7 @@ dnf_cache
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/rundeck.repo ${CONTAINER_PATH}/etc/yum.repos.d/rundeck.repo
 fi
+cp -v ./files/RPM-GPG-KEY-rundeck ${CONTAINER_PATH}/etc/pki/rpm-gpg/RPM-GPG-KEY-rundeck
 rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-rundeck
 dnf_install "rundeck git-core"
 dnf_cache_clean

@@ -12,6 +12,7 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
         cp -v ./files/epel-next.repo ${CONTAINER_PATH}/etc/yum.repos.d/epel-next.repo
     fi
 fi
+cp -v ./files/RPM-GPG-KEY-EPEL-9 ${CONTAINER_PATH}/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9
 rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-EPEL-9
 dnf_install "systemd procps-ng"
 dnf_cache_clean

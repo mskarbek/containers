@@ -10,7 +10,9 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/isc-kea-2-0.repo ${CONTAINER_PATH}/etc/yum.repos.d/isc-kea-2-0.repo
     cp -v ./files/isc-stork.repo ${CONTAINER_PATH}/etc/yum.repos.d/isc-stork.repo
 fi
+cp -v ./files/RPM-GPG-KEY-Kea ${CONTAINER_PATH}/etc/pki/rpm-gpg/RPM-GPG-KEY-Kea
 rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-ISC-Kea
+cp -v ./files/RPM-GPG-KEY-Stork ${CONTAINER_PATH}/etc/pki/rpm-gpg/RPM-GPG-KEY-Stork
 rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-ISC-Stork
 dnf_install "isc-kea isc-stork-agent"
 dnf_cache_clean

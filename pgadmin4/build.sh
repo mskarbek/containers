@@ -10,6 +10,7 @@ dnf_cache
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/pgdg-redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgdg-redhat.repo
 fi
+cp -v ./files/RPM-GPG-KEY-PGDG ${CONTAINER_PATH}/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
 rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-PGDG
 dnf_install "libstdc++ postgresql12 postgresql13 postgresql14 python3-psycopg2"
 dnf_install "python3-six python3-pycparser python3-dateutil python3-idna python3-jmespath python3-greenlet python3-click python3-pytz"

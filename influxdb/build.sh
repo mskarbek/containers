@@ -9,6 +9,7 @@ dnf_cache
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/influxdb.repo ${CONTAINER_PATH}/etc/yum.repos.d/influxdb.repo
 fi
+cp -v ./files/RPM-GPG-KEY-influxdb ${CONTAINER_PATH}/etc/pki/rpm-gpg/RPM-GPG-KEY-influxdb
 rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-influxdb
 dnf_install "influxdb2"
 dnf_cache_clean

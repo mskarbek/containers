@@ -15,7 +15,9 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/gitlab-${GITLAB_TYPE}.repo /etc/yum.repos.d/gitlab-${GITLAB_TYPE}.repo
     cp -v ./files/gitlab-${GITLAB_TYPE}.repo ${CONTAINER_PATH}/etc/yum.repos.d/gitlab-${GITLAB_TYPE}.repo
 fi
+cp -v ./files/RPM-GPG-KEY-Gitlab /etc/pki/rpm-gpg/RPM-GPG-KEY-Gitlab
 rpm --import ./files/RPM-GPG-KEY-Gitlab
+cp -v ./files/RPM-GPG-KEY-Gitlab ${CONTAINER_PATH}/etc/pki/rpm-gpg/RPM-GPG-KEY-Gitlab
 rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-Gitlab
 dnf_install "hostname perl policycoreutils policycoreutils-python-utils checkpolicy git libxcrypt-compat"
 TMP_DIR=$(mktemp -d)

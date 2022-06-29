@@ -9,6 +9,7 @@ dnf_cache
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/vector.repo ${CONTAINER_PATH}/etc/yum.repos.d/vector.repo
 fi
+cp -v ./files/RPM-GPG-KEY-vector ${CONTAINER_PATH}/etc/pki/rpm-gpg/RPM-GPG-KEY-vector
 rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-vector
 dnf_install "vector"
 dnf_cache_clean
