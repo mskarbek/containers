@@ -1,7 +1,0 @@
-trigger-fleet:
-  stage: trigger
-  trigger: containers/fleet
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

@@ -1,7 +1,0 @@
-trigger-pushgateway:
-  stage: trigger
-  trigger: containers/pushgateway
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

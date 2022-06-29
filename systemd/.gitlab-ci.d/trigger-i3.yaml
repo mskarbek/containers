@@ -1,7 +1,0 @@
-trigger-i3:
-  stage: trigger
-  trigger: containers/i3
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

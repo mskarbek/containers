@@ -1,7 +1,0 @@
-trigger-vault:
-  stage: trigger
-  trigger: containers/vault
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
