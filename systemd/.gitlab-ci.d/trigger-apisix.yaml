@@ -1,7 +1,0 @@
-trigger-apisix:
-  stage: trigger
-  trigger: containers/apisix
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
