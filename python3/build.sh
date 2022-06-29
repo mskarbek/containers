@@ -10,6 +10,8 @@ dnf_install "python3 python3-pip python3-setuptools python3-wheel python3-pip-wh
 dnf_cache_clean
 dnf_clean
 
+rsync_rootfs
+
 container_commit base/python3 ${IMAGE_TAG}
 
 
