@@ -163,6 +163,7 @@ rsync_rootfs () {
 }
 
 files_clean () {
+    echo -e "${TXT_YELLOW}delete: cache files${TXT_CLEAR}"
     rm -rf\
      ${CONTAINER_PATH}/var/cache/*\
      ${CONTAINER_PATH}/var/log/dnf*\
@@ -172,6 +173,7 @@ files_clean () {
 }
 
 repos_clean () {
+    echo -e "${TXT_YELLOW}delete: repo files${TXT_CLEAR}"
     rm -rf\
      ${CONTAINER_PATH}/etc/yum.repos.d/*
 }
