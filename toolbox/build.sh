@@ -11,7 +11,7 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/pgdg-redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgdg-redhat.repo
 fi
 dnf_install_with_docs "bash-completion"
-dnf_install "sudo less findutils curl vi nano telnet hostname iputils iproute mtr tmux lsof knot-utils tar unzip zstd gzip rsync jq htop openssh-clients tcpdump postgresql14"
+dnf_install "sudo less findutils curl vi nano telnet hostname iputils iproute mtr nftables tmux lsof knot-utils tar unzip zstd gzip rsync jq htop openssh-clients tcpdump postgresql14"
 dnf_cache_clean
 dnf_clean
 
@@ -28,8 +28,7 @@ buildah config --volume /home/toolbox/.ssh ${CONTAINER_UUID}
 container_commit toolbox ${IMAGE_TAG}
 
 
-CONTAINER_UUID=$(create_container toolbox ${IMAGE_TAG})
-CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
+container_create toolbox ${IMAGE_TAG}
 
 buildah config --cmd '[ "/usr/bin/bash" ]' ${CONTAINER_UUID}
 buildah config --stop-signal 'SIGINT' ${CONTAINER_UUID}
