@@ -14,7 +14,7 @@ if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
 fi
 rpm --import --root=${CONTAINER_PATH} ./files/RPM-GPG-KEY-EPEL-9
 dnf_install "systemd procps-ng"
-dnf_clean_cache
+dnf_cache_clean
 dnf_clean
 
 rsync_rootfs
