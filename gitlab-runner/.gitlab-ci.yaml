@@ -28,25 +28,24 @@ build-image:
     # generate tag
     - export IMAGE_TAG=$(bash ../meta/tag.sh)
     - printf "IMAGE_TAG=$IMAGE_TAG" > ./build.env
-  script:
-    - # build image
-    - ./build.sh
-    - # tag repo
-    - PUSH_URL=`printf $CI_REPOSITORY_URL | sed "s;:\/\/.*@;:\/\/oauth2:$CONTAINERS_CI_TOKEN@;"`
-    - git remote add origin-tag $PUSH_URL
-    - git tag v$IMAGE_TAG
-    - git push -o ci.skip origin-tag --tags
-    - # push image
-    - |
-      if [ ! -z $FROM_IMAGE ]; then
-        skopeo_copy gitlab-runner-$FROM_IMAGE $IMAGE_TAG
-        skopeo_copy gitlab-runner-$FROM_IMAGE-zfs $IMAGE_TAG
-      else
-        skopeo_copy gitlab-runner-buildah $IMAGE_TAG
-        skopeo_copy gitlab-runner-buildah-zfs $IMAGE_TAG
-        skopeo_copy gitlab-runner-podman $IMAGE_TAG
-        skopeo_copy gitlab-runner-podman-zfs $IMAGE_TAG
-      fi
+  script: |
+    # build image
+    ./build.sh
+    # tag repo
+    PUSH_URL=`printf $CI_REPOSITORY_URL | sed "s;:\/\/.*@;:\/\/oauth2:$CONTAINERS_CI_TOKEN@;"`
+    git remote add origin-tag $PUSH_URL
+    git tag v$IMAGE_TAG
+    git push -o ci.skip origin-tag --tags
+    # push image
+    if [ ! -z $FROM_IMAGE ]; then
+      skopeo_copy gitlab-runner-$FROM_IMAGE $IMAGE_TAG
+      skopeo_copy gitlab-runner-$FROM_IMAGE-zfs $IMAGE_TAG
+    else
+      skopeo_copy gitlab-runner-buildah $IMAGE_TAG
+      skopeo_copy gitlab-runner-buildah-zfs $IMAGE_TAG
+      skopeo_copy gitlab-runner-podman $IMAGE_TAG
+      skopeo_copy gitlab-runner-podman-zfs $IMAGE_TAG
+    fi
   artifacts:
     reports:
       dotenv: ./build.env
