@@ -18,5 +18,17 @@ pushd ${TMP_DIR}
             fi
         popd
     done
+    #meta is special case
+    REPO_DIR=$(mktemp -d -p ${TMP_DIR} meta.XXX)
+    git clone --quiet git@git.lab.skarbek.name:containers/meta.git ${REPO_DIR}
+    rsync -a --delete --exclude=".git" ${MIRROR_DIR}/meta/{ENV,tag.sh,common.sh} ${REPO_DIR}/
+    pushd ${REPO_DIR}
+        git add .
+        git diff-index --cached --quiet HEAD --
+        if [ $? -ne 0 ]; then
+            git commit -m 'chore: mirror update'
+            git push -o ci.skip
+        fi
+    popd
 popd
 rm -rf ${TMP_DIR}
