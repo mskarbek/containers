@@ -31,7 +31,7 @@ build-image:
     - printf "IMAGE_TAG=$IMAGE_TAG" > ./build.env
   script:
     # build image
-    - ./build.sh
+    - ./build.sh $FROM_TAG
     # tag repo
     - PUSH_URL=`printf $CI_REPOSITORY_URL | sed "s;:\/\/.*@;:\/\/oauth2:$CONTAINERS_CI_TOKEN@;"`
     - git remote add origin-tag $PUSH_URL
