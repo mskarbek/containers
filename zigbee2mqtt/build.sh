@@ -1,15 +1,10 @@
-. ../meta/common.sh
-. ./files/VERSIONS
-
-BUILD_UUID=$(create_container base/nodejs16-devel ${IMAGE_TAG})
-BUILD_PATH=$(buildah mount ${BUILD_UUID})
 #!/usr/bin/env bash
 set -e
 
 source ../meta/common.sh
 source ./files/VERSIONS
 
-container_create systemd ${1}
+container_create nodejs16-devel ${1}
 
 TMP_DIR=$(buildah run ${BUILD_UUID} mktemp -d)
 if [ -f ./files/${ZIGBEE2MQTT_VERSION}.tar.gz ]; then

@@ -2,6 +2,7 @@
 set -e
 
 source ../meta/common.sh
+source ./files/VERSIONS
 
 container_create systemd ${1}
 
