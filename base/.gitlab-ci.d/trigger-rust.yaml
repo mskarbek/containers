@@ -1,0 +1,7 @@
+trigger-rust:
+  stage: trigger
+  trigger: containers/rust
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

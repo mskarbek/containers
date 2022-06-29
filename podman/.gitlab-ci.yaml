@@ -44,11 +44,4 @@ build-image:
     reports:
       dotenv: ./build.env
 
-trigger-gitlab-runner:
-  stage: trigger
-  trigger: containers/gitlab-runner
-  variables:
-    FROM_TAG: $IMAGE_TAG
-    FROM_IMAGE: "podman"
-  needs:
-    - build-image
+include: ".gitlab-ci.d/*.yaml"

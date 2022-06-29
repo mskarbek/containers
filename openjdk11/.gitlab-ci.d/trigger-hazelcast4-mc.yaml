@@ -1,0 +1,7 @@
+trigger-hazelcast4-mc:
+  stage: trigger
+  trigger: containers/hazelcast4-mc
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

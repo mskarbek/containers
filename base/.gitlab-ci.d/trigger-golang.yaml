@@ -1,0 +1,7 @@
+trigger-golang:
+  stage: trigger
+  trigger: containers/golang
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

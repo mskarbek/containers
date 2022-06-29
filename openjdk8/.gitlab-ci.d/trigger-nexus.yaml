@@ -1,0 +1,7 @@
+trigger-nexus:
+  stage: trigger
+  trigger: containers/nexus
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

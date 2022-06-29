@@ -45,42 +45,4 @@ build-image:
     reports:
       dotenv: ./build.env
 
-trigger-ansible:
-  stage: trigger
-  trigger: containers/ansible
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
-
-trigger-ara:
-  stage: trigger
-  trigger: containers/ara
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
-
-trigger-locust:
-  stage: trigger
-  trigger: containers/locust
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
-
-trigger-pgadmin4:
-  stage: trigger
-  trigger: containers/pgadmin4
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
-
-trigger-synapse:
-  stage: trigger
-  trigger: containers/synapse
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
+include: ".gitlab-ci.d/*.yaml"

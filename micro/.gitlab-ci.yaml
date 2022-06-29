@@ -43,10 +43,4 @@ build-image:
     reports:
       dotenv: ./build.env
 
-trigger-base:
-  stage: trigger
-  trigger: containers/base
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
+include: ".gitlab-ci.d/*.yaml"

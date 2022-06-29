@@ -1,0 +1,7 @@
+trigger-guacamole:
+  stage: trigger
+  trigger: containers/guacamole
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

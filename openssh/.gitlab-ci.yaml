@@ -43,34 +43,4 @@ build-image:
     reports:
       dotenv: ./build.env
 
-trigger-rundeck-runner:
-  stage: trigger
-  trigger: containers/rundeck-runner
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
-
-trigger-gitlab:
-  stage: trigger
-  trigger: containers/gitlab
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
-
-trigger-toolbox:
-  stage: trigger
-  trigger: containers/toolbox
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
-
-trigger-host:
-  stage: trigger
-  trigger: containers/host
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
+include: ".gitlab-ci.d/*.yaml"

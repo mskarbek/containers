@@ -1,0 +1,7 @@
+trigger-synapse:
+  stage: trigger
+  trigger: containers/synapse
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

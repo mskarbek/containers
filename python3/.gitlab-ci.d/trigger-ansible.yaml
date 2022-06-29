@@ -1,0 +1,7 @@
+trigger-ansible:
+  stage: trigger
+  trigger: containers/ansible
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
