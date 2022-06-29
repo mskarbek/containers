@@ -1,0 +1,7 @@
+trigger-zigbee2mqtt:
+  stage: trigger
+  trigger: containers/zigbee2mqtt
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

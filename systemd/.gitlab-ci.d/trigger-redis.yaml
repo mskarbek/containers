@@ -1,0 +1,7 @@
+trigger-redis:
+  stage: trigger
+  trigger: containers/redis
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

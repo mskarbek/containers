@@ -1,0 +1,7 @@
+trigger-loki:
+  stage: trigger
+  trigger: containers/loki
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

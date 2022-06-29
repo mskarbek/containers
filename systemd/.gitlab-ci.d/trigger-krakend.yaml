@@ -1,0 +1,7 @@
+trigger-krakend:
+  stage: trigger
+  trigger: containers/krakend
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

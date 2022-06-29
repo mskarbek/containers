@@ -1,0 +1,7 @@
+trigger-haproxy:
+  stage: trigger
+  trigger: containers/haproxy
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

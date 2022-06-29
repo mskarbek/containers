@@ -1,0 +1,7 @@
+trigger-tinyproxy:
+  stage: trigger
+  trigger: containers/tinyproxy
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

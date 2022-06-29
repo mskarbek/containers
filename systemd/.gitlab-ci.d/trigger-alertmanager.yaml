@@ -1,0 +1,7 @@
+trigger-alertmanager:
+  stage: trigger
+  trigger: containers/alertmanager
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

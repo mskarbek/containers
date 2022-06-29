@@ -1,0 +1,7 @@
+trigger-fake-service:
+  stage: trigger
+  trigger: containers/fake-service
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

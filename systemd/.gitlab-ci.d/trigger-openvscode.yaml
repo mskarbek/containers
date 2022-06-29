@@ -1,0 +1,7 @@
+trigger-openvscode:
+  stage: trigger
+  trigger: containers/openvscode
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

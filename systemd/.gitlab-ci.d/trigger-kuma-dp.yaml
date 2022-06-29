@@ -1,0 +1,7 @@
+trigger-kuma-dp:
+  stage: trigger
+  trigger: containers/kuma-dp
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

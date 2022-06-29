@@ -1,0 +1,7 @@
+trigger-rabbitmq:
+  stage: trigger
+  trigger: containers/rabbitmq
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
