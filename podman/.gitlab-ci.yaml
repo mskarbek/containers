@@ -49,5 +49,6 @@ trigger-gitlab-runner:
   trigger: containers/gitlab-runner
   variables:
     FROM_TAG: $IMAGE_TAG
+    FROM_IMAGE: "podman"
   needs:
     - build-image

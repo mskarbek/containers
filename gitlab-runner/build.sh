@@ -17,7 +17,7 @@ else
 fi
 
 for IMAGE in ${IMAGES}; do
-    container_create systemd ${IMAGE} ${1}
+    container_create systemd ${1}
 
     dnf_cache
     dnf_install "openssh-clients git-core hostname"
@@ -35,5 +35,5 @@ for IMAGE in ${IMAGES}; do
     buildah config --volume /etc/gitlab-runner ${CONTAINER_UUID}
     buildah config --volume /var/lib/gitlab-runner ${CONTAINER_UUID}
 
-    container_commit gitlab-runner-${IMAGE} ${IMAGE_TAG}
+    container_commit gitlab-runner ${IMAGE_TAG}
 done
