@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
+set -e
 
+git fetch --tags
 LAST_TAG=$(git tag --list v*|sort|tail -n 1)
 
 if [ -z ${LAST_TAG} ]; then
