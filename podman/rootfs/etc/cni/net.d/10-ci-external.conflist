@@ -1,0 +1,32 @@
+{
+    "cniVersion": "1.0.0",
+    "name": "ci-external",
+    "plugins": [
+        {
+            "type": "bridge",
+            "bridge": "cni0",
+            "isGateway": true,
+            "ipMasq": true,
+            "hirpinMode": true,
+            "ipam": {
+                "type": "host-local",
+                "ranges": [
+                    [
+                        {
+                            "subnet": "172.16.0.0/25",
+                            "gateway": "172.16.0.126"
+                        }
+                    ]
+                ],
+                "routes": [
+                    {
+                        "dst": "0.0.0.0/0"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "firewall"
+        }
+    ]
+}

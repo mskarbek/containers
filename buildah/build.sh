@@ -7,7 +7,7 @@ source ./files/VERSIONS
 container_create systemd ${1}
 
 dnf_cache
-dnf_install "buildah skopeo fuse-overlayfs netavark aardvark-dns iputils iproute iptables-nft rsync dnf dnf-plugins-core tar unzip"
+dnf_install "buildah skopeo fuse-overlayfs netavark aardvark-dns containernetworking-plugins iputils iproute iptables-nft nftables rsync dnf dnf-plugins-core tar unzip"
 dnf_cache_clean
 dnf_clean
 
@@ -15,8 +15,8 @@ sed -i 's/^#mount_program = .*/mount_program = "\/usr\/bin\/fuse-overlayfs"/' ${
 
 cp -v ${CONTAINER_PATH}/usr/share/containers/containers.conf ${CONTAINER_PATH}/etc/containers/containers.conf
 sed -i 's/^# volume_path = .*/volume_path = "\/var\/lib\/volumes"/' ${CONTAINER_PATH}/etc/containers/containers.conf
-sed -i 's/^#network_backend = .*/network_backend = "netavark"/' ${CONTAINER_PATH}/etc/containers/containers.conf
-sed -i 's/^#default_network = .*/default_network = "ci"/' ${CONTAINER_PATH}/etc/containers/containers.conf
+sed -i 's/^#network_backend = .*/network_backend = "cni"/' ${CONTAINER_PATH}/etc/containers/containers.conf
+sed -i 's/^#default_network = .*/default_network = "ci-internal"/' ${CONTAINER_PATH}/etc/containers/containers.conf
 
 mkdir -vp /var/lib/volumes
 
