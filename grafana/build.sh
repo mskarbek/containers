@@ -2,14 +2,13 @@
 set -e
 
 source ../meta/common.sh
+source ./files/VERSIONS
 
 container_create systemd ${1}
 
 dnf_cache
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
-    cp -v ./files/grafana.repo ${CONTAINER_PATH}/etc/yum.repos.d/grafana.repo
-fi
-dnf_install "grafana"
+dnf_install "findutils"
+dnf_install "https://dl.grafana.com/oss/release/grafana-${GRAFANA_VERSION}-1.x86_64.rpm"
 dnf_cache_clean
 dnf_clean
 
