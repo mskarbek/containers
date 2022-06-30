@@ -39,7 +39,7 @@ dnf_install "libevent-devel\
 dnf_cache_clean
 dnf_clean
 
-buildah run ${CONTAINER_UUID} pip3 install locust==${LOCUST_VERSION}
+buildah run --network host ${CONTAINER_UUID} pip3 install locust==${LOCUST_VERSION}
 
 rm -vrf ${CONTAINER_PATH}/root/.cache
 rsync_rootfs

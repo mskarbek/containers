@@ -10,5 +10,5 @@ Type=oneshot
 User=pgadmin
 Group=pgadmin
 EnvironmentFile=/run/secrets/pgadmin4-password
-ExecStart=/usr/pgadmin4/venv/bin/python3 /usr/pgadmin4/web/bootstrap_db.py
+ExecStart=/usr/bin/python3 /usr/local/lib/python3.9/site-packages/pgadmin4/bootstrap_db.py
 RemainAfterExit=false

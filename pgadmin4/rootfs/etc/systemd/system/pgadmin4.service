@@ -8,7 +8,7 @@ After=network.target nss-lookup.target pgadmin4-password.service pgadmin4-config
 WorkingDirectory=/run/pgadmin
 User=pgadmin
 Group=pgadmin
-ExecStart=/usr/pgadmin4/venv/bin/gunicorn --workers=1 --threads=25 --chdir /usr/pgadmin4/web/ pgAdmin4:app
+ExecStart=/usr/bin/gunicorn --workers=1 --threads=25 --chdir /usr/local/lib/python3.9/site-packages/pgadmin4/ pgAdmin4:app
 Restart=always
 
 [Install]
