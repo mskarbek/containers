@@ -14,11 +14,13 @@ dnf_clean
 TMP_DIR=$(mktemp -d)
 pushd ${TMP_DIR}
     curl -L https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz|tar xzv
+    curl -LO https://github.com/groupe-edf/nexus-repository-dart/releases/download/${NEXUS_REPOSITORYDART_VERSION}/nexus-repository-dart-${NEXUS_REPOSITORYDART_VERSION}-bundle.kar
 popd
 mkdir -vp ${CONTAINER_PATH}/usr/lib/sonatype
 pushd ${CONTAINER_PATH}/usr/lib/sonatype
     mv -v ${TMP_DIR}/nexus-${NEXUS_VERSION} ./
     mv -v ${TMP_DIR}/sonatype-work ./
+    mv -v ${TMP_DIR}/nexus-repository-dart-${NEXUS_REPOSITORYDART_VERSION}-bundle.kar ./nexus-${NEXUS_VERSION}/deploy/nexus-repository-dart-${NEXUS_REPOSITORYDART_VERSION}-bundle.kar
     ln -s ./nexus-${NEXUS_VERSION} nexus
 popd
 rm -vrf ${TMP_DIR}
