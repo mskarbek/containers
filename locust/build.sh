@@ -7,28 +7,28 @@ source ./files/VERSIONS
 container_create base/python3-devel ${1}
 
 # Packages in repos that are unfortunately outdated:
+#   python3-click
+#   python3-configargparse
+#   python3-dataclasses
+#   python3-flask
+#   python3-flask-cors
+#   python3-gevent
 #   python3-greenlet
+#   python3-importlib-metadata
 #   python3-itsdangerous
 #   python3-jinja2
 #   python3-markupsafe
-#   python3-requests
-#   python3-werkzeug
-#   python3-click
-#   python3-flask-cors
-#   python3-flask
-#   python3-configargparse
-#   python3-gevent
-#   python3-zmq
-#   python3-typing-extensions
 #   python3-psutil
+#   python3-requests
+#   python3-typing-extensions
+#   python3-werkzeug
+#   python3-zipp
+#   python3-zmq
 # To reduce the image size, we need to properly package locust and all missing deps
 dnf_cache
 dnf_install "libevent-devel\
  python3-zope-event\
  python3-zope-interface\
- python3-dataclasses\
- python3-zipp\
- python3-importlib-metadata\
  python3-six\
  python3-msgpack\
  python3-certifi\
