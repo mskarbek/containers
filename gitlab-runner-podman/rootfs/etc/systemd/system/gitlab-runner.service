@@ -1,0 +1,18 @@
+[Unit]
+Description=GitLab Runner - Podman
+ConditionFileIsExecutable=/usr/local/bin/gitlab-runner
+Requires=gitlab-runner-register.service
+After=network.target nss-lookup.target
+Before=gitlab-runner-register.service
+#ConditionPathExists=/run/docker.sock
+
+[Service]
+EnvironmentFile=-/etc/sysconfig/gitlab-runner
+ExecStart=/usr/local/bin/gitlab-runner --debug run --working-directory=/var/lib/gitlab-runner --config=/etc/gitlab-runner/config.toml --service=gitlab-runner --user=root
+StartLimitBurst=10
+StartLimitInterval=5
+Restart=always
+RestartSec=120
+
+[Install]
+WantedBy=multi-user.target

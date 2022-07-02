@@ -4,19 +4,7 @@ set -eu
 source ../meta/common.sh
 source ./files/VERSIONS
 
-if [ ! -z ${FROM_IMAGE} ]; then
-    if [ ${FROM_IMAGE} == "buildah" ]; then
-        IMAGES="buildah buildah-zfs"
-    elif [ ${FROM_IMAGE} == "podman" ]; then
-        IMAGES="podman podman-zfs"
-    else
-        IMAGES="buildah buildah-zfs podman podman-zfs"
-    fi
-else
-    IMAGES="buildah buildah-zfs podman podman-zfs"
-fi
-
-for IMAGE in ${IMAGES}; do
+for IMAGE in {"podman","podman-zfs"}; do
     container_create ${IMAGE} ${1}
 
     dnf_cache
