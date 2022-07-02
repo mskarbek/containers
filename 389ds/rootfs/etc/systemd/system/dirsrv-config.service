@@ -2,11 +2,13 @@
 Description=389 Directory Server dscreate
 Documentation=https://directory.fedoraproject.org/docs/389ds/howto/howto-install-389.html
 After=network.target nss-lookup.target minio-password.service
-AssertFileNotEmpty=/etc/instance.conf
+ConditionPathExists=!/etc/dirsrv/.lock
+AssertFileNotEmpty=/etc/dirsrv/instance.inf
 
 [Service]
 Type=oneshot
-ExecStart=/usr/sbin/dscreate from-file /etc/instance.conf
+ExecStart=/usr/sbin/dscreate from-file /etc/dirsrv/instance.inf
+ExecStartPost=/usr/bin/touch /etc/dirsrv/.lock
 RemainAfterExit=false
 
 [Install]
