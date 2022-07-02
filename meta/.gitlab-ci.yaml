@@ -1,0 +1,18 @@
+default:
+  tags:
+    - buildah
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+
+stages:
+  - build
+
+build-image:
+  stage: build
+  script:
+    - ./mirror.sh

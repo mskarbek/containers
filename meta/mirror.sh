@@ -7,27 +7,49 @@ pushd ${TMP_DIR}
     git clone --quiet https://github.com/mskarbek/containers.git ${MIRROR_DIR}
     for IMAGE in $(ls -1 --hide=README.md --hide=meta ${MIRROR_DIR}); do
         REPO_DIR=$(mktemp -d -p ${TMP_DIR} ${IMAGE}.XXX)
-        git clone --quiet git@git.lab.skarbek.name:containers/$IMAGE.git ${REPO_DIR}
+        if [ -z ${CI} ]; then
+            git clone --quiet git@${GIT_FORGE}:containers/${IMAGE}.git ${REPO_DIR}
+        else
+            git clone --quiet http://gitlab-ci-token:${CI_JOB_TOKEN}@${GIT_FORGE}/containers/${IMAGE}.git ${REPO_DIR}
+        fi
         rsync -a --delete --exclude=".git" ${MIRROR_DIR}/${IMAGE}/ ${REPO_DIR}/
         pushd ${REPO_DIR}
+            if [ ! -z ${CI} ]; then
+                git config user.name "${GIT_NAME}"
+                git config user.email "${GIT_EMAIL}"
+                PUSH_URL=`git remote get-url --push origin | sed "s;:\/\/.*@;:\/\/oauth2:${GIT_TOKEN}@;"`
+                git remote remove origin
+                git remote add origin ${PUSH_URL}
+            fi
             git add .
             git diff-index --cached --quiet HEAD --
-            if [ $? -ne 0 ]; then
+            if [ ${?} -ne 0 ]; then
                 git commit -m 'chore: mirror update'
-                git push -o ci.skip
+                git push -o ci.skip -u origin main
             fi
         popd
     done
     #meta is special case
     REPO_DIR=$(mktemp -d -p ${TMP_DIR} meta.XXX)
-    git clone --quiet git@git.lab.skarbek.name:containers/meta.git ${REPO_DIR}
+    if [ -z ${CI} ]; then
+        git clone --quiet git@${GIT_FORGE}:containers/meta.git ${REPO_DIR}
+    else
+        git clone --quiet http://gitlab-ci-token:${CI_JOB_TOKEN}@${GIT_FORGE}/containers/meta.git ${REPO_DIR}
+    fi
     rsync -a --delete --exclude=".git" ${MIRROR_DIR}/meta/{ENV,tag.sh,common.sh} ${REPO_DIR}/
     pushd ${REPO_DIR}
+        if [ ! -z ${CI} ]; then
+            git config user.name "${GIT_NAME}"
+            git config user.email "${GIT_EMAIL}"
+            PUSH_URL=`git remote get-url --push origin | sed "s;:\/\/.*@;:\/\/oauth2:${GIT_TOKEN}@;"`
+            git remote remove origin
+            git remote add origin ${PUSH_URL}
+        fi
         git add .
         git diff-index --cached --quiet HEAD --
-        if [ $? -ne 0 ]; then
+        if [ ${?} -ne 0 ]; then
             git commit -m 'chore: mirror update'
-            git push -o ci.skip
+            git push -o ci.skip -u origin main
         fi
     popd
 popd
