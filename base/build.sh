@@ -8,7 +8,7 @@ container_create micro ${1}
 dnf_cache
 if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
     cp -v ./files/epel.repo ${CONTAINER_PATH}/etc/yum.repos.d/epel.repo
-    if [ ${BASE_OS} = "c9s" ]; then
+    if [ ${OS_TYPE} = "c9s" ]; then
         cp -v ./files/epel-next.repo ${CONTAINER_PATH}/etc/yum.repos.d/epel-next.repo
     fi
 fi
