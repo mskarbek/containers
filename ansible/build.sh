@@ -15,4 +15,7 @@ buildah run ${CONTAINER_UUID} pip3 install ara==${ARA_VERSION} python-consul
 
 rm -vrf ${CONTAINER_PATH}/root/.cache
 
+rsync_rootfs
+buildah run --workingdir /root ${CONTAINER_UUID} ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections
+
 container_commit base/ansible ${IMAGE_TAG}
