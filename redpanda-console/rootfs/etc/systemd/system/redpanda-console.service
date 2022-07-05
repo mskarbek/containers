@@ -1,0 +1,15 @@
+[Unit]
+Description=Redpanda Console
+Documentation=https://cloudhut.dev/docs/
+After=network.target nss-lookup.target
+AssertFileNotEmpty=/etc/redpanda-console/config.yaml
+
+[Service]
+ExecStart=/usr/local/bin/redpanda-console -config.filepath /etc/redpanda-console/config.yaml
+WorkingDirectory=/run/redpanda-console
+User=redpanda-console
+Group=redpanda-console
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
