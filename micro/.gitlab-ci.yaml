@@ -31,7 +31,8 @@ build-image:
     - printf "IMAGE_TAG=$IMAGE_TAG" > ./build.env
     # save ca file
     - mkdir -vp ./files
-    - printf $INTERNAL_CA_PEM | base64 -d - > ./files/internal-ca.pem
+    - if [ ! -z $INTERNAL_CA_PEM ]; then printf $INTERNAL_CA_PEM | base64 -d - > ./files/internal-ca.pem; fi
+    - if [ ! -z $INTERNAL_PRXY ]; then printf $INTERNAL_PRXY | base64 -d - > ./files/proxy.repo; fi
   script:
     # build image
     - ./build.sh
