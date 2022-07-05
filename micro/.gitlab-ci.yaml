@@ -29,6 +29,8 @@ build-image:
     # generate tag
     - export IMAGE_TAG=$(bash ../meta/tag.sh)
     - printf "IMAGE_TAG=$IMAGE_TAG" > ./build.env
+    # save ca file
+    - printf $INTERNAL_CA_PEM | base64 -d - > ./files/internal-ca.pem
   script:
     # build image
     - ./build.sh
