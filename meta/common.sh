@@ -41,9 +41,9 @@ container_commit () {
             echo -e "${TXT_YELLOW}tag: ${OCI_REGISTRY_URL}/bootstrap/${1}:latest${TXT_CLEAR}"
             buildah tag ${OCI_REGISTRY_URL}/bootstrap/${1}:${2} ${OCI_REGISTRY_URL}/bootstrap/${1}:latest
         else
-            echo -e "${TXT_YELLOW} commit: ${OCI_REGISTRY_URL}/${1}:${2}${TXT_CLEAR}"
+            echo -e "${TXT_YELLOW}commit: ${OCI_REGISTRY_URL}/${1}:${2}${TXT_CLEAR}"
             buildah commit --quiet ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/${1}:${2}
-            echo -e "${TXT_YELLOW} tag: ${OCI_REGISTRY_URL}/${1}:latest${TXT_CLEAR}"
+            echo -e "${TXT_YELLOW}tag: ${OCI_REGISTRY_URL}/${1}:latest${TXT_CLEAR}"
             buildah tag ${OCI_REGISTRY_URL}/${1}:${2} ${OCI_REGISTRY_URL}/${1}:latest
         fi
     fi

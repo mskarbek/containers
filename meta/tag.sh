@@ -2,7 +2,7 @@
 set -e
 
 git fetch --tags
-LAST_TAG=$(git tag --list v*|sort|tail -n 1)
+LAST_TAG=$(git tag --list v* --sort=v:refname|tail -n 1)
 
 if [ -z ${LAST_TAG} ]; then
     TAG=$(date +%y.%m-1)
