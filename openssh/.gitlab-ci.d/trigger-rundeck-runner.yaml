@@ -1,7 +1,0 @@
-trigger-rundeck-runner:
-  stage: trigger
-  trigger: containers/rundeck-runner
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

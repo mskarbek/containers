@@ -1,7 +1,0 @@
-trigger-consul:
-  stage: trigger
-  trigger: containers/consul
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

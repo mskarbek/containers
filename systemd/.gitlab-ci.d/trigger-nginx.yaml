@@ -1,7 +1,0 @@
-trigger-nginx:
-  stage: trigger
-  trigger: containers/nginx
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

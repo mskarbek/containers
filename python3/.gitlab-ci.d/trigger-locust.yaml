@@ -1,7 +1,0 @@
-trigger-locust:
-  stage: trigger
-  trigger: containers/locust
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

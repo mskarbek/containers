@@ -1,7 +1,0 @@
-trigger-openjdk8:
-  stage: trigger
-  trigger: containers/openjdk8
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

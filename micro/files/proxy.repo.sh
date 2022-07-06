@@ -50,7 +50,7 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-el-9
 
 [prd]
 name = Collection for Enterprise Linux 9 x86_64 (RPMs)
-baseurl = ${REPOSITORY_URL}/repository/rpm-hosted-prd
+baseurl = ${REPOSITORY_URL}/repository/rpm-hosted-prd/9
 username = ${REPOSITORY_USERNAME}
 password = ${REPOSITORY_PASSWORD}
 enabled = 1
