@@ -6,7 +6,7 @@ source ../meta/common.sh
 container_create systemd ${1}
 
 dnf_cache
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
     cp -v ./files/rabbitmq.repo ${CONTAINER_PATH}/etc/yum.repos.d/rabbitmq.repo
 fi
 dnf_install "erlang rabbitmq-server"

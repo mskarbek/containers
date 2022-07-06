@@ -30,7 +30,7 @@ container_commit podman ${IMAGE_TAG}
 container_create podman ${IMAGE_TAG}
 
 dnf_cache
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
     TMP_DIR=$(mktemp -d)
     pushd ${TMP_DIR}
         curl -L -O https://github.com/zeet-cc/zfs-rpms/releases/download/v${ZFS_VERSION}-rhel9.0/libnvpair3-${ZFS_VERSION}-1.el9.x86_64.rpm

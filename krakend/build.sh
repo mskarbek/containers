@@ -6,7 +6,7 @@ source ../meta/common.sh
 container_create systemd ${1}
 
 dnf_cache
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
     cp -v ./files/krakend.repo ${CONTAINER_PATH}/etc/yum.repos.d/krakend.repo
 fi
 dnf_install "krakend"

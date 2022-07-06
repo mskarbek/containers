@@ -11,7 +11,7 @@ if [ -z ${GITLAB_TYPE} ] || [ ${GITLAB_TYPE} != "ee" ]; then
 fi
 
 dnf_cache
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
     cp -v ./files/gitlab-${GITLAB_TYPE}.repo /etc/yum.repos.d/gitlab-${GITLAB_TYPE}.repo
     cp -v ./files/gitlab-${GITLAB_TYPE}.repo ${CONTAINER_PATH}/etc/yum.repos.d/gitlab-${GITLAB_TYPE}.repo
 fi

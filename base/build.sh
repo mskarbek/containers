@@ -6,7 +6,7 @@ source ../meta/common.sh
 container_create micro ${1}
 
 dnf_cache
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
     cp -v ./files/epel.repo ${CONTAINER_PATH}/etc/yum.repos.d/epel.repo
     if [ ${OS_TYPE} = "c9s" ]; then
         cp -v ./files/epel-next.repo ${CONTAINER_PATH}/etc/yum.repos.d/epel-next.repo

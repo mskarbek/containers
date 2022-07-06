@@ -5,7 +5,7 @@ TXT_CLEAR="\e[0m"
 container_create () {
     CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
     if [ -z ${2} ]; then
-        if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+        if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
             echo -e "${TXT_YELLOW}from: ${OCI_REGISTRY_URL}/bootstrap/${1}:latest${TXT_CLEAR}"
             buildah from --quiet --name=${CONTAINER_UUID} ${OCI_REGISTRY_URL}/bootstrap/${1}:latest
         else
@@ -13,7 +13,7 @@ container_create () {
             buildah from --quiet --name=${CONTAINER_UUID} ${OCI_REGISTRY_URL}/${1}:latest
         fi
     else
-        if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+        if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
             echo -e "${TXT_YELLOW}from: ${OCI_REGISTRY_URL}/bootstrap/${1}:${2}${TXT_CLEAR}"
             buildah from --quiet --name=${CONTAINER_UUID} ${OCI_REGISTRY_URL}/bootstrap/${1}:${2}
         else
@@ -27,7 +27,7 @@ container_create () {
 container_commit () {
     files_clean
     if [ -z ${2} ]; then
-        if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+        if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
             echo -e "${TXT_YELLOW}commit: ${OCI_REGISTRY_URL}/bootstrap/${1}:latest${TXT_CLEAR}"
             buildah commit --quiet ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/bootstrap/${1}:latest
         else
@@ -35,7 +35,7 @@ container_commit () {
             buildah commit --quiet ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/${1}:latest
         fi
     else
-        if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+        if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
             echo -e "${TXT_YELLOW}commit: ${OCI_REGISTRY_URL}/bootstrap/${1}:${2}${TXT_CLEAR}"
             buildah commit --quiet ${CONTAINER_UUID} ${OCI_REGISTRY_URL}/bootstrap/${1}:${2}
             echo -e "${TXT_YELLOW}tag: ${OCI_REGISTRY_URL}/bootstrap/${1}:latest${TXT_CLEAR}"
@@ -58,7 +58,7 @@ dnf_cache () {
 }
 
 dnf_install () {
-    if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
+    if [ ${IMAGE_BOOTSTRAP} == "true" ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
         if [ ${OS_TYPE} = "el9" ]; then
             cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         elif [ ${OS_TYPE} = "c9s" ]; then
@@ -75,7 +75,7 @@ dnf_install () {
      --setopt=install_weak_deps=false\
      --nodocs\
      install ${@}
-    if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
+    if [ ${IMAGE_BOOTSTRAP} == "true" ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
         if [ ${OS_TYPE} = "el9" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         elif [ ${OS_TYPE} = "c9s" ]; then
@@ -88,7 +88,7 @@ dnf_install () {
 }
 
 dnf_install_with_docs () {
-    if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
+    if [ ${IMAGE_BOOTSTRAP} == "true" ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
         if [ ${OS_TYPE} = "el9" ]; then
             cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         elif [ ${OS_TYPE} = "c9s" ]; then
@@ -104,7 +104,7 @@ dnf_install_with_docs () {
      --setopt=module_platform_id=platform:el9\
      --setopt=install_weak_deps=false\
      install ${@}
-    if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
+    if [ ${IMAGE_BOOTSTRAP} == "true" ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
         if [ ${OS_TYPE} = "el9" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         elif [ ${OS_TYPE} = "c9s" ]; then
@@ -117,7 +117,7 @@ dnf_install_with_docs () {
 }
 
 dnf_module () {
-    if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
+    if [ ${IMAGE_BOOTSTRAP} == "true" ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
         if [ ${OS_TYPE} = "el9" ]; then
             cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         elif [ ${OS_TYPE} = "c9s" ]; then
@@ -134,7 +134,7 @@ dnf_module () {
      --setopt=install_weak_deps=false\
      --nodocs\
      module ${1}
-    if [ ! -z ${IMAGE_BOOTSTRAP} ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
+    if [ ${IMAGE_BOOTSTRAP} == "true" ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
         if [ ${OS_TYPE} = "el9" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
         elif [ ${OS_TYPE} = "c9s" ]; then
@@ -184,7 +184,7 @@ skopeo_login () {
 
 skopeo_copy () {
     if [ -z ${2} ]; then
-        if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+        if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
             echo -e "${TXT_YELLOW}push: ${OCI_REGISTRY_URL}/bootstrap/${1}:latest${TXT_CLEAR}"
             skopeo copy --quiet --format oci containers-storage:${OCI_REGISTRY_URL}/bootstrap/${1}:latest docker://${OCI_REGISTRY_URL}/bootstrap/${1}:latest
         else
@@ -192,7 +192,7 @@ skopeo_copy () {
             skopeo copy --quiet --format oci containers-storage:${OCI_REGISTRY_URL}/${1}:latest docker://${OCI_REGISTRY_URL}/${1}:latest
         fi
     else
-        if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+        if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
             echo -e "${TXT_YELLOW}push: ${OCI_REGISTRY_URL}/bootstrap/${1}:${2}${TXT_CLEAR}"
             skopeo copy --quiet --format oci containers-storage:${OCI_REGISTRY_URL}/bootstrap/${1}:${2} docker://${OCI_REGISTRY_URL}/bootstrap/${1}:${2}
             echo -e "${TXT_YELLOW}push: ${OCI_REGISTRY_URL}/bootstrap/${1}:latest${TXT_CLEAR}"

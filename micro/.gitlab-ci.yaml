@@ -32,7 +32,7 @@ build-image:
     # save ca file
     - mkdir -vp ./files
     - if [ ! -z $INTERNAL_CA_PEM ]; then printf $INTERNAL_CA_PEM | base64 -d - > ./files/internal-ca.pem; fi
-    - if [ -z $IMAGE_BOOTSTRAP ]; then pushd ./files; ./proxy.repo.sh; popd; fi
+    - if [ ${IMAGE_BOOTSTRAP} != "true" ]; then pushd ./files; ./proxy.repo.sh; popd; fi
   script:
     # build image
     - ./build.sh

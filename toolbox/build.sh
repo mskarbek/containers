@@ -7,7 +7,7 @@ source ./files/VERSIONS
 container_create openssh ${1}
 
 dnf_cache
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
     cp -v ./files/pgdg-redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgdg-redhat.repo
 fi
 dnf_install_with_docs "bash-completion"

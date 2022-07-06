@@ -7,7 +7,7 @@ source ./files/VERSIONS
 container_create python3 ${1}
 
 dnf_cache
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
     cp -v ./files/pgdg-redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/pgdg-redhat.repo
 fi
 dnf_install "python3-psycopg2 python3-attrs python3-certifi python3-charset-normalizer python3-idna python3-pbr python3-prettytable python3-requests python3-urllib3 python3-wcwidth python3-pygments python3-pyparsing python3-pytz python3-pyyaml python3-ruamel-yaml python3-ruamel-yaml-clib python3-sqlparse"

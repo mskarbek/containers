@@ -6,7 +6,7 @@ source ../meta/common.sh
 container_create openjdk11-jre ${1}
 
 dnf_cache
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
     cp -v ./files/rundeck.repo ${CONTAINER_PATH}/etc/yum.repos.d/rundeck.repo
 fi
 dnf_install "rundeck git-core"

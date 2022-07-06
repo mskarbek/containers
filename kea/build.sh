@@ -6,7 +6,7 @@ source ../meta/common.sh
 container_create systemd ${1}
 
 dnf_cache
-if [ ! -z ${IMAGE_BOOTSTRAP} ]; then
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
     cp -v ./files/isc-kea-2-0.repo ${CONTAINER_PATH}/etc/yum.repos.d/isc-kea-2-0.repo
     cp -v ./files/isc-stork.repo ${CONTAINER_PATH}/etc/yum.repos.d/isc-stork.repo
 fi
