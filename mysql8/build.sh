@@ -17,6 +17,6 @@ buildah run --network none ${CONTAINER_UUID} systemctl enable\
  mysqld.service
 
 buildah config --volume /var/lib/mysql ${CONTAINER_UUID}
-#buildah config --volume /var/log/mysql ${CONTAINER_UUID}
+buildah config --volume /var/log/mysql ${CONTAINER_UUID}
 
 container_commit mysql8 ${IMAGE_TAG}
