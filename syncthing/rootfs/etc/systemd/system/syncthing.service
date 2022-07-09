@@ -1,0 +1,22 @@
+[Unit]
+Description=Syncthing - Open Source Continuous File Synchronization
+Documentation=https://docs.syncthing.net/
+After=network.target nss-lookup.target
+#AssertFileNotEmpty=/env/syncthing/ENV
+
+[Service]
+User=syncthing
+Group=syncthing
+EnvironmentFile=-/etc/syncthing/ENV
+WorkingDirectory=/run/syncthing
+ExecStart=/usr/bin/syncthing serve --no-browser --no-restart --logflags=0 $OPTS
+Restart=on-failure
+RestartSec=5
+SuccessExitStatus=3 4
+RestartForceExitStatus=3 4
+TimeoutStopSec=30
+StartLimitIntervalSec=60
+StartLimitBurst=4
+
+[Install]
+WantedBy=multi-user.target
