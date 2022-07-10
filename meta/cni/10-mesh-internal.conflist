@@ -1,0 +1,26 @@
+{
+    "cniVersion": "1.0.0",
+    "name": "mesh-internal",
+    "plugins": [
+        {
+            "type": "bridge",
+            "bridge": "cni1",
+            "isGateway": true,
+            "ipMasq": true,
+            "hirpinMode": true,
+            "ipam": {
+                "type": "host-local",
+                "subnet": "172.16.1.128/25",
+                "gateway": "172.16.1.254",
+                "routes": [
+                    {
+                        "dst": "172.16.1.0/25"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "tuning"
+        }
+    ]
+}
