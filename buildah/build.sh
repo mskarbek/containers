@@ -12,6 +12,7 @@ dnf_cache_clean
 dnf_clean
 
 sed -i 's/^#mount_program = .*/mount_program = "\/usr\/bin\/fuse-overlayfs"/' ${CONTAINER_PATH}/etc/containers/storage.conf
+sed -i 's/^mountopt = .*/mountopt = "nodev"/' ${CONTAINER_PATH}/etc/containers/storage.conf
 
 cp -v ${CONTAINER_PATH}/usr/share/containers/containers.conf ${CONTAINER_PATH}/etc/containers/containers.conf
 sed -i 's/^# volume_path = .*/volume_path = "\/var\/lib\/volumes"/' ${CONTAINER_PATH}/etc/containers/containers.conf
