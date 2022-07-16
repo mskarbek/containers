@@ -7,7 +7,7 @@ source ./files/VERSIONS
 container_create base/python3 ${1}
 
 dnf_cache
-dnf_install "ansible-core openssh-clients git-core rsync python3-requests python3-certifi python3-idna python3-charset-normalizer python3-wcwidth python3-pbr python3-attrs python3-urllib3 python3-prettytable"
+dnf_install "ansible-core openssh-clients git-core rsync python3-requests python3-certifi python3-idna python3-charset-normalizer python3-wcwidth python3-pbr python3-attrs python3-urllib3 python3-prettytable python3-botocore python3-boto3"
 dnf_cache_clean
 dnf_clean
 
