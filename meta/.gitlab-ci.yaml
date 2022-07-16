@@ -4,15 +4,22 @@ default:
 
 workflow:
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "web"
     - if: $CI_PIPELINE_SOURCE == "trigger"
     - if: $CI_PIPELINE_SOURCE == "pipeline"
 
 stages:
-  - build
+  - sync
+  - download
 
-build-image:
-  stage: build
+sync-mirror:
+  stage: sync
   script:
     - ./mirror.sh
+
+download-artefacts:
+  stage: download
+  script:
+    - ./downloads.sh
+  needs:
+    - sync-mirror

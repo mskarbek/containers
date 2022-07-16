@@ -2,16 +2,21 @@
 set -eu
 
 source ../meta/common.sh
-source ./files/VERSIONS
 
 container_create systemd ${1}
 
+VERSION=$(jq -r .[0].version ./files/versions.json)
 TMP_DIR=$(mktemp -d)
 pushd ${TMP_DIR}
-    curl -L -O https://github.com/grafana/loki/releases/download/v${LOKI_VERSION}/loki-linux-amd64.zip
-    curl -L -O https://github.com/grafana/loki/releases/download/v${LOKI_VERSION}/logcli-linux-amd64.zip
-    unzip ./loki-linux-amd64.zip
-    unzip ./logcli-linux-amd64.zip
+    if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
+        curl -L -O $(jq -r .[0].remote_url ./files/versions.json | sed "s;VERSION;${VERSION};g")
+        curl -L -O $(jq -r .[1].remote_url ./files/versions.json | sed "s;VERSION;${VERSION};g")
+    else
+        curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L -O $(jq -r .[0].local_url ./files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+        curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L -O $(jq -r .[1].local_url ./files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+    fi
+    unzip ./$(jq -r .[0].file_name ./files/versions.json | sed "s;VERSION;${VERSION};")
+    unzip ./$(jq -r .[1].file_name ./files/versions.json | sed "s;VERSION;${VERSION};")
 popd
 mv -v ${TMP_DIR}/loki-linux-amd64 ${CONTAINER_PATH}/usr/local/bin/loki
 mv -v ${TMP_DIR}/logcli-linux-amd64 ${CONTAINER_PATH}/usr/local/bin/logcli

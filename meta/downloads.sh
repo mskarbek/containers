@@ -1,12 +1,26 @@
 #!/usr/bin/env bash
-set -eu
+set -u
 
-TMP_DIR=$(mktemp -d)
-pushd ${TMP_DIR}
-    curl -s -L -O https://github.com/fleetdm/fleet/releases/download/fleet-v4.17.0/fleet_v4.17.0_linux.tar.gz
-    curl -s -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" --upload-file fleet_v4.17.0_linux.tar.gz ${REPOSITORY_URL}/repository/raw-hosted-prd/f/fleet/4.17.0/fleet_v4.17.0_linux.tar.gz
+TXT_YELLOW="\e[1;93m"
+TXT_CLEAR="\e[0m"
 
-    curl -s -L -O https://github.com/fleetdm/fleet/releases/download/fleet-v4.17.0/fleetctl_v4.17.0_linux.tar.gz
-    curl -s -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" --upload-file fleetctl_v4.17.0_linux.tar.gz ${REPOSITORY_URL}/repository/raw-hosted-prd/f/fleetctl/4.17.0/fleetctl_v4.17.0_linux.tar.gz
+git clone --quiet https://github.com/mskarbek/containers.git ./containers
+
+declare -a ARETFACTS=( "alertmanager" "boundary" "consul" "fake-service" "fleet" "gitlab-runner-buildah" "kuma-cp" "loki" "mimir" "minio" "minio-console" )
+
+pushd ./containers
+    for ARETFACT in ${ARETFACTS[@]}; do
+        let LENGTH=$(jq length ./${ARETFACT}/files/versions.json)-1
+        for (( I=0; I<=${LENGTH}; I++ )); do
+            VERSION=$(jq -r .[${I}].version ./${ARETFACT}/files/versions.json)
+            curl -s -o /dev/null --fail-with-body -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" $(jq -r .[${I}].local_url ./${ARETFACT}/files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+            if [ ${?} -ne 0 ]; then
+                curl -L -O $(jq -r .[${I}].remote_url ./${ARETFACT}/files/versions.json | sed "s;VERSION;${VERSION};g")
+                echo -e "${TXT_YELLOW}upload: $(jq -r .[${I}].file_name ./${ARETFACT}/files/versions.json | sed "s;VERSION;${VERSION};")${TXT_CLEAR}"
+                curl -s -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" --upload-file $(jq -r .[${I}].file_name ./${ARETFACT}/files/versions.json | sed "s;VERSION;${VERSION};") $(jq -r .[${I}].local_url ./${ARETFACT}/files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+            fi
+        done
+    done
 popd
-rm -rf ${TMP_DIR}
+
+rm -rf ./containers

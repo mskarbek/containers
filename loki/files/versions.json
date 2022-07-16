@@ -1,0 +1,16 @@
+[
+    {
+        "name": "loki",
+        "version": "2.6.0",
+        "remote_url": "https://github.com/grafana/loki/releases/download/vVERSION/loki-linux-amd64.zip",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/l/loki/VERSION/loki-linux-amd64.zip",
+        "file_name": "loki-linux-amd64.zip"
+    },
+    {
+        "name": "logcli",
+        "version": "2.6.0",
+        "remote_url": "https://github.com/grafana/loki/releases/download/vVERSION/logcli-linux-amd64.zip",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/l/logcli/VERSION/logcli-linux-amd64.zip",
+        "file_name": "logcli-linux-amd64.zip"
+    }
+]

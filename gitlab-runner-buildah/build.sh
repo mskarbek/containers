@@ -2,17 +2,21 @@
 set -eu
 
 source ../meta/common.sh
-source ./files/VERSIONS
 
 for IMAGE in {"buildah","buildah-zfs"}; do
     container_create ${IMAGE} ${1}
 
     dnf_cache
-    dnf_install "openssh-clients git-core hostname"
+    dnf_install "openssh-clients git-core hostname rsync jq unzip tar dnf dnf-plugins-core"
     dnf_cache_clean
     dnf_clean
 
-    curl -L -o ${CONTAINER_PATH}/usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/v${GITLAB_RUNNER_VERSION}/binaries/gitlab-runner-linux-amd64
+    VERSION=$(jq -r .[0].version ./files/versions.json)
+    if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
+        curl -L -o ${CONTAINER_PATH}/usr/local/bin/gitlab-runner $(jq -r .[0].remote_url ./files/versions.json | sed "s;VERSION;${VERSION};g")
+    else
+        curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L -o ${CONTAINER_PATH}/usr/local/bin/gitlab-runner $(jq -r .[0].local_url ./files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+    fi
     chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/gitlab-runner
 
     rsync_rootfs

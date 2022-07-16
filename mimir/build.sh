@@ -2,14 +2,21 @@
 set -eu
 
 source ../meta/common.sh
-source ./files/VERSIONS
 
 container_create systemd ${1}
 
-curl -L -o ${CONTAINER_PATH}/usr/local/bin/metaconvert https://github.com/grafana/mimir/releases/download/mimir-${MIMIR_VERSION}/metaconvert-linux-amd64
-curl -L -o ${CONTAINER_PATH}/usr/local/bin/mimir https://github.com/grafana/mimir/releases/download/mimir-${MIMIR_VERSION}/mimir-linux-amd64
-curl -L -o ${CONTAINER_PATH}/usr/local/bin/mimirtool https://github.com/grafana/mimir/releases/download/mimir-${MIMIR_VERSION}/mimirtool-linux-amd64
-curl -L -o ${CONTAINER_PATH}/usr/local/bin/query-tee https://github.com/grafana/mimir/releases/download/mimir-${MIMIR_VERSION}/query-tee-linux-amd64
+VERSION=$(jq -r .[0].version ./files/versions.json)
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
+    curl -L -o ${CONTAINER_PATH}/usr/local/bin/metaconvert $(jq -r .[0].remote_url ./files/versions.json | sed "s;VERSION;${VERSION};g")
+    curl -L -o ${CONTAINER_PATH}/usr/local/bin/mimir $(jq -r .[1].remote_url ./files/versions.json | sed "s;VERSION;${VERSION};g")
+    curl -L -o ${CONTAINER_PATH}/usr/local/bin/mimirtool $(jq -r .[2].remote_url ./files/versions.json | sed "s;VERSION;${VERSION};g")
+    curl -L -o ${CONTAINER_PATH}/usr/local/bin/query-tee $(jq -r .[3].remote_url ./files/versions.json | sed "s;VERSION;${VERSION};g")
+else
+    curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L -o ${CONTAINER_PATH}/usr/local/bin/metaconvert $(jq -r .[0].local_url ./files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+    curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L -o ${CONTAINER_PATH}/usr/local/bin/mimir $(jq -r .[1].local_url ./files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+    curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L -o ${CONTAINER_PATH}/usr/local/bin/mimirtool $(jq -r .[2].local_url ./files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+    curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L -o ${CONTAINER_PATH}/usr/local/bin/query-tee $(jq -r .[3].local_url ./files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+fi
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/{metaconvert,mimir,mimirtool,query-tee}
 
 rsync_rootfs

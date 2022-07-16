@@ -7,7 +7,7 @@ source ./files/VERSIONS
 container_create systemd ${1}
 
 dnf_cache
-dnf_install "buildah skopeo fuse-overlayfs netavark aardvark-dns containernetworking-plugins iputils iproute iptables-nft nftables rsync dnf dnf-plugins-core tar unzip"
+dnf_install "buildah skopeo fuse-overlayfs netavark aardvark-dns containernetworking-plugins iputils iproute iptables-nft nftables"
 dnf_cache_clean
 dnf_clean
 

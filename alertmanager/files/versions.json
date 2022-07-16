@@ -1,0 +1,9 @@
+[
+    {
+        "name": "alertmanager",
+        "version": "0.23.0",
+        "remote_url": "https://github.com/prometheus/alertmanager/releases/download/vVERSION/alertmanager-VERSION.linux-amd64.tar.gz",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/a/alertmanager/VERSION/alertmanager-VERSION.linux-amd64.tar.gz",
+        "file_name": "alertmanager-VERSION.linux-amd64.tar.gz"
+    }
+]

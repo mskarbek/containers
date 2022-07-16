@@ -2,13 +2,17 @@
 set -eu
 
 source ../meta/common.sh
-source ./files/VERSIONS
 
 container_create systemd ${1}
 
+VERSION=$(jq -r .[0].version ./files/versions.json)
 TMP_DIR=$(mktemp -d)
 pushd ${TMP_DIR}
-    curl -L https://download.konghq.com/mesh-alpine/kuma-${KUMA_VERSION}-rhel-amd64.tar.gz|tar xzv
+    if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
+        curl -L $(jq -r .[0].remote_url ./files/versions.json | sed "s;VERSION;${VERSION};g") | tar xzv
+    else
+        curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L $(jq -r .[0].local_url ./files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};") | tar xzv
+    fi
 popd
 mv -v ${TMP_DIR}/kuma-${KUMA_VERSION}/bin/{kuma-cp,kumactl} ${CONTAINER_PATH}/usr/local/bin/
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/{kuma-cp,kumactl}

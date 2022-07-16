@@ -3,3 +3,7 @@ export OCI_REGISTRY_URL="registry.lab.skarbek.name"
 export OS_VERSION="9.0"
 # Supported options: el9 - RHEL 9, c9s - CentOS Stream 9
 export OS_TYPE="el9"
+export REPOSITORY_URL=""
+export REPOSITORY_USERNAME=""
+export REPOSITORY_PASSWORD=""
+export REPOSITORY_RAW_REPO=""

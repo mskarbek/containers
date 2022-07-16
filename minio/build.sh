@@ -2,12 +2,18 @@
 set -eu
 
 source ../meta/common.sh
-source ./files/VERSIONS
 
 container_create systemd ${1}
 
-curl -L -o ${CONTAINER_PATH}/usr/local/bin/minio https://dl.min.io/server/minio/release/linux-amd64/archive/minio.${MINIO_VERSION}
-curl -L -o ${CONTAINER_PATH}/usr/local/bin/mcli https://dl.min.io/client/mc/release/linux-amd64/archive/mc.${MCLI_VERSION}
+MINIO_VERSION=$(jq -r .[0].version ./files/versions.json)
+MCLI_VERSION=$(jq -r .[1].version ./files/versions.json)
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
+    curl -L -o ${CONTAINER_PATH}/usr/local/bin/minio $(jq -r .[0].remote_url ./files/versions.json | sed "s;VERSION;${MINIO_VERSION};g")
+    curl -L -o ${CONTAINER_PATH}/usr/local/bin/mcli $(jq -r .[1].remote_url ./files/versions.json | sed "s;VERSION;${MCLI_VERSION};g")
+else
+    curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L -o ${CONTAINER_PATH}/usr/local/bin/minio $(jq -r .[0].local_url ./files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+    curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L -o ${CONTAINER_PATH}/usr/local/bin/mcli $(jq -r .[1].local_url ./files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+fi
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/{minio,mcli}
 
 rsync_rootfs
