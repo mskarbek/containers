@@ -2,6 +2,11 @@ default:
   tags:
     - buildah
 
+variables:
+  FROM_TAG:
+    value: "latest"
+    description: "Define base image tag"
+
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
