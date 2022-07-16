@@ -4,6 +4,14 @@ set -u
 TXT_YELLOW="\e[1;93m"
 TXT_CLEAR="\e[0m"
 
+pushd () {
+    command pushd "$@" > /dev/null
+}
+
+popd () {
+    command popd "$@" > /dev/null
+}
+
 git clone --quiet https://github.com/mskarbek/containers.git ./containers
 
 declare -a ARETFACTS=( "alertmanager" "boundary" "consul" "fake-service" "fleet" "gitlab-runner-buildah" "kuma-cp" "loki" "mimir" "minio" "minio-console" )

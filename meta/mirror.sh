@@ -4,6 +4,14 @@ set -u
 TXT_YELLOW="\e[1;93m"
 TXT_CLEAR="\e[0m"
 
+pushd () {
+    command pushd "$@" > /dev/null
+}
+
+popd () {
+    command popd "$@" > /dev/null
+}
+
 TMP_DIR=$(mktemp -d -p /tmp mirror.XXX)
 pushd ${TMP_DIR}
     MIRROR_DIR=$(mktemp -d -p ${TMP_DIR} containers.XXX)
@@ -27,7 +35,7 @@ pushd ${TMP_DIR}
             git add .
             git diff-index --cached --quiet HEAD --
             if [ ${?} -ne 0 ]; then
-                echo -e "${TXT_YELLOW}push: sync changes in ${REPO_DIR}${TXT_CLEAR}"
+                echo -e "${TXT_YELLOW}push: sync changes in ${IMAGE}${TXT_CLEAR}"
                 git commit -m 'chore: mirror update'
                 git push --quiet -o ci.skip -u origin main
             fi
@@ -52,7 +60,7 @@ pushd ${TMP_DIR}
         git add .
         git diff-index --cached --quiet HEAD --
         if [ ${?} -ne 0 ]; then
-            echo -e "${TXT_YELLOW}push: sync changes in ${REPO_DIR}${TXT_CLEAR}"
+            echo -e "${TXT_YELLOW}push: sync changes in meta${TXT_CLEAR}"
             git commit -m 'chore: mirror update'
             git push --quiet -o ci.skip -u origin main
         fi
