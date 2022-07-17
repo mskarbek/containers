@@ -40,7 +40,7 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9
 
 [rpmfusion-free-updates]
 name = RPM Fusion Free for Enterprise Linux 9 x86_64 (RPMs)
-baseurl = ${REPOSITORY_URL}/repository/rpm-proxy-rpmfusion/updates/9/x86_64
+baseurl = ${REPOSITORY_URL}/repository/rpm-proxy-rpmfusion/free/el/updates/9/x86_64
 username = ${REPOSITORY_USERNAME}
 password = ${REPOSITORY_PASSWORD}
 enabled = 1
@@ -48,7 +48,61 @@ gpgcheck = 1
 repo_gpgcheck = 0
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-el-9
 
-[prd]
+[pgdg-common]
+name = PostgreSQL common for Enterprise Linux 9 x86_64 (RPMs)
+baseurl = ${REPOSITORY_URL}/repository/rpm-proxy-pgdg/common/redhat/rhel-9-x86_64
+username = ${REPOSITORY_USERNAME}
+password = ${REPOSITORY_PASSWORD}
+enabled = 1
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+
+[pgdg-rhel9-sysupdates]
+name = PostgreSQL Supplementary ucommon for Enterprise Linux 9 x86_64 (RPMs)
+baseurl = ${REPOSITORY_URL}/repository/rpm-proxy-pgdg/common/pgdg-rocky9-sysupdates/redhat/rhel-9-x86_64
+username = ${REPOSITORY_USERNAME}
+password = ${REPOSITORY_PASSWORD}
+enabled = 0
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+
+[pgdg-rhel9-extras]
+name = Extra packages to support PostgreSQL for Enterprise Linux 9 x86_64 (RPMs)
+baseurl = ${REPOSITORY_URL}/repository/rpm-proxy-pgdg/common/pgdg-rhel9-extras/redhat/rhel-9-x86_64
+username = ${REPOSITORY_USERNAME}
+password = ${REPOSITORY_PASSWORD}
+enabled = 0
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+
+[pgdg14]
+name = PostgreSQL 14 for Enterprise Linux 9 x86_64 (RPMs)
+baseurl = ${REPOSITORY_URL}/repository/rpm-proxy-pgdg/14/redhat/rhel-9-x86_64
+username = ${REPOSITORY_USERNAME}
+password = ${REPOSITORY_PASSWORD}
+enabled = 1
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+
+[pgdg13]
+name = PostgreSQL 13 for Enterprise Linux 9 x86_64 (RPMs)
+baseurl = ${REPOSITORY_URL}/repository/rpm-proxy-pgdg/13/redhat/rhel-9-x86_64
+username = ${REPOSITORY_USERNAME}
+password = ${REPOSITORY_PASSWORD}
+enabled = 0
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+
+[pgdg12]
+name = PostgreSQL 12 for Enterprise Linux 9 x86_64 (RPMs)
+baseurl = ${REPOSITORY_URL}/repository/rpm-proxy-pgdg/12/redhat/rhel-9-x86_64
+username = ${REPOSITORY_USERNAME}
+password = ${REPOSITORY_PASSWORD}
+enabled = 0
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+
+[rpm-hosted-prd]
 name = Collection for Enterprise Linux 9 x86_64 (RPMs)
 baseurl = ${REPOSITORY_URL}/repository/rpm-hosted-prd/9
 username = ${REPOSITORY_USERNAME}
