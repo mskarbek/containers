@@ -20,6 +20,6 @@ sync-mirror:
 download-artefacts:
   stage: download
   script:
-    - ./downloads.sh
+    - ./download-raw.sh
   needs:
     - sync-mirror
