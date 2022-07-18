@@ -1,0 +1,9 @@
+[
+    {
+        "name": "terraform",
+        "version": "1.2.5",
+        "remote_url": "https://releases.hashicorp.com/terraform/VERSION/terraform_VERSION_linux_amd64.zip",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/t/terraform/VERSION/terraform_VERSION_linux_amd64.zip",
+        "file_name": "terraform_VERSION_linux_amd64.zip"
+    }
+]
