@@ -2,7 +2,6 @@
 set -eu
 
 source ../meta/common.sh
-source ./files/VERSIONS
 
 container_create openjdk8-jre ${1}
 
@@ -11,16 +10,24 @@ dnf_install "curl"
 dnf_cache_clean
 dnf_clean
 
+NEXUS_VERSION=$(jq -r .[0].version ./files/versions.json)
+NEXUS_REPOSITORY_DART_VERSION=$(jq -r .[1].version ./files/versions.json)
+PWD_DIR=$(pwd)
 TMP_DIR=$(mktemp -d)
 pushd ${TMP_DIR}
-    curl -L https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz|tar xzv
-    curl -LO https://github.com/groupe-edf/nexus-repository-dart/releases/download/${NEXUS_REPOSITORYDART_VERSION}/nexus-repository-dart-${NEXUS_REPOSITORYDART_VERSION}-bundle.kar
+    if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
+        curl -L $(jq -r .[0].remote_url ${PWD_DIR}/files/versions.json | sed "s;VERSION;${NEXUS_VERSION};g") | tar xzv
+        curl -L -O $(jq -r .[1].remote_url ${PWD_DIR}/files/versions.json | sed "s;VERSION;${NEXUS_REPOSITORY_DART_VERSION};g")
+    else
+        curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L $(jq -r .[0].local_url ${PWD_DIR}/files/versions.json | sed "s;VERSION;${NEXUS_VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};") | tar xzv
+        curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L -O $(jq -r .[1].local_url ${PWD_DIR}/files/versions.json | sed "s;VERSION;${NEXUS_REPOSITORY_DART_VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+    fi
 popd
 mkdir -vp ${CONTAINER_PATH}/usr/lib/sonatype
 pushd ${CONTAINER_PATH}/usr/lib/sonatype
     mv -v ${TMP_DIR}/nexus-${NEXUS_VERSION} ./
     mv -v ${TMP_DIR}/sonatype-work ./
-    mv -v ${TMP_DIR}/nexus-repository-dart-${NEXUS_REPOSITORYDART_VERSION}-bundle.kar ./nexus-${NEXUS_VERSION}/deploy/nexus-repository-dart-${NEXUS_REPOSITORYDART_VERSION}-bundle.kar
+    mv -v ${TMP_DIR}/nexus-repository-dart-${NEXUS_REPOSITORY_DART_VERSION}-bundle.kar ./nexus-${NEXUS_VERSION}/deploy/nexus-repository-dart-${NEXUS_REPOSITORY_DART_VERSION}-bundle.kar
     ln -s ./nexus-${NEXUS_VERSION} nexus
 popd
 rm -vrf ${TMP_DIR}
