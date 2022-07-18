@@ -16,6 +16,11 @@ buildah run ${CONTAINER_UUID} pip3 install ara==${ARA_VERSION} python-consul
 rm -vrf ${CONTAINER_PATH}/root/.cache
 
 rsync_rootfs
-buildah run --workingdir /root ${CONTAINER_UUID} ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections
+
+if [ ! -z $CI_HTTP_PROXY ]; then
+    buildah run --workingdir /root --env HTTP_PROXY=${CI_HTTP_PROXY} --env HTTPS_PROXY=${CI_HTTP_PROXY} ${CONTAINER_UUID} ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections
+else
+    buildah run --workingdir /root ${CONTAINER_UUID} ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections
+fi
 
 container_commit base/ansible ${IMAGE_TAG}

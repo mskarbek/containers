@@ -28,7 +28,13 @@ chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/kumactl
 rm -vrf ${TMP_DIR}
 
 rsync_rootfs
-buildah run --workingdir /var/lib/rundeck ${CONTAINER_UUID} ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections
+
+if [ ! -z $CI_HTTP_PROXY ]; then
+    buildah run --workingdir /var/lib/rundeck --env HTTP_PROXY=${CI_HTTP_PROXY} --env HTTPS_PROXY=${CI_HTTP_PROXY} ${CONTAINER_UUID} ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections
+else
+    buildah run --workingdir /var/lib/rundeck ${CONTAINER_UUID} ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections
+fi
+
 buildah config --volume /var/lib/rundeck/.ssh ${CONTAINER_UUID}
 
 container_commit rundeck-runner ${IMAGE_TAG}
