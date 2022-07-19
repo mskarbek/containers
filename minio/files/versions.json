@@ -8,7 +8,7 @@
     },
     {
         "name": "mcli",
-        "version": "RELEASE.2022-07-11T16-16-12Z",
+        "version": "RELEASE.2022-07-15T09-20-55Z",
         "remote_url": "https://dl.min.io/client/mc/release/linux-amd64/archive/mc.VERSION",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/m/mcli/VERSION/mc.VERSION",
         "file_name": "mc.VERSION"
