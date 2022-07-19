@@ -1,0 +1,16 @@
+[
+    {
+        "name": "graalvm",
+        "version": "22.1.0",
+        "remote_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-VERSION/graalvm-ce-java17-linux-amd64-VERSION.tar.gz",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/g/graalvm/VERSION/graalvm-ce-java17-linux-amd64-VERSION.tar.gz",
+        "file_name": "graalvm-ce-java17-linux-amd64-VERSION.tar.gz"
+    },
+    {
+        "name": "native-image",
+        "version": "22.1.0",
+        "remote_url": "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-VERSION/native-image-installable-svm-java17-linux-amd64-VERSION.jar",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/n/native-image/VERSION/native-image-installable-svm-java17-linux-amd64-VERSION.jar",
+        "file_name": "native-image-installable-svm-java17-linux-amd64-VERSION.jar"
+    }
+]

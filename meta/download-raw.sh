@@ -14,7 +14,7 @@ popd () {
 
 git clone --quiet https://github.com/mskarbek/containers.git ./containers
 
-declare -a ARETFACTS=( "alertmanager" "boundary" "consul" "fake-service" "fleet" "gitlab-runner-buildah" "kuma-cp" "loki" "mimir" "minio" "minio-console" "nexus" "terraform" )
+declare -a ARETFACTS=( "alertmanager" "boundary" "consul" "fake-service" "fleet" "graalvm" "gitlab-runner-buildah" "kuma-cp" "loki" "mimir" "minio" "minio-console" "nexus" "terraform" )
 
 pushd ./containers
     for ARETFACT in ${ARETFACTS[@]}; do

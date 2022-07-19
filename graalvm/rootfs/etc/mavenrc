@@ -1,0 +1,6 @@
+export JAVA_HOME=/usr/local/lib/graalvm
+export GRAALVM_HOME=/usr/local/lib/graalvm
+export M2_HOME=/var/lib/m2
+#export MVNW_REPOURL=${REPOSITORY_URL}/repository/maven-group-all
+#export MVNW_USERNAME="${REPOSITORY_USERNAME}"
+#export MVNW_PASSWORD="${REPOSITORY_PASSWORD}"
