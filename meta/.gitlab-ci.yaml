@@ -17,9 +17,16 @@ sync-mirror:
   script:
     - ./mirror.sh
 
-download-artefacts:
+download-raw-artefacts:
   stage: download
   script:
     - ./download-raw.sh
+  needs:
+    - sync-mirror
+
+download-rpm-artefacts:
+  stage: download
+  script:
+    - ./download-rpm.sh
   needs:
     - sync-mirror
