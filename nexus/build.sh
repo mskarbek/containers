@@ -34,14 +34,6 @@ rm -vrf ${TMP_DIR}
 
 rsync_rootfs
 
-#TODO: keystore situation needs to be rethought
-sed -i 's/=\.\.\/sonatype-work/=\/var\/lib\/sonatype-work/' ${CONTAINER_PATH}/usr/lib/sonatype/nexus/bin/nexus.vmoptions
-if [ -f ./files/keystore.p12 ] && [ -f ./files/keystore.pass ]; then
-    cp -v ./files/keystore.p12 ${CONTAINER_PATH}/usr/lib/sonatype/sonatype-work/nexus3/keystores/keystore.p12
-    echo "-Djavax.net.ssl.keyStore=/var/lib/sonatype-work/nexus3/keystores/keystore.p12" >> ${CONTAINER_PATH}/usr/lib/sonatype/nexus/bin/nexus.vmoptions
-    echo "-Djavax.net.ssl.keyStorePassword=$(cat ./files/keystore.pass)" >> ${CONTAINER_PATH}/usr/lib/sonatype/nexus/bin/nexus.vmoptions
-fi
-
 # Unfortunately, some mirrors use TLS certificates that, to be accepted, force LEGACY crypto policies
 buildah run --network none ${CONTAINER_UUID} update-crypto-policies --set LEGACY
 buildah run --network none ${CONTAINER_UUID} systemctl enable\

@@ -33,9 +33,6 @@ build-image:
     # generate tag
     - export IMAGE_TAG=$(bash ../meta/tag.sh)
     - printf "IMAGE_TAG=$IMAGE_TAG" > ./build.env
-    # save keystore files
-    - printf $KEYSTORE_PASS | base64 -d - > ./files/keystore.pass
-    - printf $KEYSTORE_P12 | base64 -d - > ./files/keystore.p12
   script:
     # build image
     - ./build.sh $FROM_TAG
