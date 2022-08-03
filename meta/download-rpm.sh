@@ -23,7 +23,7 @@ pushd ./containers
         if [ ${?} -ne 0 ]; then
             curl -L -O $(jq -r .[${I}].remote_url ./meta/files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;RELEASE;${RELEASE};g")
             echo -e "${TXT_YELLOW}upload: $(jq -r .[${I}].file_name ./meta/files/versions.json | sed "s;VERSION;${VERSION};" | sed "s;RELEASE;${RELEASE};g")${TXT_CLEAR}"
-            curl -s -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" --upload-file $(jq -r .[${I}].file_name ./meta/files/versions.json | sed "s;VERSION;${VERSION};") $(jq -r .[${I}].local_url ./meta/files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;RELEASE;${RELEASE};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RPM_REPO;${REPOSITORY_RPM_REPO};")
+            curl -s -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" --upload-file $(jq -r .[${I}].file_name ./meta/files/versions.json | sed "s;VERSION;${VERSION};" | sed "s;RELEASE;${RELEASE};g") $(jq -r .[${I}].local_url ./meta/files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;RELEASE;${RELEASE};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RPM_REPO;${REPOSITORY_RPM_REPO};")
         fi
     done
 popd
