@@ -35,7 +35,7 @@
         "name": "gitlab-ce",
         "version": "15.2.2",
         "release": "ce.0",
-        "remote_url": "https://packages.gitlab.com/gitlab/gitlab-ce/packages/el/8/gitlab-ce-VERSION-RELEASE.el8.x86_64.rpm",
+        "remote_url": "https://packages.gitlab.com/gitlab/gitlab-ce/el/8/x86_64/gitlab-ce-VERSION-RELEASE.el8.x86_64.rpm",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RPM_REPO/9/Packages/g/gitlab-ce-VERSION-RELEASE.el8.x86_64.rpm",
         "file_name": "gitlab-ce-VERSION-RELEASE.el8.x86_64.rpm"
     },
@@ -43,7 +43,7 @@
         "name": "erlang",
         "version": "25.0.2",
         "release": "1",
-        "remote_url": "https://packagecloud.io/rabbitmq/erlang/packages/el/8/erlang-VERSION-RELEASE.el8.x86_64.rpm",
+        "remote_url": "https://packagecloud.io/rabbitmq/erlang/el/8/x86_64/erlang-VERSION-RELEASE.el8.x86_64.rpm",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RPM_REPO/9/Packages/e/erlang-VERSION-RELEASE.el8.x86_64.rpm",
         "file_name": "erlang-VERSION-RELEASE.el8.x86_64.rpm"
     },
@@ -51,7 +51,7 @@
         "name": "rabbitmq-server",
         "version": "3.10.7",
         "release": "1",
-        "remote_url": "https://packagecloud.io/rabbitmq/rabbitmq-server/packages/el/8/rabbitmq-server-VERSION-RELEASE.el8.noarch.rpm",
+        "remote_url": "https://packagecloud.io/rabbitmq/rabbitmq-server/el/8/x86_64/../noarch/rabbitmq-server-VERSION-RELEASE.el8.noarch.rpm",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RPM_REPO/9/Packages/r/rabbitmq-server-VERSION-RELEASE.el8.noarch.rpm",
         "file_name": "rabbitmq-server-VERSION-RELEASE.el8.noarch.rpm"
     },
