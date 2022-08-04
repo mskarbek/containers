@@ -1,0 +1,9 @@
+[
+    {
+        "name": "vault",
+        "version": "1.11.2",
+        "remote_url": "https://releases.hashicorp.com/vault/VERSION/vault_VERSION_linux_amd64.zip",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/v/vault/VERSION/vault_VERSION_linux_amd64.zip",
+        "file_name": "vault_VERSION_linux_amd64.zip"
+    }
+]
