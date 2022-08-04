@@ -2,15 +2,20 @@
 set -eu
 
 source ../meta/common.sh
-source ./files/VERSIONS
 
 container_create systemd ${1}
 
+VERSION=$(jq -r .[0].version ./files/versions.json)
+PWD_DIR=$(pwd)
 TMP_DIR=$(mktemp -d)
 pushd ${TMP_DIR}
-    curl -L https://github.com/oauth2-proxy/oauth2-proxy/releases/download/v${OAUTH2_PROXY_VERSION}/oauth2-proxy-v${OAUTH2_PROXY_VERSION}.linux-amd64.tar.gz|tar xzv
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
+    curl -L $(jq -r .[0].remote_url ${PWD_DIR}/files/versions.json | sed "s;VERSION;${VERSION};g") | tar xzv
+else
+    curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L $(jq -r .[0].local_url ${PWD_DIR}/files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};") | tar xzv
+fi
 popd
-mv -v ${TMP_DIR}/oauth2-proxy-v${OAUTH2_PROXY_VERSION}.linux-amd64/oauth2-proxy ${CONTAINER_PATH}/usr/local/bin/oauth2-proxy
+mv -v ${TMP_DIR}/oauth2-proxy-v${VERSION}.linux-amd64/oauth2-proxy ${CONTAINER_PATH}/usr/local/bin/oauth2-proxy
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/oauth2-proxy
 rm -vrf ${TMP_DIR}
 
