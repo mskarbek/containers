@@ -1,7 +1,7 @@
 [
     {
         "name": "boundary",
-        "version": "0.9.1",
+        "version": "0.10.1",
         "remote_url": "https://releases.hashicorp.com/boundary/VERSION/boundary_VERSION_linux_amd64.zip",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/b/boundary/VERSION/boundary_VERSION_linux_amd64.zip",
         "file_name": "boundary_VERSION_linux_amd64.zip"
