@@ -1,7 +1,7 @@
 [
     {
         "name": "kuma",
-        "version": "1.7.1",
+        "version": "1.8.0",
         "remote_url": "https://download.konghq.com/mesh-alpine/kuma-VERSION-rhel-amd64.tar.gz",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/k/kuma/VERSION/kuma-VERSION-rhel-amd64.tar.gz",
         "file_name": "kuma-VERSION-rhel-amd64.tar.gz"

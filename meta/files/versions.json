@@ -17,7 +17,7 @@
     },
     {
         "name": "osquery",
-        "version": "5.4.0",
+        "version": "5.5.0",
         "release": "1",
         "remote_url": "https://pkg.osquery.io/rpm/osquery-VERSION-RELEASE.linux.x86_64.rpm",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RPM_REPO/9/Packages/o/osquery-VERSION-RELEASE.linux.x86_64.rpm",
@@ -25,8 +25,8 @@
     },
     {
         "name": "code",
-        "version": "1.69.2",
-        "release": "1658162074",
+        "version": "1.70.1",
+        "release": "1660113182",
         "remote_url": "https://packages.microsoft.com/yumrepos/vscode/code-VERSION-RELEASE.el7.x86_64.rpm",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RPM_REPO/9/Packages/c/code-VERSION-RELEASE.el7.x86_64.rpm",
         "file_name": "code-VERSION-RELEASE.el7.x86_64.rpm"

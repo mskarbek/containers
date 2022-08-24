@@ -38,8 +38,8 @@ if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
         curl -L -O https://github.com/zeet-cc/zfs-rpms/releases/download/v${ZFS_VERSION}-rhel9.0/libzpool5-${ZFS_VERSION}-1.el9.x86_64.rpm
         curl -L -O https://github.com/zeet-cc/zfs-rpms/releases/download/v${ZFS_VERSION}-rhel9.0/zfs-${ZFS_VERSION}-1.el9.x86_64.rpm
         curl -L -O https://github.com/zeet-cc/zfs-rpms/releases/download/v${ZFS_VERSION}-rhel9.0/zfs-container-${ZFS_VERSION}-1.el9.noarch.rpm
-        dnf_install "./libnvpair3-${ZFS_VERSION}-1.el9.x86_64.rpm ./libuutil3-${ZFS_VERSION}-1.el9.x86_64.rpm ./libzfs5-${ZFS_VERSION}-1.el9.x86_64.rpm ./libzpool5-${ZFS_VERSION}-1.el9.x86_64.rpm ./zfs-${ZFS_VERSION}-1.el9.x86_64.rpm ./zfs-container-${ZFS_VERSION}-1.el9.noarch.rpm"
     popd
+    dnf_install "${TMP_DIR}/libnvpair3-${ZFS_VERSION}-1.el9.x86_64.rpm ${TMP_DIR}/libuutil3-${ZFS_VERSION}-1.el9.x86_64.rpm ${TMP_DIR}/libzfs5-${ZFS_VERSION}-1.el9.x86_64.rpm ${TMP_DIR}/libzpool5-${ZFS_VERSION}-1.el9.x86_64.rpm ${TMP_DIR}/zfs-${ZFS_VERSION}-1.el9.x86_64.rpm ${TMP_DIR}/zfs-container-${ZFS_VERSION}-1.el9.noarch.rpm"
     rm -vrf ${TMP_DIR}
 else
     dnf_install "zfs zfs-container"
