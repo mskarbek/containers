@@ -1,0 +1,9 @@
+[
+    {
+        "name": "hydrogen-web",
+        "version": "0.3.1",
+        "remote_url": "https://github.com/vector-im/hydrogen-web/releases/download/vVERSION/hydrogen-web-VERSION.tar.gz",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/h/hydrogen-web/VERSION/hydrogen-web-VERSION.tar.gz",
+        "file_name": "hydrogen-web-VERSION.tar.gz"
+    }
+]

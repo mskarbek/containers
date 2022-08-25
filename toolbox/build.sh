@@ -2,7 +2,6 @@
 set -eu
 
 source ../meta/common.sh
-source ./files/VERSIONS
 
 container_create openssh ${1}
 
@@ -15,8 +14,12 @@ dnf_install "sudo less findutils curl vi nano telnet hostname iputils iproute mt
 dnf_cache_clean
 dnf_clean
 
-curl -L -o ./files/yq https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64
-cp -v ./files/yq ${CONTAINER_PATH}/usr/local/bin/yq
+VERSION=$(jq -r .[0].version ./files/versions.json)
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
+    curl -L -o ${CONTAINER_PATH}/usr/local/bin/yq $(jq -r .[0].remote_url ./files/versions.json | sed "s;VERSION;${VERSION};g")
+else
+    curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L -o ${CONTAINER_PATH}/usr/local/bin/yq $(jq -r .[0].local_url ./files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};")
+fi
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/yq
 
 rsync_rootfs
