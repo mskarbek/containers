@@ -9,7 +9,7 @@
     },
     {
         "name": "vector",
-        "version": "0.23.0",
+        "version": "0.24.0",
         "release": "1",
         "remote_url": "https://packages.timber.io/vector/VERSION/vector-VERSION-RELEASE.x86_64.rpm",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RPM_REPO/9/Packages/v/vector-VERSION-RELEASE.x86_64.rpm",
