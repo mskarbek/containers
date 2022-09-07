@@ -33,7 +33,7 @@
     },
     {
         "name": "gitlab-ce",
-        "version": "15.2.2",
+        "version": "15.3.3",
         "release": "ce.0",
         "remote_url": "https://packages.gitlab.com/gitlab/gitlab-ce/el/8/x86_64/gitlab-ce-VERSION-RELEASE.el8.x86_64.rpm",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RPM_REPO/9/Packages/g/gitlab-ce-VERSION-RELEASE.el8.x86_64.rpm",
