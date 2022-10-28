@@ -42,8 +42,7 @@ build-image:
     - git tag v$IMAGE_TAG
     - git push -o ci.skip origin-tag --tags
     # push image
-    - skopeo_copy gitlab-runner-podman $IMAGE_TAG
-    - skopeo_copy gitlab-runner-podman-zfs $IMAGE_TAG
+    - skopeo_copy gitlab-runner $IMAGE_TAG
   artifacts:
     reports:
       dotenv: ./build.env
