@@ -1,7 +1,7 @@
 [
     {
         "name": "minio-console",
-        "version": "0.20.3",
+        "version": "0.21.1",
         "remote_url": "https://github.com/minio/console/releases/download/vVERSION/console-linux-amd64",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/m/minio-console/VERSION/console-linux-amd64",
         "file_name": "console-linux-amd64"
