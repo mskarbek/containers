@@ -1,0 +1,16 @@
+[
+    {
+        "name": "gitlab-runner-helper",
+        "version": "15.5.0",
+        "remote_url": "https://gitlab-runner-downloads.s3.amazonaws.com/vVERSION/binaries/gitlab-runner-helper/gitlab-runner-helper.x86_64",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/g/gitlab-runner-helper/VERSION/gitlab-runner-helper.x86_64",
+        "file_name": "gitlab-runner-helper.x86_64"
+    },
+    {
+        "name": "dumb-init",
+        "version": "1.2.5",
+        "remote_url": "https://github.com/Yelp/dumb-init/releases/download/vVERSION/dumb-init_VERSION_x86_64",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/d/dumb-init/VERSION/dumb-init_VERSION_x86_64",
+        "file_name": "dumb-init_VERSION_x86_64"
+    }   
+]

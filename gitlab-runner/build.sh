@@ -5,11 +5,6 @@ source ../meta/common.sh
 
 container_create systemd ${1}
 
-dnf_cache
-dnf_install "openssh-clients git-core hostname rsync jq unzip tar"
-dnf_cache_clean
-dnf_clean
-
 VERSION=$(jq -r .[0].version ./files/versions.json)
 if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
     curl -L -o ${CONTAINER_PATH}/usr/local/bin/gitlab-runner $(jq -r .[0].remote_url ./files/versions.json | sed "s;VERSION;${VERSION};g")
