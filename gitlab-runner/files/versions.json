@@ -1,7 +1,7 @@
 [
     {
         "name": "gitlab-runner",
-        "version": "15.5.0",
+        "version": "15.5.1",
         "remote_url": "https://gitlab-runner-downloads.s3.amazonaws.com/vVERSION/binaries/gitlab-runner-linux-amd64",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/g/gitlab-runner/VERSION/gitlab-runner-linux-amd64",
         "file_name": "gitlab-runner-linux-amd64"
