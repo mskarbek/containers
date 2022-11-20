@@ -31,6 +31,7 @@ buildah run --network none ${CONTAINER_UUID} systemctl mask\
  sys-fs-fuse-connections.mount\
  systemd-ask-password-console.path\
  systemd-ask-password-wall.path\
+ systemd-firstboot.service\
  systemd-homed.service\
  systemd-logind.service\
  systemd-machine-id-commit.service\
