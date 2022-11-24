@@ -28,4 +28,4 @@ buildah config --volume /etc/gitlab ${CONTAINER_UUID}
 buildah config --volume /var/log/gitlab ${CONTAINER_UUID}
 buildah config --volume /var/opt/gitlab ${CONTAINER_UUID}
 
-container_commit gitlab ${IMAGE_TAG}
+container_commit gitlab-ce ${IMAGE_TAG}
