@@ -1,4 +1,30 @@
-NATS_VERSION="2.9.1"
-NATSTOP_VERSION="0.5.0"
-NATSCLI_VERSION="0.0.34"
-NSC_VERSION="2.7.2"
+[
+    {
+        "name": "nats",
+        "version": "2.9.1",
+        "remote_url": "https://dl.min.io/server/minio/release/linux-amd64/archive/minio.VERSION",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/m/minio/VERSION/minio.VERSION",
+        "file_name": "minio.VERSION"
+    },
+    {
+        "name": "natstop",
+        "version": "0.5.0",
+        "remote_url": "https://dl.min.io/client/mc/release/linux-amd64/archive/mc.VERSION",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/m/mcli/VERSION/mc.VERSION",
+        "file_name": "mc.VERSION"
+    },
+    {
+        "name": "natscli",
+        "version": "0.0.34",
+        "remote_url": "https://dl.min.io/client/mc/release/linux-amd64/archive/mc.VERSION",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/m/mcli/VERSION/mc.VERSION",
+        "file_name": "mc.VERSION"
+    },
+    {
+        "name": "nsc",
+        "version": "2.7.2",
+        "remote_url": "https://dl.min.io/client/mc/release/linux-amd64/archive/mc.VERSION",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/m/mcli/VERSION/mc.VERSION",
+        "file_name": "mc.VERSION"
+    }
+]
