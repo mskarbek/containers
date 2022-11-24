@@ -31,6 +31,7 @@ fi
 rsync_rootfs "--links"
 
 buildah config --env='container=oci' ${CONTAINER_UUID}
+buildah config --env='SYSTEMD_LOG_TARGET=console' ${CONTAINER_UUID}
 buildah config --cmd='[ "/usr/bin/bash", "-l" ]' ${CONTAINER_UUID}
 
 container_commit micro ${IMAGE_TAG}
