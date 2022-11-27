@@ -1,7 +1,7 @@
 [
     {
         "name": "gitlab",
-        "version": "15.5.4",
+        "version": "15.6.0",
         "remote_url": "https://packages.gitlab.com/gitlab/gitlab-ce/packages/el/8/gitlab-ce-VERSION-ce.0.el8.x86_64.rpm/download.rpm",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/g/gitlab/VERSION/gitlab-ce-VERSION-ce.0.el8.x86_64.rpm",
         "file_name": "gitlab-ce-VERSION-ce.0.el8.x86_64.rpm"
