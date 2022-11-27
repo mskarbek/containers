@@ -16,7 +16,9 @@ pushd ${TMP_DIR}
     fi
 popd
 mv -v ${TMP_DIR}/kuma-${VERSION}/bin/{kuma-dp,envoy,coredns} ${CONTAINER_PATH}/usr/local/bin/
+mv -v ${TMP_DIR}/kuma-${VERSION}/ebpf/{mb_bind,mb_connect,mb_get_sockopts,mb_recvmsg,mb_redir,mb_sendmsg,mb_sockops,mb_tc} ${CONTAINER_PATH}/usr/local/libexec/
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/{kuma-dp,envoy,coredns}
+chmod -v 0755 ${CONTAINER_PATH}/usr/local/libexec/{mb_bind,mb_connect,mb_get_sockopts,mb_recvmsg,mb_redir,mb_sendmsg,mb_sockops,mb_tc}
 rm -vrf ${TMP_DIR}
 
 rsync_rootfs
