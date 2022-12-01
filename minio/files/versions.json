@@ -1,7 +1,7 @@
 [
     {
         "name": "minio",
-        "version": "RELEASE.2022-11-17T23-20-09Z",
+        "version": "RELEASE.2022-11-29T23-40-49Z",
         "remote_url": "https://dl.min.io/server/minio/release/linux-amd64/archive/minio.VERSION",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/m/minio/VERSION/minio.VERSION",
         "file_name": "minio.VERSION"
