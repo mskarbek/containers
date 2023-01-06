@@ -6,7 +6,7 @@ source ../meta/common.sh
 container_create openssh ${1}
 
 dnf_cache
-dnf_install "hostname perl policycoreutils policycoreutils-python-utils checkpolicy git libxcrypt-compat"
+dnf_install "hostname perl policycoreutils policycoreutils-python-utils checkpolicy git libxcrypt-compat tar"
 VERSION=$(jq -r .[0].version ./files/versions.json)
 TMP_DIR=$(mktemp -d)
 if [ ${IMAGE_BOOTSTRAP} == "true" ]; then

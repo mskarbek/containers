@@ -1,6 +1,6 @@
 postgresql['shared_buffers'] = '1MB'
 package['modify_kernel_parameters'] = false
-external_url "http://git.ORG_URL"
+external_url "https://git.skarbek.lab"
 #manage_accounts['enable'] = false
 
 node_exporter['enable'] = false
@@ -20,6 +20,6 @@ gitlab_rails['gitlab_kas_enabled'] = false
 gitlab_rails['incoming_email_enabled'] = false
 gitlab_rails['usage_ping_enabled'] = false
 gitlab_rails['allowed_hosts'] = []
-#gitlab_rails['trusted_proxies'] = [ '192.168.1.0/24', '192.168.2.1', '2001:0db8::/32' ]
+gitlab_rails['trusted_proxies'] = [ '10.88.0.1' ]
 #gitlab_rails['smtp_enable'] = true
 #gitlab_rails['initial_root_password'] = File.read('/run/secrets/gitlab-password')
