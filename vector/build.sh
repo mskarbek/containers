@@ -9,7 +9,7 @@ dnf_cache
 if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
     cp -v ./files/vector.repo ${CONTAINER_PATH}/etc/yum.repos.d/vector.repo
 fi
-dnf_install "vector"
+dnf_install "systemd-journal-remote vector"
 dnf_cache_clean
 dnf_clean
 
