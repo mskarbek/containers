@@ -16,8 +16,7 @@ pushd ${TMP_DIR}
     fi
 popd
 pushd ${CONTAINER_PATH}/usr/lib
-    mv -v ${TMP_DIR}/keycloak-${VERSION} ./
-    ln -s ./keycloak-${VERSION} keycloak
+    mv -v ${TMP_DIR}/keycloak-${VERSION} ./keycloak
     mv -v ${CONTAINER_PATH}/usr/lib/keycloak/conf ${CONTAINER_PATH}/usr/share/keycloak
 popd
 rm -vrf ${TMP_DIR}
