@@ -5,6 +5,11 @@ source ../meta/common.sh
 
 container_create openjdk17-jre ${1}
 
+dnf_cache
+dnf_install "krb5-workstation"
+dnf_cache_clean
+dnf_clean
+
 VERSION=$(jq -r .[0].version ./files/versions.json)
 PWD_DIR=$(pwd)
 TMP_DIR=$(mktemp -d)
