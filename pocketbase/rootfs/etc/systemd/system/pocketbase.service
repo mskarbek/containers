@@ -1,0 +1,14 @@
+[Unit]
+Description=PocketBase
+Documentation=https://pocketbase.io/docs/
+After=network.target nss-lookup.target
+
+[Service]
+WorkingDirectory=/run/pocketbase
+User=pocketbase
+Group=pocketbase
+ExecStart=/usr/local/bin/pocketbase serve --http=0.0.0.0:8080 --dir=/var/lib/pocketbase/pb_data --migrationsDir=/var/lib/pocketbase/pb_migrations --publicDir=/var/lib/pocketbase/pb_public
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

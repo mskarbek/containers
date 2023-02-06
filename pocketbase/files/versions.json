@@ -1,0 +1,9 @@
+[
+    {
+        "name": "pocketbase",
+        "version": "0.12.2",
+        "remote_url": "https://github.com/pocketbase/pocketbase/releases/download/vVERSION/pocketbase_VERSION_linux_amd64.zip",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/p/pocketbase/VERSION/pocketbase_VERSION_linux_amd64.zip",
+        "file_name": "pocketbase_VERSION_linux_amd64.zip"
+    }
+]
