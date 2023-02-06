@@ -1,0 +1,9 @@
+[
+    {
+        "name": "flutter",
+        "version": "3.7.1",
+        "remote_url": "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_VERSION-stable.tar.xz",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/f/flutter/VERSION/flutter_linux_VERSION-stable.tar.xz",
+        "file_name": "flutter_linux_VERSION-stable.tar.xz"
+    }
+]
