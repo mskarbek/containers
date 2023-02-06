@@ -1,28 +1,35 @@
 [
     {
         "name": "metaconvert",
-        "version": "2.1.0",
+        "version": "2.6.0",
         "remote_url": "https://github.com/grafana/mimir/releases/download/mimir-VERSION/metaconvert-linux-amd64",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/m/metaconvert/VERSION/metaconvert-linux-amd64",
         "file_name": "metaconvert-linux-amd64"
     },
     {
         "name": "mimir",
-        "version": "2.1.0",
+        "version": "2.6.0",
         "remote_url": "https://github.com/grafana/mimir/releases/download/mimir-VERSION/mimir-linux-amd64",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/m/mimir/VERSION/mimir-linux-amd64",
         "file_name": "mimir-linux-amd64"
     },
     {
+        "name": "mimir-continuous-test",
+        "version": "2.6.0",
+        "remote_url": "https://github.com/grafana/mimir/releases/download/mimir-VERSION/mimir-continuous-test-linux-amd64",
+        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/m/mimir/VERSION/mimir-continuous-test-linux-amd64",
+        "file_name": "mimir-continuous-test-linux-amd64"
+    },
+    {
         "name": "mimirtool",
-        "version": "2.1.0",
+        "version": "2.6.0",
         "remote_url": "https://github.com/grafana/mimir/releases/download/mimir-VERSION/mimirtool-linux-amd64",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/m/mimirtool/VERSION/mimirtool-linux-amd64",
         "file_name": "mimirtool-linux-amd64"
     },
     {
         "name": "query-tee",
-        "version": "2.1.0",
+        "version": "2.6.0",
         "remote_url": "https://github.com/grafana/mimir/releases/download/mimir-VERSION/query-tee-linux-amd64",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/q/query-tee/VERSION/query-tee-linux-amd64",
         "file_name": "query-tee-linux-amd64"

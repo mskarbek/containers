@@ -2,13 +2,16 @@
 Description=Loki
 Documentation=https://grafana.com/docs/loki/
 After=network.target nss-lookup.target
+AssertFileIsExecutable=/usr/local/bin/loki
+AssertFileNotEmpty=/etc/loki/config.yaml
 
 [Service]
 WorkingDirectory=/run/loki
 User=loki
 Group=loki
-ExecStart=/usr/local/bin/loki -config.file=/etc/loki/loki.yaml
+ExecStart=/usr/local/bin/loki -config.file=/etc/loki/config.yaml
 Restart=always
+LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target

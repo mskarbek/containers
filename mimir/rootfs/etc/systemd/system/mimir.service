@@ -1,15 +1,15 @@
 [Unit]
 Description=Mimir
-Documentation=https://grafana.com/docs/mimir/latest/
+Documentation=https://grafana.com/docs/mimir/
 After=network.target nss-lookup.target
 AssertFileIsExecutable=/usr/local/bin/mimir
 AssertFileNotEmpty=/etc/mimir/config.yaml
 
 [Service]
-ExecStart=/usr/local/bin/mimir --config.file=/etc/mimir/config.yaml
 WorkingDirectory=/run/mimir
 User=mimir
 Group=mimir
+ExecStart=/usr/local/bin/mimir --config.file=/etc/mimir/config.yaml
 Restart=always
 LimitNOFILE=65536
 
