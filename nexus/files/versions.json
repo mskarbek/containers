@@ -1,7 +1,7 @@
 [
     {
         "name": "nexus",
-        "version": "3.45.0-01",
+        "version": "3.47.1-01",
         "remote_url": "https://download.sonatype.com/nexus/3/nexus-VERSION-unix.tar.gz",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/n/nexus/VERSION/nexus-VERSION-unix.tar.gz",
         "file_name": "nexus-VERSION-unix.tar.gz"
