@@ -6,8 +6,7 @@ source ../meta/common.sh
 container_create base ${1}
 
 dnf_cache
-dnf_install "java-11-openjdk-headless apr"
-# tomcat-native - not in EPEL 9 yet
+dnf_install "java-11-openjdk-headless apr tomcat-native"
 dnf_cache_clean
 dnf_clean
 
@@ -26,6 +25,7 @@ container_commit openjdk11-jre ${IMAGE_TAG}
 container_create base/openjdk11-jre ${IMAGE_TAG}
 
 dnf_cache
+dnf_module "enable maven:3.8"
 dnf_install "java-11-openjdk-devel maven maven-openjdk11"
 dnf_cache_clean
 dnf_clean
