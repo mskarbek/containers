@@ -15,7 +15,8 @@ pushd ${TMP_DIR}
         curl -u "${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}" -L $(jq -r .[0].local_url ${PWD_DIR}/files/versions.json | sed "s;VERSION;${VERSION};g" | sed "s;REPOSITORY_URL;${REPOSITORY_URL};" | sed "s;REPOSITORY_RAW_REPO;${REPOSITORY_RAW_REPO};") | tar xzv
     fi
 popd
-mv -v ${TMP_DIR}/kuma-${VERSION}/bin/{kuma-dp,envoy,coredns} ${CONTAINER_PATH}/usr/local/bin/
+mv -v ${TMP_DIR}/kuma-${VERSION}/bin/{kuma-dp,coredns} ${CONTAINER_PATH}/usr/local/bin/
+mv -v ${TMP_DIR}/kuma-${VERSION}/bin/envoy* ${CONTAINER_PATH}/usr/local/bin/envoy
 mv -v ${TMP_DIR}/kuma-${VERSION}/ebpf/{mb_bind,mb_connect,mb_get_sockopts,mb_recvmsg,mb_redir,mb_sendmsg,mb_sockops,mb_tc} ${CONTAINER_PATH}/usr/local/libexec/
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/bin/{kuma-dp,envoy,coredns}
 chmod -v 0755 ${CONTAINER_PATH}/usr/local/libexec/{mb_bind,mb_connect,mb_get_sockopts,mb_recvmsg,mb_redir,mb_sendmsg,mb_sockops,mb_tc}

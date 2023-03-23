@@ -9,7 +9,7 @@ buildah run --network none ${CONTAINER_UUID} systemctl unmask\
  systemd-logind.service
 
 dnf_cache
-dnf_install "i3 i3status xrdp xorgxrdp passwd firefox vi dmenu rxvt-unicode"
+dnf_install "i3 i3status xrdp xorgxrdp passwd firefox vi dmenu rxvt-unicode iputils iproute fish"
 dnf_cache_clean
 dnf_clean
 

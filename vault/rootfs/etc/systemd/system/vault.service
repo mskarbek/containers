@@ -5,7 +5,7 @@ After=network.target nss-lookup.target
 AssertFileNotEmpty=/etc/vault.d/config.hcl
 
 [Service]
-ExecStart=/usr/local/bin/vault server -config-dir=/etc/vault.d
+ExecStart=/usr/local/bin/vault server -config=/etc/vault.d
 ExecReload=/bin/kill --signal HUP $MAINPID
 EnvironmentFile=-/etc/sysconfig/vault
 User=vault
