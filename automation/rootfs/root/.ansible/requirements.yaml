@@ -4,5 +4,7 @@ collections:
   - ansible.posix
   - community.crypto
   - community.general
+  - community.hashi_vault
+  - community.postgresql
   - community.rabbitmq
   - containers.podman
