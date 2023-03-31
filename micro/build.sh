@@ -7,9 +7,9 @@ CONTAINER_UUID=$(cat /proc/sys/kernel/random/uuid)
 buildah from --name=${CONTAINER_UUID} scratch
 CONTAINER_PATH=$(buildah mount ${CONTAINER_UUID})
 
-if [ ${OS_TYPE} = "el9" ]; then
+if [ ${OS_TYPE} = "rhel" ]; then
     ENABLE_REPO="rhel-9-for-x86_64-baseos-rpms"
-elif [ ${OS_TYPE} = "c9s" ]; then
+elif [ ${OS_TYPE} = "alma" ]; then
     ENABLE_REPO="baseos"
 else
     printf "ERROR: Missing or incorrect OS_TYPE variable." >&2

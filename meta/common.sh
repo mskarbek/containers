@@ -59,10 +59,13 @@ dnf_cache () {
 
 dnf_install () {
     if [ ${IMAGE_BOOTSTRAP} == "true" ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        if [ ${OS_TYPE} = "el9" ]; then
+        if [ ${OS_TYPE} = "rhel" ]; then
             cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        elif [ ${OS_TYPE} = "c9s" ]; then
-            cp -v /etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+        elif [ ${OS_TYPE} = "alma" ]; then
+            cp -v /etc/yum.repos.d/almalinux-{baseos,appstream,highavailability,crb,extras}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+
+
+            
         else
             printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
             exit 1
@@ -76,10 +79,10 @@ dnf_install () {
      --nodocs\
      install ${@}
     if [ ${IMAGE_BOOTSTRAP} == "true" ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        if [ ${OS_TYPE} = "el9" ]; then
+        if [ ${OS_TYPE} = "rhel" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        elif [ ${OS_TYPE} = "c9s" ]; then
-            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo
+        elif [ ${OS_TYPE} = "alma" ]; then
+            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/almalinux-{baseos,appstream,highavailability,crb,extras}.repo
         else
             printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
             exit 1
@@ -89,10 +92,10 @@ dnf_install () {
 
 dnf_install_with_docs () {
     if [ ${IMAGE_BOOTSTRAP} == "true" ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        if [ ${OS_TYPE} = "el9" ]; then
+        if [ ${OS_TYPE} = "rhel" ]; then
             cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        elif [ ${OS_TYPE} = "c9s" ]; then
-            cp -v /etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+        elif [ ${OS_TYPE} = "alma" ]; then
+            cp -v /etc/yum.repos.d/almalinux-{baseos,appstream,highavailability,crb,extras}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
         else
             printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
             exit 1
@@ -105,10 +108,10 @@ dnf_install_with_docs () {
      --setopt=install_weak_deps=false\
      install ${@}
     if [ ${IMAGE_BOOTSTRAP} == "true" ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        if [ ${OS_TYPE} = "el9" ]; then
+        if [ ${OS_TYPE} = "rhel" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        elif [ ${OS_TYPE} = "c9s" ]; then
-            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo
+        elif [ ${OS_TYPE} = "alma" ]; then
+            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/almalinux-{baseos,appstream,highavailability,crb,extras}.repo
         else
             printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
             exit 1
@@ -118,10 +121,10 @@ dnf_install_with_docs () {
 
 dnf_module () {
     if [ ${IMAGE_BOOTSTRAP} == "true" ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        if [ ${OS_TYPE} = "el9" ]; then
+        if [ ${OS_TYPE} = "rhel" ]; then
             cp -v /etc/yum.repos.d/redhat.repo ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        elif [ ${OS_TYPE} = "c9s" ]; then
-            cp -v /etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
+        elif [ ${OS_TYPE} = "alma" ]; then
+            cp -v /etc/yum.repos.d/almalinux-{baseos,appstream,highavailability,crb,extras}.repo ${CONTAINER_PATH}/etc/yum.repos.d/
         else
             printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
             exit 1
@@ -135,10 +138,10 @@ dnf_module () {
      --nodocs\
      module ${1}
     if [ ${IMAGE_BOOTSTRAP} == "true" ] && [ -d ${CONTAINER_PATH}/etc/yum.repos.d ]; then
-        if [ ${OS_TYPE} = "el9" ]; then
+        if [ ${OS_TYPE} = "rhel" ]; then
             rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/redhat.repo
-        elif [ ${OS_TYPE} = "c9s" ]; then
-            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/CentOS-Stream-{BaseOS,AppStream,PowerTools,HighAvailability}.repo
+        elif [ ${OS_TYPE} = "alma" ]; then
+            rm -vf ${CONTAINER_PATH}/etc/yum.repos.d/almalinux-{baseos,appstream,highavailability,crb,extras}.repo
         else
             printf "ERROR: Missing or incorrect OS_TYPE variable." >&2
             exit 1
