@@ -1,7 +1,7 @@
 [
     {
         "name": "fake-service",
-        "version": "0.24.2",
+        "version": "0.25.1",
         "remote_url": "https://github.com/nicholasjackson/fake-service/releases/download/vVERSION/fake_service_linux_amd64.zip",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/f/fake-service/VERSION/fake_service_linux_amd64.zip",
         "file_name": "fake_service_linux_amd64.zip"

@@ -8,7 +8,7 @@
     },
     {
         "name": "grafana-oncall",
-        "version": "1.1.41",
+        "version": "1.2.6",
         "remote_url": "https://github.com/grafana/oncall/releases/download/vVERSION/grafana-oncall-app-vVERSION.zip",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/k/kuma-datasource/VERSION/grafana-oncall-app-vVERSION.zip",
         "file_name": "grafana-oncall-app-vVERSION.zip"
