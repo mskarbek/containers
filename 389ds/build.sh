@@ -5,7 +5,10 @@ source ../meta/common.sh
 
 container_create systemd ${1}
 
+dnf_copr "enable @389ds/389-directory-server"
+
 dnf_cache
+#dnf_install "389-ds-base cockpit-389-ds"
 dnf_install "389-ds-base"
 dnf_cache_clean
 dnf_clean
