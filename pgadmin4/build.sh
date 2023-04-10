@@ -12,9 +12,11 @@ if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
 fi
 # python3-psycopg2
 dnf_install "libstdc++\
+ postgresql11\
  postgresql12\
  postgresql13\
  postgresql14\
+ postgresql15\
  python3-babel\
  python3-bcrypt\
  python3-brotli\
@@ -46,10 +48,12 @@ buildah run --network host ${CONTAINER_UUID} pip3 install pgadmin4==${PGADMIN4_V
 
 cat << EOF > ${CONTAINER_PATH}/usr/local/lib/python3.9/site-packages/pgadmin4/config_distro.py
 DEFAULT_BINARY_PATHS = {
-        'pg': '/usr/pgsql-14/bin',
+        'pg': '/usr/pgsql-15/bin',
+        'pg-15': '/usr/pgsql-15/bin',
         'pg-14': '/usr/pgsql-14/bin',
         'pg-13': '/usr/pgsql-13/bin',
-        'pg-12': '/usr/pgsql-12/bin'
+        'pg-12': '/usr/pgsql-12/bin',
+        'pg-11': '/usr/pgsql-11/bin'
 }
 EOF
 
