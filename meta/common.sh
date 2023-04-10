@@ -149,6 +149,16 @@ dnf_module () {
     fi
 }
 
+dnf_copr () {
+    dnf -y\
+     --installroot=${CONTAINER_PATH}\
+     --releasever=9\
+     --setopt=module_platform_id=platform:el9\
+     --setopt=install_weak_deps=false\
+     --nodocs\
+     copr ${1}
+}
+
 dnf_clean () {
     dnf -y\
      --installroot=${CONTAINER_PATH}\
