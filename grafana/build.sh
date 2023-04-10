@@ -41,6 +41,9 @@ rm -vrf ${CONTAINER_PATH}/etc/init.d/grafana-server
 
 rsync_rootfs
 
+buildah run --network host ${CONTAINER_UUID} grafana-cli plugins install parca-datasource
+buildah run --network host ${CONTAINER_UUID} grafana-cli plugins install parca-panel
+
 buildah run --network none ${CONTAINER_UUID} systemctl enable\
  grafana-server.service
 
