@@ -1,4 +1,4 @@
-node_name = "consul-server"
+node_name = "node1"
 server    = true
 bootstrap = true
 ui_config {

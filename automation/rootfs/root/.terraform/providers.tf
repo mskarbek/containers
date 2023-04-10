@@ -20,5 +20,9 @@ terraform {
       source = "gitlabhq/gitlab"
       version = "15.10.0"
     }
+    rabbitmq = {
+      source = "cyrilgdn/rabbitmq"
+      version = "1.8.0"
+    }
   }
 }
