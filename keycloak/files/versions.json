@@ -1,7 +1,7 @@
 [
     {
         "name": "keycloak",
-        "version": "21.0.1",
+        "version": "21.0.2",
         "remote_url": "https://github.com/keycloak/keycloak/releases/download/VERSION/keycloak-VERSION.tar.gz",
         "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/k/keycloak/VERSION/keycloak-VERSION.tar.gz",
         "file_name": "keycloak-VERSION.tar.gz"
