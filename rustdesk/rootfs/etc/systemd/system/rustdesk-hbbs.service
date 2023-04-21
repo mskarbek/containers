@@ -1,0 +1,16 @@
+[Unit]
+Description=RustDesk ID/Rendezvous Server
+Documentation=https://rustdesk.com/docs/
+After=network.target nss-lookup.target
+AssertFileNotEmpty=/run/secrets/rustdesk
+
+[Service]
+WorkingDirectory=/run/rustdesk
+EnvironmentFile=/run/secrets/rustdesk
+User=rustdesk
+Group=rustdesk
+ExecStart=/usr/local/bin/hbbs -k "${RUSTDESK_KEY}" -r "${RUSTDESK_RELAY}" -R "${RUSTDESK_RENDEZVOUS}" --mask "${RUSTDESK_MASK}"
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
