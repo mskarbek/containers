@@ -26,4 +26,6 @@ buildah run --network none ${CONTAINER_UUID} systemctl enable\
  rustdesk-hbbr.service\
  rustdesk-hbbs.service
 
+buildah config --volume /var/lib/rustdesk ${CONTAINER_UUID}
+
 container_commit rustdesk ${IMAGE_TAG}
