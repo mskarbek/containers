@@ -175,6 +175,10 @@ rsync_rootfs () {
     rsync -rv --exclude '.gitkeep' --ignore-existing ${@} rootfs/ ${CONTAINER_PATH}/
 }
 
+rsync_rootfs_all () {
+    rsync -rv --exclude '.gitkeep' ${@} rootfs/ ${CONTAINER_PATH}/
+}
+
 files_clean () {
     echo -e "${TXT_YELLOW}delete: cache files${TXT_CLEAR}"
     rm -rf\

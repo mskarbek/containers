@@ -5,10 +5,11 @@ source ../meta/common.sh
 
 container_create systemd ${1}
 
-dnf_copr "enable @oisf/suricata-7.0-testing"
-
 dnf_cache
-dnf_install "suricata rust cargo"
+if [ ${IMAGE_BOOTSTRAP} == "true" ]; then
+    dnf_copr "enable @oisf/suricata-7.0-testing"
+fi
+dnf_install "suricata iproute iproute-tc iputils nftables iptables-nft ipset"
 dnf_cache_clean
 dnf_clean
 
