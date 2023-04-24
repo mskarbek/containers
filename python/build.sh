@@ -25,23 +25,23 @@ EOF
     chmod -v 0600 ${CONTAINER_PATH}/root/.netrc
 fi
 
-container_commit base/python3 ${IMAGE_TAG}
+container_commit base/python ${IMAGE_TAG}
 
 
-container_create base/python3 ${IMAGE_TAG}
+container_create base/python ${IMAGE_TAG}
 
 buildah config --cmd '[ "/usr/sbin/init" ]' ${CONTAINER_UUID}
 buildah config --stop-signal 'SIGRTMIN+3' ${CONTAINER_UUID}
 buildah config --volume /var/log/journal ${CONTAINER_UUID}
 
-container_commit python3 ${IMAGE_TAG}
+container_commit python ${IMAGE_TAG}
 
 
-container_create base/python3 ${IMAGE_TAG}
+container_create base/python ${IMAGE_TAG}
 
 dnf_cache
 dnf_install "python3-devel libffi-devel gcc make"
 dnf_cache_clean
 dnf_clean
 
-container_commit base/python3-devel ${IMAGE_TAG}
+container_commit base/python-devel ${IMAGE_TAG}
