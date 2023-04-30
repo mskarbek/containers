@@ -1,0 +1,6 @@
+---
+base_name: "base"
+base_tag: "9.1-1"
+image_name: "base/openjdk"
+image_version: "1.8.0.372.b07-1"
+image_release: "1"
