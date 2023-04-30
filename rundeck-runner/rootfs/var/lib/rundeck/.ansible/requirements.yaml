@@ -1,7 +1,0 @@
----
-collections:
-  - amazon.aws
-  - ansible.posix
-  - community.crypto
-  - community.general
-  - containers.podman

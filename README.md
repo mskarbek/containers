@@ -1,10 +1,9 @@
 # RHEL-based set of container images
 ## Idea
-RHEL/CentOS Stream-based containers leveraging `systemd` and its potential including `sysusers.d`, `tmpfiles.d`, eliminating shell scripts inside containers as much as possible. Strongly opinionated. I do not intend to extend support to RHEL rebuilds (AmaLinux/Rocky/whatever). Pretty much every script provided in this repo should "just work" and build a fully functional image based on those RHEL rebuilds (with small adjustments in `meta/common.sh`) but I don't have need nor time to validate that.
+RHEL/Alma/CentOS Stream-based containers leveraging `systemd` and its potential including `sysusers.d`, `tmpfiles.d`, eliminating shell scripts inside containers as much as possible. Strongly opinionated.
 
 ## Build process
-Build requires RHEL 9 (with valid Red Hat [subscription](https://developers.redhat.com/)) or CentOS Stream 9 as a host and [`buildah`](https://buildah.io/).
-Although [OpenZFS](https://github.com/openzfs/zfs/) is not strictly required, some images take advantage of ZFS and require it to be used as containers (`podman-zfs`, `buildah-zfs`, based on them GitLab runners).
+Build requires RHEL 9 (with valid Red Hat [subscription](https://developers.redhat.com/)), Alma Linux 9 or CentOS Stream 9 as a host, Ansible and [`buildah`](https://buildah.io/).
 
 # Images
 ## Foundation
@@ -16,21 +15,40 @@ Those images are intended to replace UBI in their function, but they drop entire
 
 ## base-based
 ### build-related
-* [base/golang](./golang/README.md)
 * [base/nodejs16-devel](./nodejs16/README.md)
+* [base/nodejs18-devel](./nodejs16/README.md)
 * [base/openjdk8-jdk](./openjdk8/README.md)
 * [base/openjdk11-jdk](./openjdk11/README.md)
 * [base/openjdk17-jdk](./openjdk17/README.md)
+
+### runtime-related
+* [base/nodejs16](./nodejs16/README.md)
+* [base/nodejs18](./nodejs16/README.md)
+* [base/openjdk8-jre](./openjdk8/README.md)
+* [base/openjdk11-jre](./openjdk11/README.md)
+* [base/openjdk17-jre](./openjdk17/README.md)
+
+## systemd-based
+### build-related
+
+### runtime-related
+* [nodejs16](./nodejs16/README.md)
+* [nodejs18](./nodejs16/README.md)
+* [openjdk8-jre](./openjdk8/README.md)
+* [openjdk11-jre](./openjdk11/README.md)
+* [openjdk17-jre](./openjdk17/README.md)
+
+## Refactor:
+
+## base-based
+### build-related
+* [base/golang](./golang/README.md)
 * [base/python3-devel](./python3/README.md)
 * [base/rpmbuild](./rpmbuild/README.md)
 * [base/rust](./rust/README.md)
 
 ### runtime-related
 * [base/ansible](./ansible/README.md)
-* [base/nodejs16](./nodejs16/README.md)
-* [base/openjdk8-jre](./openjdk8/README.md)
-* [base/openjdk11-jre](./openjdk11/README.md)
-* [base/openjdk17-jre](./openjdk17/README.md)
 * [base/python3](./python3/README.md)
 * [base/toolbox](./toolbox/README.md)
 
@@ -46,10 +64,6 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [podman](./podman/README.md)
 
 ### runtime-related
-* [nodejs16](./nodejs16/README.md)
-* [openjdk8-jre](./openjdk8/README.md)
-* [openjdk11-jre](./openjdk11/README.md)
-* [openjdk17-jre](./openjdk17/README.md)
 * [python3](./python3/README.md)
 
 ### services

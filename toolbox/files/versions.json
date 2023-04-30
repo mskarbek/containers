@@ -1,9 +1,0 @@
-[
-    {
-        "name": "yq",
-        "version": "4.27.2",
-        "remote_url": "https://github.com/mikefarah/yq/releases/download/vVERSION/yq_linux_amd64",
-        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/y/yq/VERSION/yq_linux_amd64",
-        "file_name": "yq_linux_amd64"
-    }
-]

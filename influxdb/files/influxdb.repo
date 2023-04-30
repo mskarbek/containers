@@ -1,6 +1,0 @@
-[influxdb]
-name=InfluxDB Repository - RHEL 8
-baseurl=https://repos.influxdata.com/rhel/8/x86_64/stable
-enabled=1
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-influxdb

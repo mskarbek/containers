@@ -1,4 +1,0 @@
-# This is the primary service, automatically started when the system comes up.
-type = internal
-
-waits-for.d = boot.d
