@@ -1,0 +1,6 @@
+---
+base_name: "base/nodejs"
+base_tag: "18.12.1-1-1"
+image_name: "base/nodejs-devel"
+image_version: "18.12.1-1"
+image_release: "1"
