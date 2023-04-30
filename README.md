@@ -21,6 +21,7 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [base/openjdk11-jdk](./openjdk11/README.md)
 * [base/openjdk17-jdk](./openjdk17/README.md)
 * [base/python3.9-devel](./python3.9/README.md)
+* [base/rust](./rust/README.md)
 
 ### runtime-related
 * [base/nodejs16](./nodejs16/README.md)
@@ -47,7 +48,6 @@ Those images are intended to replace UBI in their function, but they drop entire
 ### build-related
 * [base/golang](./golang/README.md)
 * [base/rpmbuild](./rpmbuild/README.md)
-* [base/rust](./rust/README.md)
 
 ### runtime-related
 * [base/ansible](./ansible/README.md)
