@@ -1,0 +1,83 @@
+---
+- ansible.builtin.file:
+    dest: "{{ container_path }}{{ item }}"
+    state: "touch"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop:
+    - "/etc/dnf/dnf.conf"
+    - "/etc/yum.repos.d/almalinux-baseos.repo"
+    - "/etc/yum.repos.d/almalinux-crb.repo"
+    - "/etc/yum.repos.d/epel.repo"
+- ansible.builtin.template:
+    src: "dnf.conf.j2"
+    dest: "{{ container_path }}/etc/dnf/dnf.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+- ansible.builtin.copy:
+    src: "repos/{{ item }}"
+    dest: "{{ container_path }}/etc/yum.repos.d/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop:
+    - "almalinux-baseos.repo"
+    - "almalinux-crb.repo"
+    - "epel.repo"
+#- ansible.builtin.dnf:
+#    name:
+#      - "glibc-minimal-langpack"
+#      - "coreutils-single"
+#    conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#    disablerepo: "*"
+#    enablerepo: "baseos"
+#    disable_plugin:
+#      - "subscription-manager"
+#    install_weak_deps: false
+#    releasever: 9
+#    state: "latest"
+#    disable_gpg_check: true
+#    installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+- ansible.builtin.command:
+    cmd: >
+      dnf
+      --quiet
+      --assumeyes
+      --disablerepo="*"
+      --enablerepo="baseos"
+      --disableplugin="subscription-manager"
+      --nogpgcheck
+      --releasever=9
+      --config={{ container_path }}/etc/dnf/dnf.conf
+      --installroot={{ container_path }}
+      install
+      glibc-minimal-langpack
+      coreutils-single
+- ansible.builtin.command:
+    cmd: "rpm --root {{ container_path }} --import {{ result_tempfile.path }}/rpm-gpg/{{ item }}"
+  loop:
+    - "RPM-GPG-KEY-AlmaLinux-9"
+    - "RPM-GPG-KEY-EPEL-9"
+#- ansible.builtin.dnf:
+#    name:
+#      - "ca-certificates"
+#    conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#    install_weak_deps: false
+#    state: "latest"
+#    installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+- ansible.builtin.command:
+    cmd: >
+      dnf
+      --quiet
+      --assumeyes
+      --disableplugin="subscription-manager"
+      --config={{ container_path }}/etc/dnf/dnf.conf
+      --installroot={{ container_path }}
+      install
+      ca-certificates

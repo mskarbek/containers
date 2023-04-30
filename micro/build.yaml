@@ -1,0 +1,97 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.tempfile:
+        state: "directory"
+      register: "result_tempfile"
+    - ansible.builtin.copy:
+        src: "rpm-gpg"
+        dest: "{{ result_tempfile.path }}"
+    - ansible.builtin.set_fact:
+        container_uuid: "{{ lookup('ansible.builtin.file', '/proc/sys/kernel/random/uuid') }}"
+    - ansible.builtin.command:
+        cmd: "buildah from --quiet --name={{ container_uuid }} {{ base_name }}"
+    - ansible.builtin.command:
+        cmd: "buildah mount {{ container_uuid }}"
+      register: "result_command"
+    - ansible.builtin.set_fact:
+        container_path: "{{ result_command.stdout }}"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item }}"
+        state: "directory"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - "/etc/dnf"
+        - "/etc/yum.repos.d"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item }}"
+        state: "directory"
+        owner: "root"
+        group: "root"
+        mode: "1777"
+      loop:
+        - "/tmp"
+    - ansible.builtin.import_tasks:
+        file: "tasks/{{ image_os }}.yaml"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/etc/pki/ca-trust/source/anchors/{{ internal_ca }}"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    - ansible.builtin.copy:
+        src: "{{ internal_ca }}"
+        dest: "{{ container_path }}/etc/pki/ca-trust/source/anchors/{{ internal_ca }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    - ansible.builtin.command:
+        cmd: "buildah run --network none {{ container_uuid }} update-ca-trust"
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - block:
+        - ansible.builtin.file:
+            dest: "{{ container_path }}/etc/yum.repos.d"
+            state: "absent"
+        - ansible.builtin.file:
+            dest: "{{ container_path }}/etc/yum.repos.d"
+            state: "directory"
+            owner: "root"
+            group: "root"
+            mode: "0755"    
+        - ansible.builtin.file:
+            dest: "{{ container_path }}/etc/yum.repos.d/proxy.repo"
+            state: "touch"
+            owner: "root"
+            group: "root"
+            mode: "0644"
+        - ansible.builtin.template:
+            src: "proxy.repo.j2"
+            dest: "{{ container_path }}/etc/yum.repos.d/proxy.repo"
+            owner: "root"
+            group: "root"
+            mode: "0644"
+      when: "not bootstrap"
+    - ansible.builtin.command:
+        cmd: "buildah run --network none {{ container_uuid }} update-ca-trust"
+    - ansible.builtin.command:
+        cmd: "buildah config --env='container=oci' {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --env='SYSTEMD_LOG_TARGET=console' {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --cmd='[ \"/usr/bin/bash\", \"-l\" ]' {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

@@ -1,0 +1,42 @@
+---
+- ansible.builtin.command:
+    cmd: "dnf --config={{ container_path }}/etc/dnf/dnf.conf --installroot={{ container_path }} clean all"
+- ansible.builtin.file:
+    dest: "{{ container_path }}{{ item }}"
+    state: "absent"
+  loop:
+    - "/run"
+    - "/tmp"
+    - "/var/cache"
+    - "/var/lib/dnf"
+    - "/var/log"
+    - "/var/tmp"
+- ansible.builtin.file:
+    dest: "{{ container_path }}{{ item }}"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  loop:
+    - "/run"
+    - "/var/cache"
+    - "/var/lib/dnf"
+    - "/var/log"
+- ansible.builtin.file:
+    dest: "{{ container_path }}{{ item }}"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "1777"
+  loop:
+    - "/tmp"
+    - "/var/tmp"
+- ansible.builtin.command:
+    cmd: "buildah commit --quiet {{ container_uuid }} {{ registry_host }}/{% if bootstrap %}bootstrap/{% endif %}{{ image_name }}:{{ image_version }}-{{ image_release }}"
+- ansible.builtin.command:
+    cmd: "buildah rm {{ container_uuid }}"
+- ansible.builtin.file:
+    dest: "{{ item }}"
+    state: "absent"
+  loop:
+    - "{{ result_tempfile.path }}"

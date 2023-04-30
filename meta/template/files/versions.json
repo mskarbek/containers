@@ -1,9 +1,0 @@
-[
-    {
-        "name": "template",
-        "version": "0.1.0",
-        "remote_url": "https://some.url/download/vVERSION/template_VERSION_amd64.tar.gz",
-        "local_url": "REPOSITORY_URL/repository/REPOSITORY_RAW_REPO/t/template/VERSION/template_VERSION_amd64.tar.gz",
-        "file_name": "template_VERSION_amd64.tar.gz"
-    }
-]

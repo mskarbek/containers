@@ -4,5 +4,5 @@
 **/build.log
 **/*.crt
 **/*.key
-
+meta/vars/main.yaml
 wip
