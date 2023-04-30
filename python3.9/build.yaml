@@ -1,0 +1,115 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "python3"
+#          - "python3-pip"
+#          - "python3-setuptools"
+#          - "python3-wheel"
+#          - "python3-pip-wheel"
+#          - "python3-setuptools-wheel"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          python3
+          python3-pip
+          python3-setuptools
+          python3-wheel
+          python3-pip-wheel
+          python3-setuptools-wheel
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item }}"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - "/root/.netrc"
+        - "/etc/pip.conf"
+      when: "not bootstrap"
+    - ansible.builtin.template:
+        src: ".netrc.j2"
+        dest: "{{ container_path }}/root/.netrc"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "not bootstrap"
+    - ansible.builtin.template:
+        src: "pip.conf.j2"
+        dest: "{{ container_path }}/etc/pip.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "not bootstrap"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/systemd.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.command:
+        cmd: "buildah config --cmd '[ \"/usr/sbin/init\" ]' {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --stop-signal 'SIGRTMIN+3' {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /var/log/journal {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/devel.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "python3-devel"
+#          - "libffi-devel"
+#          - "gcc"
+#          - "make"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          python3-devel
+          libffi-devel
+          gcc
+          make
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

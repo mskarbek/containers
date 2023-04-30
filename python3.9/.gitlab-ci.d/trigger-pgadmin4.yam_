@@ -1,0 +1,7 @@
+trigger-pgadmin4:
+  stage: trigger
+  trigger: containers/pgadmin4
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

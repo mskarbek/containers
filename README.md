@@ -20,6 +20,7 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [base/openjdk8-jdk](./openjdk8/README.md)
 * [base/openjdk11-jdk](./openjdk11/README.md)
 * [base/openjdk17-jdk](./openjdk17/README.md)
+* [base/python3.9-devel](./python3.9/README.md)
 
 ### runtime-related
 * [base/nodejs16](./nodejs16/README.md)
@@ -27,6 +28,7 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [base/openjdk8-jre](./openjdk8/README.md)
 * [base/openjdk11-jre](./openjdk11/README.md)
 * [base/openjdk17-jre](./openjdk17/README.md)
+* [base/python3.9](./python3.9/README.md)
 
 ## systemd-based
 ### build-related
@@ -37,19 +39,18 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [openjdk8-jre](./openjdk8/README.md)
 * [openjdk11-jre](./openjdk11/README.md)
 * [openjdk17-jre](./openjdk17/README.md)
+* [python3.9](./python3.9/README.md)
 
 ## Refactor:
 
 ## base-based
 ### build-related
 * [base/golang](./golang/README.md)
-* [base/python3-devel](./python3/README.md)
 * [base/rpmbuild](./rpmbuild/README.md)
 * [base/rust](./rust/README.md)
 
 ### runtime-related
 * [base/ansible](./ansible/README.md)
-* [base/python3](./python3/README.md)
 * [base/toolbox](./toolbox/README.md)
 
 ## systemd-based
@@ -62,9 +63,6 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [gitlab-runner-podman](./gitlab-runner/README.md)
 * [podman-zfs](./podman/README.md)
 * [podman](./podman/README.md)
-
-### runtime-related
-* [python3](./python3/README.md)
 
 ### services
 #### development

@@ -1,0 +1,7 @@
+trigger-ara:
+  stage: trigger
+  trigger: containers/ara
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
