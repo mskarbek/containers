@@ -1,0 +1,7 @@
+trigger-mimir:
+  stage: trigger
+  trigger: containers/mimir
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

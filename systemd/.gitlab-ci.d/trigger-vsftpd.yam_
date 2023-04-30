@@ -1,0 +1,7 @@
+trigger-vsftpd:
+  stage: trigger
+  trigger: containers/vsftpd
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

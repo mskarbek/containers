@@ -1,0 +1,7 @@
+trigger-kea:
+  stage: trigger
+  trigger: containers/kea
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

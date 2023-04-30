@@ -1,0 +1,7 @@
+trigger-vector:
+  stage: trigger
+  trigger: containers/vector
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

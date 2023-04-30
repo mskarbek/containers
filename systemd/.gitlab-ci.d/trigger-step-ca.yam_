@@ -1,0 +1,7 @@
+trigger-step-ca:
+  stage: trigger
+  trigger: containers/step-ca
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

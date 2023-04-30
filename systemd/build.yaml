@@ -1,0 +1,17 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.command:
+        cmd: "buildah config --cmd '[ \"/usr/sbin/init\" ]' {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --stop-signal 'SIGRTMIN+3' {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /var/log/journal {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

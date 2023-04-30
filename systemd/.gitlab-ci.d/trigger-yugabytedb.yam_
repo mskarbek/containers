@@ -1,0 +1,7 @@
+trigger-yugabytedb:
+  stage: trigger
+  trigger: containers/yugabytedb
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

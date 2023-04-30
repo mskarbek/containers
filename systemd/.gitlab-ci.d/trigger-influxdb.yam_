@@ -1,0 +1,7 @@
+trigger-influxdb:
+  stage: trigger
+  trigger: containers/influxdb
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

@@ -1,0 +1,7 @@
+trigger-openssh:
+  stage: trigger
+  trigger: containers/openssh
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
