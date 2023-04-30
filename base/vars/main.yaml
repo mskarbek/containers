@@ -1,0 +1,6 @@
+---
+base_name: "micro"
+base_tag: "9.1-1"
+image_name: "base"
+image_version: "9.1"
+image_release: "1"

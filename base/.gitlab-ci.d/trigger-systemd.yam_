@@ -1,0 +1,7 @@
+trigger-systemd:
+  stage: trigger
+  trigger: containers/systemd
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image
