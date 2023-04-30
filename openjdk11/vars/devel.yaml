@@ -1,6 +1,6 @@
 ---
-base_name: "base/openjdk"
+base_name: "base/openjdk11"
 base_tag: "11.0.19.0.7-1-1"
-image_name: "base/openjdk-devel"
+image_name: "base/openjdk11-devel"
 image_version: "11.0.19.0.7-1"
 image_release: "1"
