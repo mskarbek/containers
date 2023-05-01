@@ -1,0 +1,113 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.copy:
+        src: "rpm-gpg"
+        dest: "{{ result_tempfile.path }}"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/root/.ansible"
+        state: "directory"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item }}"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - "/etc/yum.repos.d/pgdg-redhat-all.repo"
+        - "/root/.ansible/requirements.yaml"
+    - ansible.builtin.copy:
+        src: "repos/{{ item }}"
+        dest: "{{ container_path }}/etc/yum.repos.d/{{ item }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - "pgdg-redhat-all.repo"
+    - ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ container_path }}/root/.ansible/{{ item }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - "requirements.yaml"
+    - ansible.builtin.command:
+        cmd: "rpm --root {{ container_path }} --import {{ result_tempfile.path }}/rpm-gpg/{{ item }}"
+      loop:
+        - "RPM-GPG-KEY-PGDG"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "ansible-core"
+#          - "git-core"
+#          - "openssh-clients"
+#          - "podman-remote"
+#          - "python3-attrs"
+#          - "python3-boto3"
+#          - "python3-botocore"
+#          - "python3-certifi"
+#          - "python3-charset-normalizer"
+#          - "python3-dns"
+#          - "python3-idna"
+#          - "python3-pbr"
+#          - "python3-prettytable"
+#          - "python3-psycopg2"
+#          - "python3-psycopg3"
+#          - "python3-requests"
+#          - "python3-urllib3"
+#          - "python3-wcwidth"
+#          - "rsync"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          ansible-core
+          git-core
+          openssh-clients
+          podman-remote
+          python3-attrs
+          python3-boto3
+          python3-botocore
+          python3-certifi
+          python3-charset-normalizer
+          python3-dns
+          python3-idna
+          python3-pbr
+          python3-prettytable
+          python3-psycopg2
+          python3-psycopg3
+          python3-requests
+          python3-urllib3
+          python3-wcwidth
+          rsync
+    - ansible.builtin.command:
+        cmd: buildah run --network=host {{ container_uuid }} pip3 install ara=={{ ara_version }} python-consul hvac
+    - ansible.builtin.command:
+        cmd: buildah run --network=host --workingdir=/root {{ container_uuid }} ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections
+    - ansible.builtin.command:
+        cmd: buildah run --network=none {{ container_uuid }} ln -s /usr/bin/podman-remote /usr/bin/podman
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/root/.cache"
+        state: "absent"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

@@ -1,0 +1,36 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/usr/local/bin/terraform"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+    - ansible.builtin.file:
+        dest: "{{ item }}"
+        state: "directory"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - "{{ container_path }}/usr/local/share/terraform/plugins"
+        - "{{ result_tempfile.path }}/terraform"
+    - ansible.builtin.unarchive:
+        src: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
+        dest: "{{ result_tempfile.path }}/terraform"
+        remote_src: true
+    - ansible.builtin.copy:
+        src: "{{ result_tempfile.path }}/terraform/terraform"
+        dest: "{{ container_path }}/usr/local/bin/terraform"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

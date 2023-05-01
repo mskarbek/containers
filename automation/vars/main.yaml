@@ -1,0 +1,7 @@
+---
+base_name: "base/ansible"
+base_tag: "2.13.3-2-1"
+image_name: "base/automation"
+image_version: "23.01"
+image_release: "1"
+terraform_version: "1.4.6"

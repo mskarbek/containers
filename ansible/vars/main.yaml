@@ -1,0 +1,7 @@
+---
+base_name: "base/python3.9"
+base_tag: "3.9.14-1-1"
+image_name: "base/ansible"
+image_version: "2.13.3-2"
+image_release: "1"
+ara_version: "1.6.1"

@@ -1,0 +1,7 @@
+---
+base_name: "base"
+base_tag: "9.1-1"
+image_name: "base/terraform"
+image_version: "{{ terraform_version }}"
+image_release: "1"
+terraform_version: "1.4.6"
