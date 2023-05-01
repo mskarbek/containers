@@ -9,6 +9,8 @@
     - "/etc/dnf/dnf.conf"
     - "/etc/yum.repos.d/redhat.repo"
     - "/etc/yum.repos.d/epel.repo"
+    - "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
+    - "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9"
 - ansible.builtin.template:
     src: "dnf.conf.j2"
     dest: "{{ container_path }}/etc/dnf/dnf.conf"
@@ -16,14 +18,20 @@
     group: "root"
     mode: "0644"
 - ansible.builtin.copy:
-    src: "repos/{{ item }}"
-    dest: "{{ container_path }}/etc/yum.repos.d/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "{{ container_path }}{{ item.dest }}"
     owner: "root"
     group: "root"
     mode: "0644"
   loop:
-    - "redhat.repo"
-    - "epel.repo"
+    - src: "repos/redhat.repo"
+      dest: "/etc/yum.repos.d/redhat.repo"
+    - src: "repos/epel.repo"
+      dest: "/etc/yum.repos.d/epel.repo"
+    - src: "rpm-gpg/RPM-GPG-KEY-redhat-release"
+      dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
+    - src: "rpm-gpg/RPM-GPG-KEY-EPEL-9"
+      dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9"
 #- ansible.builtin.dnf:
 #    name:
 #      - "glibc-minimal-langpack"
@@ -56,7 +64,7 @@
       glibc-minimal-langpack
       coreutils-single
 - ansible.builtin.command:
-    cmd: "rpm --root {{ container_path }} --import {{ result_tempfile.path }}/rpm-gpg/{{ item }}"
+    cmd: "rpm --root {{ container_path }} --import {{ container_path }}/etc/pki/rpm-gpg/{{ item }}"
   loop:
     - "RPM-GPG-KEY-redhat-release"
     #- "RPM-GPG-KEY-redhat-beta"

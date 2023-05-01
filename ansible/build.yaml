@@ -7,9 +7,6 @@
   tasks:
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
-    - ansible.builtin.copy:
-        src: "rpm-gpg"
-        dest: "{{ result_tempfile.path }}"
     - ansible.builtin.file:
         dest: "{{ container_path }}/root/.ansible"
         state: "directory"
@@ -25,24 +22,22 @@
       loop:
         - "/etc/yum.repos.d/pgdg-redhat-all.repo"
         - "/root/.ansible/requirements.yaml"
+        - "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG"
     - ansible.builtin.copy:
-        src: "repos/{{ item }}"
-        dest: "{{ container_path }}/etc/yum.repos.d/{{ item }}"
+        src: "{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
         owner: "root"
         group: "root"
         mode: "0644"
       loop:
-        - "pgdg-redhat-all.repo"
-    - ansible.builtin.copy:
-        src: "{{ item }}"
-        dest: "{{ container_path }}/root/.ansible/{{ item }}"
-        owner: "root"
-        group: "root"
-        mode: "0644"
-      loop:
-        - "requirements.yaml"
+        - src: "repos/pgdg-redhat-all.repo"
+          dest: "/etc/yum.repos.d/pgdg-redhat-all.repo"
+        - src: "rpm-gpg/RPM-GPG-KEY-PGDG"
+          dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG"
+        - src: "requirements.yaml"
+          dest: "/root/.ansible/requirements.yaml"
     - ansible.builtin.command:
-        cmd: "rpm --root {{ container_path }} --import {{ result_tempfile.path }}/rpm-gpg/{{ item }}"
+        cmd: "rpm --root {{ container_path }} --import {{ container_path }}/etc/pki/rpm-gpg/{{ item }}"
       loop:
         - "RPM-GPG-KEY-PGDG"
 #    - ansible.builtin.dnf:

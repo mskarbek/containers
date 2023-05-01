@@ -25,12 +25,15 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [base/rust](./rust/README.md)
 
 ### runtime-related
+* [base/ansible](./ansible/README.md)
+* [base/automation](./automation/README.md)
 * [base/nodejs16](./nodejs16/README.md)
 * [base/nodejs18](./nodejs16/README.md)
 * [base/openjdk8-jre](./openjdk8/README.md)
 * [base/openjdk11-jre](./openjdk11/README.md)
 * [base/openjdk17-jre](./openjdk17/README.md)
 * [base/python3.9](./python3.9/README.md)
+* [base/terraform](./terraform/README.md)
 
 ## systemd-based
 ### build-related
@@ -44,13 +47,13 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [python3.9](./python3.9/README.md)
 
 ## Refactor:
+The below list contains old script-based images dropped after c5c2793414e506b25c12af8ec1ca4d0acd8f1ff3.
 
 ## base-based
 ### build-related
 * [base/rpmbuild](./rpmbuild/README.md)
 
 ### runtime-related
-* [base/ansible](./ansible/README.md)
 * [base/toolbox](./toolbox/README.md)
 
 ## systemd-based
