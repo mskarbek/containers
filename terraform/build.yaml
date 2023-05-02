@@ -21,13 +21,12 @@
         mode: "0755"
       loop:
         - "{{ container_path }}/usr/local/share/terraform/plugins"
-        - "{{ result_tempfile.path }}/terraform"
     - ansible.builtin.unarchive:
         src: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
-        dest: "{{ result_tempfile.path }}/terraform"
+        dest: "{{ result_tempfile.path }}"
         remote_src: true
     - ansible.builtin.copy:
-        src: "{{ result_tempfile.path }}/terraform/terraform"
+        src: "{{ result_tempfile.path }}/terraform"
         dest: "{{ container_path }}/usr/local/bin/terraform"
         owner: "root"
         group: "root"

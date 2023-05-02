@@ -24,7 +24,7 @@
     group: "root"
     mode: "0644"
   loop:
-    - src: "repos/redhat.repo"
+    - src: "/etc/yum.repos.d/redhat.repo"
       dest: "/etc/yum.repos.d/redhat.repo"
     - src: "repos/epel.repo"
       dest: "/etc/yum.repos.d/epel.repo"
