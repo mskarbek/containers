@@ -1,0 +1,4 @@
+---
+base_name: "systemd"
+base_tag: "9.1-1"
+image_name: "kuma-cp"

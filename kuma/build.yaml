@@ -1,0 +1,116 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+    - "vars/controlplane.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/usr/local/bin/{{ item }}"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - "kuma-cp"
+        - "kumactl"
+    - ansible.builtin.unarchive:
+        src: "https://download.konghq.com/kuma-binaries-release/kuma-{{ kuma_version }}-linux-amd64.tar.gz"
+        dest: "{{ result_tempfile.path }}"
+        remote_src: true
+    - ansible.builtin.copy:
+        src: "{{ result_tempfile.path }}/kuma-{{ kuma_version }}/bin/{{ item }}"
+        dest: "{{ container_path }}/usr/local/bin/{{ item }}"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - "kuma-cp"
+        - "kumactl"
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /etc/kuma {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /var/log/kuma {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah run --network none {{ container_uuid }} systemctl enable kuma-cp.service"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+    - "vars/dataplane.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/usr/local/bin/{{ item }}"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - "coredns"
+        - "envoy"
+        - "kuma-dp"
+    - ansible.builtin.unarchive:
+        src: "https://download.konghq.com/kuma-binaries-release/kuma-{{ kuma_version }}-linux-amd64.tar.gz"
+        dest: "{{ result_tempfile.path }}"
+        remote_src: true
+    - ansible.builtin.copy:
+        src: "{{ result_tempfile.path }}/kuma-{{ kuma_version }}/bin/{{ item }}"
+        dest: "{{ container_path }}/usr/local/bin/{{ item }}"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - "coredns"
+        - "envoy"
+        - "kuma-dp"
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /etc/kuma {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /var/log/kuma {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah run --network none {{ container_uuid }} systemctl enable kuma-dp.service"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+    - "vars/dataplane-systemd.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.command:
+        cmd: "buildah config --cmd '[ \"/usr/sbin/init\" ]' {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --stop-signal 'SIGRTMIN+3' {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /var/log/journal {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

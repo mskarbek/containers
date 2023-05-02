@@ -1,0 +1,4 @@
+---
+base_name: "base/kuma-dp"
+base_tag: "{{ kuma_version }}-{{ image_release }}"
+image_name: "kuma-dp"
