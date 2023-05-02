@@ -1,0 +1,6 @@
+---
+base_name: "systemd"
+base_tag: "9.1-1"
+image_name: "postgresql"
+image_version: "15.2"
+image_release: "1"

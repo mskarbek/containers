@@ -1,0 +1,13 @@
+[Unit]
+Description=PostgreSQL 15 database init
+ConditionPathExists=!/etc/pgsql.lock
+AssertFileNotEmpty=/run/secrets/postgres-password
+After=postgresql-password.service
+Requires=postgresql-password.service
+
+[Service]
+Type=oneshot
+Environment="PGSETUP_INITDB_OPTIONS=--encoding=UTF8 --locale=C.UTF-8 --pwfile=/run/secrets/postgres-password"
+ExecStart=/usr/pgsql-15/bin/postgresql-15-setup initdb
+ExecStartPost=/usr/bin/touch /etc/pgsql.lock
+RemainAfterExit=no
