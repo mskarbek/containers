@@ -1,0 +1,19 @@
+[Unit]
+Description="HashiCorp Consul"
+Documentation=https://www.consul.io/
+After=network.target nss-lookup.target
+AssertFileNotEmpty=/etc/consul.d/config.hcl
+
+[Service]
+ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d
+ExecReload=/bin/kill --signal HUP $MAINPID
+EnvironmentFile=-/etc/sysconfig/consul
+User=consul
+Group=consul
+KillMode=process
+KillSignal=SIGTERM
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
