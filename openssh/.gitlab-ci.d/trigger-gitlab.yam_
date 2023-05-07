@@ -1,0 +1,7 @@
+trigger-gitlab:
+  stage: trigger
+  trigger: containers/gitlab
+  variables:
+    FROM_TAG: $IMAGE_TAG
+  needs:
+    - build-image

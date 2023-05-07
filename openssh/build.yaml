@@ -1,0 +1,52 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "openssh-server"
+#          - "openssh-clients"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          openssh-server
+          openssh-clients
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: >
+          buildah run --network none {{ container_uuid }} systemctl unmask
+          systemd-logind.service
+    - ansible.builtin.command:
+        cmd: "sed -i 's/session[ \t]*required[ \t]*pam_loginuid.so/#session    required     pam_loginuid.so/' {{ container_path }}/etc/pam.d/{{ item }}"
+      loop:
+        - "sshd"
+        - "remote"
+        - "login"
+        - "systemd-user"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
