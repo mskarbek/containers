@@ -13,6 +13,11 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [base](./base/README.md) - equivalent of `ubi9/ubi`
 * [systemd](./systemd/README.md) - equivalent of `ubi9/ubi-init`
 
+## micro-based
+### tools
+* [micro/consul-template](./consul-template/README.md)
+* [micro/terraform](./terraform/README.md)
+
 ## base-based
 ### build-related
 * [base/golang](./golang/README.md)
@@ -25,15 +30,16 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [base/rust](./rust/README.md)
 
 ### runtime-related
-* [base/ansible](./ansible/README.md)
-* [base/automation](./automation/README.md)
 * [base/nodejs16](./nodejs16/README.md)
 * [base/nodejs18](./nodejs16/README.md)
 * [base/openjdk8-jre](./openjdk8/README.md)
 * [base/openjdk11-jre](./openjdk11/README.md)
 * [base/openjdk17-jre](./openjdk17/README.md)
 * [base/python3.9](./python3.9/README.md)
-* [base/terraform](./terraform/README.md)
+
+### tools
+* [base/ansible](./ansible/README.md)
+* [base/automation](./automation/README.md)
 
 ## systemd-based
 ### build-related
@@ -45,6 +51,26 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [openjdk11-jre](./openjdk11/README.md)
 * [openjdk17-jre](./openjdk17/README.md)
 * [python3.9](./python3.9/README.md)
+
+### services
+#### development
+
+#### databases
+* [postgresql14](./postgresql14/README.md)
+* [postgresql15](./postgresql15/README.md)
+
+#### networking
+* [kuma](./kuma/README.md)
+* [nginx](./nginx/README.md)
+
+#### monitoring
+
+#### tools
+* [consul](./consul/README.md)
+* [vault](./vault/README.md)
+
+#### streaming/messaging
+
 
 ## Refactor:
 The below list contains old script-based images dropped after c5c2793414e506b25c12af8ec1ca4d0acd8f1ff3.
@@ -76,11 +102,8 @@ The below list contains old script-based images dropped after c5c2793414e506b25c
 * [openvscode](./openvscode/README.md)
 
 #### databases
-* [consul](./consul/README.md)
 * [influxdb](./influxdb/README.md)
 * [pgadmin4](./pgadmin4/README.md)
-* [postgresql13](./postgresql13/README.md)
-* [postgresql14](./postgresql14/README.md)
 * [yugabytedb](./yugabytedb/README.md)
 
 #### networking
@@ -89,9 +112,6 @@ The below list contains old script-based images dropped after c5c2793414e506b25c
 * [knot-dns](./knot-dns/README.md)
 * [knot-resolver](./knot-resolver/README.md)
 * [krakend](./krakend/README.md)
-* [kuma-cp](./kuma-cp/README.md)
-* [kuma-dp](./kuma-dp/README.md)
-* [nginx](./nginx/README.md)
 * [tinyproxy](./tinyproxy/README.md)
 * [vsftpd](./vsftpd/README.md)
 
@@ -139,6 +159,5 @@ The below list contains old script-based images dropped after c5c2793414e506b25c
 * [rekor](./rekor/README.md)
 * [synth](./synth/README.md)
 * [tempo](./tempo/README.md)
-* [vault](./vault/README.md)
 * [victoriametrics](./victoriametrics/README.md)
 * [zookeeper](./zookeeper/README.md)
