@@ -1,0 +1,38 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/usr/local/bin/vault"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+    - ansible.builtin.unarchive:
+        src: "https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_linux_amd64.zip"
+        dest: "{{ result_tempfile.path }}"
+        remote_src: true
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: >
+          buildah run --network none {{ container_uuid }} systemctl enable
+          vault.service
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /etc/vault.d {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /var/lib/vault {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
