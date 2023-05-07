@@ -1,0 +1,67 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "nginx"
+#          - "nginx-mod-stream"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          nginx
+          nginx-mod-stream
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item }}"
+        state: "absent"
+      loop:
+        - "/etc/nginx/nginx.conf"
+        - "/usr/share/nginx/html/index.html"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/usr/share/nginx/html/index.html"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: >
+          buildah run --network none {{ container_uuid }} systemctl enable
+          etc-nginx-conf.d.path
+          etc-nginx-stream.d.path
+          nginx.service
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /etc/nginx/conf.d {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /etc/nginx/stream.d {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /etc/pki/tls/private {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /var/log/nginx {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

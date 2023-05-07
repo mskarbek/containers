@@ -1,0 +1,9 @@
+[Unit]
+Description=Monitor nginx conf.d changes
+
+[Path]
+PathChanged=/etc/nginx/conf.d
+Unit=nginx-reload.service
+
+[Install]
+WantedBy=multi-user.target

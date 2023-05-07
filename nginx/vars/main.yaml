@@ -1,0 +1,6 @@
+---
+base_name: "systemd"
+base_tag: "9.1-1"
+image_name: "nginx"
+image_version: "1.20.1-13"
+image_release: "1"
