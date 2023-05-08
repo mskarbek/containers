@@ -1,0 +1,11 @@
+---
+base_name: "systemd"
+base_tag: "9.1-1"
+image_name: "nats"
+image_version: "{{ nats_version }}"
+image_release: "1"
+nats_version: "2.9.16"
+natstop_version: "0.5.3"
+natscli_version: "0.0.35"
+nsc_version: "2.8.0"
+nkeys_version: "0.4.4"

@@ -1,0 +1,67 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/usr/local/bin/{{ item }}"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - "nats-server"
+        - "nats-top"
+        - "nats"
+        - "nsc"
+        - "nk"
+    - ansible.builtin.unarchive:
+        src: "{{ item }}"
+        dest: "{{ result_tempfile.path }}"
+        remote_src: true
+      loop:
+        - "https://github.com/nats-io/nats-server/releases/download/v{{ nats_version }}/nats-server-v{{ nats_version }}-linux-amd64.tar.gz"
+        - "https://github.com/nats-io/nats-top/releases/download/v{{ natstop_version }}/nats-top_{{ natstop_version }}_linux_amd64.tar.gz"
+        - "https://github.com/nats-io/natscli/releases/download/v{{ natscli_version }}/nats-{{ natscli_version }}-linux-amd64.zip"
+        - "https://github.com/nats-io/nsc/releases/download/v{{ nsc_version }}/nsc-linux-amd64.zip"
+        - "https://github.com/nats-io/nkeys/releases/download/v{{ nkeys_version }}/nkeys-v{{ nkeys_version }}-linux-amd64.zip"
+    - ansible.builtin.copy:
+        src: "{{ result_tempfile.path }}/{{ item.src }}"
+        dest: "{{ container_path }}/usr/local/bin/{{ item.dest }}"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - src: "nats-server-v{{ nats_version }}-linux-amd64/nats-server"
+          dest: "nats-server"
+        - src: "nats-top"
+          dest: "nats-top"
+        - src: "nats-{{ natscli_version }}-linux-amd64/nats"
+          dest: "nats"
+        - src: "nsc"
+          dest: "nsc"
+        - src: "nkeys-v{{ nkeys_version }}-linux-amd64/nk"
+          dest: "nk"
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: >
+          buildah run --network none {{ container_uuid }} systemctl enable
+          nats.service
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /etc/nats {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /var/lib/nats {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
