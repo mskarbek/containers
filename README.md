@@ -40,6 +40,7 @@ Those images are intended to replace UBI in their function, but they drop entire
 ### tools
 * [base/ansible](./ansible/README.md)
 * [base/automation](./automation/README.md)
+* [base/toolbox](./toolbox/README.md)
 
 ## systemd-based
 ### build-related
@@ -68,6 +69,7 @@ Those images are intended to replace UBI in their function, but they drop entire
 #### tools
 * [consul](./consul/README.md)
 * [vault](./vault/README.md)
+* [toolbox](./toolbox/README.md)
 
 #### streaming/messaging
 
@@ -80,7 +82,6 @@ The below list contains old script-based images dropped after c5c2793414e506b25c
 * [base/rpmbuild](./rpmbuild/README.md)
 
 ### runtime-related
-* [base/toolbox](./toolbox/README.md)
 
 ## systemd-based
 ### build-related
@@ -132,7 +133,6 @@ The below list contains old script-based images dropped after c5c2793414e506b25c
 * [rundeck-runner](./rundeck-runner/README.md)
 * [rundeck](./rundeck/README.md)
 * [step-ca](./step-ca/README.md)
-* [toolbox](./toolbox/README.md)
 
 #### streaming/messaging
 * [nats-kafka](./nats-kafka/README.md)

@@ -1,0 +1,180 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item }}"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - "/etc/yum.repos.d/pgdg-redhat-all.repo"
+        - "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG"
+        - "/usr/local/bin/yq"
+      when: "bootstrap"
+    - ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - src: "repos/pgdg-redhat-all.repo"
+          dest: "/etc/yum.repos.d/pgdg-redhat-all.repo"
+        - src: "rpm-gpg/RPM-GPG-KEY-PGDG"
+          dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG"
+      when: "bootstrap"
+    - ansible.builtin.command:
+        cmd: "rpm --root {{ container_path }} --import {{ container_path }}/etc/pki/rpm-gpg/{{ item }}"
+      loop:
+        - "RPM-GPG-KEY-PGDG"
+      when: "bootstrap"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "curl"
+#          - "findutils"
+#          - "gzip"
+#          - "hostname"
+#          - "htop"
+#          - "iproute"
+#          - "iputils"
+#          - "jq"
+#          - "knot-utils"
+#          - "less"
+#          - "lsof"
+#          - "mtr"
+#          - "nano"
+#          - "nftables"
+#          - "postgresql15"
+#          - "rsync"
+#          - "sudo"
+#          - "tar"
+#          - "tcpdump"
+#          - "telnet"
+#          - "tmux"
+#          - "unzip"
+#          - "vim-enhanced"
+#          - "vim-minimal"
+#          - "wireguard-tools"
+#          - "zstd"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          curl
+          findutils
+          gzip
+          hostname
+          htop
+          iproute
+          iputils
+          jq
+          knot-utils
+          less
+          lsof
+          mtr
+          nano
+          nftables
+          postgresql15
+          rsync
+          sudo
+          tar
+          tcpdump
+          telnet
+          tmux
+          unzip
+          vim-enhanced
+          vim-minimal
+          wireguard-tools
+          zstd
+    - ansible.builtin.get_url:
+        url: "https://github.com/mikefarah/yq/releases/download/v{{ yq_version }}/yq_linux_amd64"
+        dest: "{{ container_path }}/usr/local/bin/yq"
+        force: true
+        owner: "root"
+        group: "root"
+        mode: "0755"
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: buildah run {{ container_uuid }} useradd --comment "ToolBox" --create-home --shell /usr/bin/bash toolbox
+    - ansible.builtin.command:
+        cmd: buildah config --user toolbox {{ container_uuid }}
+    - ansible.builtin.command:
+        cmd: buildah config --workingdir /home/toolbox {{ container_uuid }}
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/systemd.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.command:
+        cmd: buildah config --user root {{ container_uuid }}
+    - ansible.builtin.command:
+        cmd: buildah config --workingdir / {{ container_uuid }}
+#    - ansible.builtin.dnf:
+#        name:
+#          - "openssh-server"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          openssh-server
+    - ansible.builtin.command:
+        cmd: >
+          buildah run --network none {{ container_uuid }} systemctl unmask
+          systemd-logind.service
+    - ansible.builtin.command:
+        cmd: "sed -i 's/session[ \t]*required[ \t]*pam_loginuid.so/#session    required     pam_loginuid.so/' {{ container_path }}/etc/pam.d/{{ item }}"
+      loop:
+        - "sshd"
+        - "remote"
+        - "login"
+        - "systemd-user"
+    - ansible.builtin.command:
+        cmd: "buildah config --cmd '[ \"/usr/sbin/init\" ]' {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --stop-signal 'SIGRTMIN+3' {{ container_uuid }}"
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /var/log/journal {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
