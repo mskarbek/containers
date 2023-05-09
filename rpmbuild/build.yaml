@@ -1,0 +1,87 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "bzip2"
+#          - "clang"
+#          - "coreutils"
+#          - "cpio"
+#          - "diffutils"
+#          - "dnf"
+#          - "dnf-plugins-core"
+#          - "findutils"
+#          - "gawk"
+#          - "gcc"
+#          - "gcc-c++"
+#          - "git"
+#          - "grep"
+#          - "gzip"
+#          - "info"
+#          - "libtool"
+#          - "llvm"
+#          - "patch"
+#          - "redhat-rpm-config"
+#          - "rpm-build"
+#          - "sed"
+#          - "shadow-utils"
+#          - "tar"
+#          - "unzip"
+#          - "util-linux"
+#          - "which"
+#          - "xz"
+#          - "yum-utils"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          --allowerasing
+          install
+          bzip2
+          clang
+          coreutils
+          cpio
+          diffutils
+          dnf
+          dnf-plugins-core
+          findutils
+          gawk
+          gcc
+          gcc-c++
+          git
+          grep
+          gzip
+          info
+          libtool
+          llvm
+          patch
+          redhat-rpm-config
+          rpm-build
+          sed
+          shadow-utils
+          tar
+          unzip
+          util-linux
+          which
+          xz
+          yum-utils
+    - ansible.builtin.command:
+        cmd: buildah run {{ container_uuid }} useradd --create-home --shell /usr/bin/bash mockbuild
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
