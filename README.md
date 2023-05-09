@@ -27,6 +27,7 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [base/openjdk11-jdk](./openjdk11/README.md)
 * [base/openjdk17-jdk](./openjdk17/README.md)
 * [base/python3.9-devel](./python3.9/README.md)
+* [base/rpmbuild](./rpmbuild/README.md)
 * [base/rust](./rust/README.md)
 
 ### runtime-related
@@ -55,12 +56,17 @@ Those images are intended to replace UBI in their function, but they drop entire
 
 ### services
 #### development
+* [nexus](./nexus/README.md)
+* [gitlab-runner](./gitlab-runner/README.md)
 
 #### databases
 * [postgresql14](./postgresql14/README.md)
 * [postgresql15](./postgresql15/README.md)
 
 #### networking
+* [kea](./kea/README.md)
+* [knot-dns](./knot-dns/README.md)
+* [knot-resolver](./knot-resolver/README.md)
 * [kuma](./kuma/README.md)
 * [nginx](./nginx/README.md)
 
@@ -72,47 +78,27 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [toolbox](./toolbox/README.md)
 
 #### streaming/messaging
-
+* [nats](./nats/README.md)
 
 ## Refactor:
 The below list contains old script-based images dropped after c5c2793414e506b25c12af8ec1ca4d0acd8f1ff3.
-
-## base-based
-### build-related
-* [base/rpmbuild](./rpmbuild/README.md)
-
-### runtime-related
 
 ## systemd-based
 ### build-related
 * [buildah-zfs](./buildah/README.md)
 * [buildah](./buildah/README.md)
-* [gitlab-runner-buildah-zfs](./gitlab-runner/README.md)
-* [gitlab-runner-buildah](./gitlab-runner/README.md)
-* [gitlab-runner-podman-zfs](./gitlab-runner/README.md)
-* [gitlab-runner-podman](./gitlab-runner/README.md)
-* [podman-zfs](./podman/README.md)
-* [podman](./podman/README.md)
 
 ### services
 #### development
 * [fake-service](./fake-service/README.md)
 * [gitlab](./gitlab/README.md)
 * [locust](./locust/README.md)
-* [nexus](./nexus/README.md)
 * [openvscode](./openvscode/README.md)
 
 #### databases
-* [influxdb](./influxdb/README.md)
 * [pgadmin4](./pgadmin4/README.md)
-* [yugabytedb](./yugabytedb/README.md)
 
 #### networking
-* [haproxy](./haproxy/README.md)
-* [kea](./kea/README.md)
-* [knot-dns](./knot-dns/README.md)
-* [knot-resolver](./knot-resolver/README.md)
-* [krakend](./krakend/README.md)
 * [tinyproxy](./tinyproxy/README.md)
 * [vsftpd](./vsftpd/README.md)
 
@@ -136,5 +122,4 @@ The below list contains old script-based images dropped after c5c2793414e506b25c
 
 #### streaming/messaging
 * [nats-kafka](./nats-kafka/README.md)
-* [nats](./nats/README.md)
 * [rabbitmq](./rabbitmq/README.md)
