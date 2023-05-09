@@ -1,0 +1,68 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "knot-resolver"
+#          - "knot-resolver-module-dnstap"
+#          - "knot-resolver-module-http"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          knot-resolver
+          knot-resolver-module-dnstap
+          knot-resolver-module-http
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/usr/share/knot-resolver"
+        state: "directory"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+    - ansible.posix.synchronize:
+        src: "{{ container_path }}/etc/knot-resolver/"
+        dest: "{{ container_path }}/usr/share/knot-resolver/"
+    - ansible.builtin.file:
+        dest: "{{ item.dest }}"
+        state: "{{ item.state }}"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - dest: "{{ container_path }}/etc/knot-resolver"
+          state: "absent"
+        - dest: "{{ container_path }}/etc/knot-resolver"
+          state: "directory"
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - "buildah run --network none {{ container_uuid }} systemctl enable kres-cache-gc.service kresd@1.service"
+        - "buildah config --volume /etc/knot-resolver {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
