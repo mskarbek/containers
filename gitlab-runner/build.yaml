@@ -1,0 +1,118 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+    - "vars/runner.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/usr/local/bin/gitlab-runner"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+    - ansible.builtin.get_url:
+        url: "https://gitlab-runner-downloads.s3.amazonaws.com/v{{ gitlab_runner_version }}/binaries/gitlab-runner-linux-amd64"
+        dest: "{{ container_path }}/usr/local/bin/gitlab-runner"
+        force: true
+        owner: "root"
+        group: "root"
+        mode: "0755"
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - "buildah run --network none {{ container_uuid }} systemctl enable gitlab-runner.service"
+        - "buildah config --volume /etc/gitlab-runner {{ container_uuid }}"
+        - "buildah config --volume /var/lib/gitlab-runner {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+    - "vars/helper.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "git-core"
+#          - "git-lfs"
+#          - "hostname"
+#          - "jq"
+#          - "openssh-clients"
+#          - "rsync"
+#          - "tar"
+#          - "unzip"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          git-core
+          git-lfs
+          hostname
+          jq
+          openssh-clients
+          rsync
+          tar
+          unzip
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/usr/bin/{{ item }}"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - "gitlab-runner-build"
+        - "gitlab-runner-helper"
+        - "dumb-init"
+    - ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ container_path }}/usr/bin/{{ item }}"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - "gitlab-runner-build"
+    - ansible.builtin.get_url:
+        url: "{{ item.url }}"
+        dest: "{{ container_path }}/usr/bin/{{ item.dest }}"
+        force: true
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - url: "https://gitlab-runner-downloads.s3.amazonaws.com/v{{ gitlab_runner_version }}/binaries/gitlab-runner-helper/gitlab-runner-helper.x86_64"
+          dest: "gitlab-runner-helper"
+        - url: "https://github.com/Yelp/dumb-init/releases/download/v{{ dumb_init_version }}/dumb-init_{{ dumb_init_version }}_x86_64"
+          dest: "dumb-init"
+    - ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - "buildah config --entrypoint='[ \"/usr/bin/dumb-init\" ]' {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

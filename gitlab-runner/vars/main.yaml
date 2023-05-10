@@ -1,0 +1,4 @@
+---
+image_version: "{{ gitlab_runner_version }}"
+image_release: "1"
+gitlab_runner_version: "15.11.0"
