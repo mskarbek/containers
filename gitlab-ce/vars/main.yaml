@@ -1,0 +1,7 @@
+---
+base_name: "openssh"
+base_tag: "8.7p1-24-1"
+image_name: "gitlab-ce"
+image_version: "15.11.2-0"
+image_release: "1"
+gitlab_version: "15.11.2"

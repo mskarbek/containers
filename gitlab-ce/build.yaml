@@ -1,0 +1,71 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "hostname"
+#          - "perl"
+#          - "policycoreutils"
+#          - "policycoreutils-python-utils"
+#          - "checkpolicy"
+#          - "git"
+#          - "libxcrypt-compat"
+#          - "tar"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          hostname
+          perl
+          policycoreutils
+          policycoreutils-python-utils
+          checkpolicy
+          git
+          libxcrypt-compat
+          tar
+    - ansible.builtin.get_url:
+        url: "https://packages.gitlab.com/gitlab/gitlab-ce/packages/el/8/gitlab-ce-{{ gitlab_version }}-ce.0.el8.x86_64.rpm/download.rpm"
+        dest: "{{ result_tempfile.path }}/gitlab-ce-{{ gitlab_version }}-ce.0.el8.x86_64.rpm"
+        force: true
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    - ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - "rpm -i --noscripts --root={{ container_path }} {{ result_tempfile.path }}/gitlab-ce-{{ gitlab_version }}-ce.0.el8.x86_64.rpm"
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - "buildah run --network none {{ container_uuid }} systemctl enable gitlab-config.service"
+        - "buildah config --volume /etc/gitlab {{ container_uuid }}"
+        - "buildah config --volume /var/log/gitlab {{ container_uuid }}"
+        - "buildah config --volume /var/opt/gitlab {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

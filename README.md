@@ -56,8 +56,9 @@ Those images are intended to replace UBI in their function, but they drop entire
 
 ### services
 #### development
-* [nexus](./nexus/README.md)
 * [gitlab-runner](./gitlab-runner/README.md)
+* [gitlab](./gitlab/README.md)
+* [nexus](./nexus/README.md)
 
 #### databases
 * [postgresql14](./postgresql14/README.md)
@@ -85,13 +86,11 @@ The below list contains old script-based images dropped after c5c2793414e506b25c
 
 ## systemd-based
 ### build-related
-* [buildah-zfs](./buildah/README.md)
 * [buildah](./buildah/README.md)
 
 ### services
 #### development
 * [fake-service](./fake-service/README.md)
-* [gitlab](./gitlab/README.md)
 * [locust](./locust/README.md)
 * [openvscode](./openvscode/README.md)
 
