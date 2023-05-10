@@ -1,0 +1,86 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item }}"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - "/etc/yum.repos.d/isc-kea-2-2.repo"
+        - "/etc/yum.repos.d/isc-stork.repo"
+        - "/etc/pki/rpm-gpg/RPM-GPG-KEY-ISC-Kea"
+        - "/etc/pki/rpm-gpg/RPM-GPG-KEY-ISC-Stork"
+      when: "bootstrap"
+    - ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - src: "repos/isc-kea-2-2.repo"
+          dest: "/etc/yum.repos.d/isc-kea-2-2.repo"
+        - src: "repos/isc-stork.repo"
+          dest: "/etc/yum.repos.d/isc-stork.repo"
+        - src: "rpm-gpg/RPM-GPG-KEY-ISC-Kea"
+          dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-ISC-Kea"
+        - src: "rpm-gpg/RPM-GPG-KEY-ISC-Stork"
+          dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-ISC-Stork"
+      when: "bootstrap"
+    - ansible.builtin.command:
+        cmd: "rpm --root {{ container_path }} --import {{ container_path }}/etc/pki/rpm-gpg/{{ item }}"
+      loop:
+        - "RPM-GPG-KEY-ISC-Kea"
+        - "RPM-GPG-KEY-ISC-Stork"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "isc-kea"
+#          - "isc-stork-agent"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          isc-kea
+          isc-stork-agent
+    - ansible.builtin.copy:
+        src: "{{ container_path }}/etc/kea/"
+        dest: "{{ container_path }}/usr/share/kea/etc/"
+        remote_src: true
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/etc/kea/"
+        state: "absent"
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: "buildah run --network none {{ container_uuid }} systemctl enable kea-dhcp4.service"
+        #isc-stork-agent.service
+    - ansible.builtin.command:
+        cmd: "buildah config --volume /etc/kea {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

@@ -1,0 +1,13 @@
+[isc-stork]
+name=isc-stork
+baseurl=https://dl.cloudsmith.io/public/isc/stork/rpm/el/9/$basearch
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ISC-Stork
+
+[isc-stork-noarch]
+name=isc-stork-noarch
+baseurl=https://dl.cloudsmith.io/public/isc/stork/rpm/el/9/noarch
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ISC-Stork
