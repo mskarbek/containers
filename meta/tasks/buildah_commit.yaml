@@ -40,6 +40,8 @@
     - "/var/tmp"
 - ansible.builtin.command:
     cmd: "buildah commit --quiet {{ container_uuid }} {{ registry_host }}/{% if bootstrap %}bootstrap/{% endif %}{{ image_name }}:{{ image_version }}-{{ image_release }}"
+  environment:
+    TMPDIR: "/var/lib/containers/tmp"
 - ansible.builtin.command:
     cmd: "buildah rm {{ container_uuid }}"
 - ansible.builtin.file:
