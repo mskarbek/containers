@@ -73,7 +73,6 @@
     - ansible.builtin.command:
         cmd: "sed -i 's/session[ \t]*required[ \t]*pam_loginuid.so/#session    required     pam_loginuid.so/' {{ container_path }}/etc/pam.d/{{ item }}"
       loop:
-        - "sshd"
         - "remote"
         - "login"
         - "systemd-user"
