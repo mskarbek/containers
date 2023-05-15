@@ -1,6 +1,6 @@
 ---
 base_name: "micro"
-base_tag: "9.1-1"
+base_tag: "9.2-1"
 image_name: "micro/consul-template"
 image_version: "{{ consul_template_version }}"
 image_release: "1"

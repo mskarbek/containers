@@ -1,6 +1,6 @@
 ---
 base_name: "systemd"
-base_tag: "9.1-1"
+base_tag: "9.2-1"
 image_name: "knot"
 image_version: "3.2.6-1"
 image_release: "1"
