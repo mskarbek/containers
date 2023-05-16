@@ -1,0 +1,84 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "curl"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          curl
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item }}"
+        state: "directory"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - "/usr/lib/sonatype"
+    - ansible.builtin.unarchive:
+        src: "https://download.sonatype.com/nexus/3/nexus-{{ nexus_version }}-unix.tar.gz"
+        dest: "{{ container_path }}/usr/lib/sonatype"
+        remote_src: true
+    - ansible.builtin.file:
+        src: "{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
+        force: true
+        state: "link"
+      loop:
+        - src: "/usr/lib/sonatype/nexus-{{ nexus_version }}"
+          dest: "/usr/lib/sonatype/nexus"
+    - ansible.builtin.replace:
+        dest: "{{ container_path }}/usr/lib/sonatype/nexus-{{ nexus_version }}/bin/nexus.vmoptions"
+        regexp: "=../sonatype-work/"
+        replace: "=/var/lib/sonatype-work/"
+# Nexus 3.53 have an issue with custom plugins so Dart is disabled for now:
+# https://help.sonatype.com/repomanager3/product-information/release-notes/2023-release-notes/sonatype-nexus-repository-3.53.0---3.53.1-release-notes
+#    - ansible.builtin.file:
+#        dest: "{{ container_path }}/usr/lib/sonatype/nexus-{{ nexus_version }}/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
+#        state: "touch"
+#        owner: "root"
+#        group: "root"
+#        mode: "0644"
+#    - ansible.builtin.get_url:
+#        url: "https://github.com/groupe-edf/nexus-repository-dart/releases/download/{{ nexus_dart_version }}/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
+#        dest: "{{ container_path }}/usr/lib/sonatype/nexus-{{ nexus_version }}/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
+#        owner: "root"
+#        group: "root"
+#        mode: "0644"
+    - ansible.posix.synchronize:
+        src: "rootfs/"
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+# Unfortunately, some mirrors use TLS certificates that, to be accepted, force LEGACY crypto policies
+    - ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - "buildah run --network none {{ container_uuid }} update-crypto-policies --set LEGACY"
+        - "buildah run --network none {{ container_uuid }} systemctl enable nexus.service"
+        - "buildah config --volume /var/lib/sonatype-work {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

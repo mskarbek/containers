@@ -1,0 +1,20 @@
+[Unit]
+Description=Nexus Repository
+Documentation=https://help.sonatype.com/repomanager3/
+Requires=nexus-password.service nexus-config.service
+After=network.target nss-lookup.target nexus-password.service
+Before=nexus-config.service
+
+[Service]
+WorkingDirectory=/run/nexus
+Type=forking
+User=nexus
+Group=nexus
+ExecStart=/usr/lib/sonatype/nexus/bin/nexus start
+ExecStop=/usr/lib/sonatype/nexus/bin/nexus stop
+Restart=on-abort
+LimitNOFILE=65536
+TimeoutSec=600
+
+[Install]
+WantedBy=multi-user.target
