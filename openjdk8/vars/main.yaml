@@ -1,6 +1,1 @@
----
-base_name: "base"
-base_tag: "9.2-1"
-image_name: "base/openjdk8"
-image_version: "1.8.0.372.b07-1"
-image_release: "1"
+openjdk8_version: "1.8.0.372.b07-2"

@@ -1,6 +1,6 @@
 ---
 base_name: "base/openjdk17"
-base_tag: "17.0.7.0.7-1-1"
+base_tag: "{{ openjdk17_version }}-1"
 image_name: "openjdk17"
-image_version: "17.0.7.0.7-1"
+image_version: "{{ openjdk17_version }}"
 image_release: "1"

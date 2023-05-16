@@ -1,0 +1,6 @@
+---
+base_name: "base"
+base_tag: "9.2-1"
+image_name: "base/openjdk17"
+image_version: "{{ openjdk17_version }}"
+image_release: "1"

@@ -4,6 +4,7 @@
   vars_files:
     - "vars/common.yaml"
     - "vars/main.yaml"
+    - "vars/base.yaml"
   tasks:
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
@@ -36,6 +37,7 @@
   gather_facts: false
   vars_files:
     - "vars/common.yaml"
+    - "vars/main.yaml"
     - "vars/systemd.yaml"
   tasks:
     - ansible.builtin.import_tasks:
@@ -52,6 +54,7 @@
   gather_facts: false
   vars_files:
     - "vars/common.yaml"
+    - "vars/main.yaml"
     - "vars/devel.yaml"
   tasks:
     - ansible.builtin.import_tasks:
