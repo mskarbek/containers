@@ -1,0 +1,7 @@
+---
+base_name: "systemd"
+base_tag: "9.2-1"
+image_name: "minio-console"
+image_version: "{{ minio_console_version }}"
+image_release: "1"
+minio_console_version: "0.27.0"
