@@ -1,0 +1,14 @@
+# Bind to a specific ADDRESS:PORT, ADDRESS can be an IP or hostname (default: ":9000").
+MINIO_ADDRESS=":9000"
+# Bind N number of listeners per ADDRESS:PORT (default: 1).
+MINIO_LISTENERS="1"
+# Specify off to disable the embedded MinIO Console.
+MINIO_BROWSER="off"
+# Extra flags: --certs-dir </root/.minio/certs> --quiet --anonymous --json
+MINIO_OPTS=""
+# Volume to be used for MinIO server.
+MINIO_VOLUMES="/var/lib/minio"
+# Root user for the server.
+MINIO_ROOT_USER="root"
+# Root secret for the server.
+MINIO_ROOT_PASSWORD="password123"
