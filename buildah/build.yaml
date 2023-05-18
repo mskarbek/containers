@@ -1,0 +1,56 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+#    - ansible.builtin.dnf:
+#        name:
+#          - "buildah"
+#          - "skopeo"
+#          - "fuse-overlayfs"
+#          - "containernetworking-plugins"
+#          - "openssh-clients"
+#          - "git-core"
+#          - "git-lfs"
+#          - "hostname"
+#          - "rsync"
+#          - "unzip"
+#          - "tar"
+#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
+#        install_weak_deps: false
+#        state: "latest"
+#        installroot: "{{ container_path }}"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          buildah
+          skopeo
+          fuse-overlayfs
+          containernetworking-plugins
+          openssh-clients
+          git-core
+          git-lfs
+          hostname
+          rsync
+          unzip
+          tar
+    - ansible.builtin.copy:
+        src: "storage.conf"
+        dest: "{{ container_path }}/etc/containers/storage.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

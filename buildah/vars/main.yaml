@@ -1,0 +1,6 @@
+---
+base_name: "base"
+base_tag: "9.2-1"
+image_name: "base/buildah"
+image_version: "1.29.1-2"
+image_release: "1"

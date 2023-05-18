@@ -20,6 +20,7 @@ Those images are intended to replace UBI in their function, but they drop entire
 
 ## base-based
 ### build-related
+* [base/buildah](./buildah/README.md)
 * [base/golang](./golang/README.md)
 * [base/nodejs16-devel](./nodejs16/README.md)
 * [base/nodejs18-devel](./nodejs16/README.md)
@@ -64,6 +65,9 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [postgresql14](./postgresql14/README.md)
 * [postgresql15](./postgresql15/README.md)
 
+#### desktop
+* [i3](./i3/README.md)
+
 #### networking
 * [kea](./kea/README.md)
 * [knot-dns](./knot-dns/README.md)
@@ -72,9 +76,12 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [nginx](./nginx/README.md)
 
 #### monitoring
+* [loki](./loki/README.md)
+* [vector](./vector/README.md)
 
 #### tools
 * [consul](./consul/README.md)
+* [openssh](./openssh/README.md)
 * [vault](./vault/README.md)
 * [toolbox](./toolbox/README.md)
 
@@ -85,8 +92,6 @@ Those images are intended to replace UBI in their function, but they drop entire
 The below list contains old script-based images dropped after c5c2793414e506b25c12af8ec1ca4d0acd8f1ff3.
 
 ## systemd-based
-### build-related
-* [buildah](./buildah/README.md)
 
 ### services
 #### development
@@ -105,16 +110,13 @@ The below list contains old script-based images dropped after c5c2793414e506b25c
 * [alertmanager](./alertmanager/README.md)
 * [grafana](./grafana/README.md)
 * [loki-canary](./loki-canary/README.md)
-* [loki](./loki/README.md)
 * [prometheus](./prometheus/README.md)
 * [pushgateway](./pushgateway/README.md)
-* [vector](./vector/README.md)
 
 #### tools
 * [ara](./ara/README.md)
 * [minio-console](./minio-console/README.md)
 * [minio](./minio/README.md)
-* [openssh](./openssh/README.md)
 * [rundeck-runner](./rundeck-runner/README.md)
 * [rundeck](./rundeck/README.md)
 * [step-ca](./step-ca/README.md)
