@@ -36,7 +36,7 @@
         rsync_opts:
           - "--exclude=.gitkeep"
           - "--ignore-existing"
-    - ansible.posix.command:
+    - ansible.builtin.command:
         cmd: "{{ item }}"
       loop:
         - "buildah run --network none {{ container_uuid }} systemctl enable minio.service"
