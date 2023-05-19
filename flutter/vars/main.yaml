@@ -1,0 +1,7 @@
+---
+base_name: "base"
+base_tag: "9.2-1"
+image_name: "base/flutter"
+image_version: "{{ flutter_version }}"
+image_release: "1"
+flutter_version: "3.10.0"
