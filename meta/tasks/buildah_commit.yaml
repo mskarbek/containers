@@ -12,6 +12,7 @@
     dest: "{{ container_path }}{{ item }}"
     state: "absent"
   loop:
+    - "/etc/yum.repos.d/redhat.repo"
     - "/run"
     - "/tmp"
     - "/var/cache"

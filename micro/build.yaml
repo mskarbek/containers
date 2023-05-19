@@ -89,12 +89,11 @@
             mode: "0644"
       when: "not bootstrap"
     - ansible.builtin.command:
-        cmd: "buildah run --network none {{ container_uuid }} update-ca-trust"
-    - ansible.builtin.command:
-        cmd: "buildah config --env='container=oci' {{ container_uuid }}"
-    - ansible.builtin.command:
-        cmd: "buildah config --env='SYSTEMD_LOG_TARGET=console' {{ container_uuid }}"
-    - ansible.builtin.command:
-        cmd: "buildah config --cmd='[ \"/usr/bin/bash\", \"-l\" ]' {{ container_uuid }}"
+        cmd: "{{ item }}"
+      loop:
+        - "buildah run --network none {{ container_uuid }} update-ca-trust"
+        - "buildah config --env='container=oci' {{ container_uuid }}"
+        - "buildah config --env='SYSTEMD_LOG_TARGET=console' {{ container_uuid }}"
+        - "buildah config --cmd='[ \"/usr/bin/bash\", \"-l\" ]' {{ container_uuid }}"
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"

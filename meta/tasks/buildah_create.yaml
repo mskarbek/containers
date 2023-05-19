@@ -1,7 +1,6 @@
 ---
 - ansible.builtin.tempfile:
     state: "directory"
-    #path: "{{ container_path }}/tmp"
   register: "result_tempfile"
 - ansible.builtin.set_fact:
     container_uuid: "{{ lookup('ansible.builtin.file', '/proc/sys/kernel/random/uuid') }}"
@@ -12,3 +11,21 @@
   register: "result_command"
 - ansible.builtin.set_fact:
     container_path: "{{ result_command.stdout }}"
+- ansible.builtin.file:
+    dest: "{{ container_path }}{{ item }}"
+    state: "touch"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop:
+    - "/etc/yum.repos.d/redhat.repo"
+  when: "bootstrap and base_name != 'scratch' and image_os == 'rhel"
+- ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ container_path }}{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop:
+    - "/etc/yum.repos.d/redhat.repo"
+  when: "bootstrap and base_name != 'scratch' and image_os == 'rhel"

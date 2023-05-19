@@ -140,13 +140,6 @@
         cmd: buildah config --user root {{ container_uuid }}
     - ansible.builtin.command:
         cmd: buildah config --workingdir / {{ container_uuid }}
-#    - ansible.builtin.dnf:
-#        name:
-#          - "openssh-server"
-#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
-#        install_weak_deps: false
-#        state: "latest"
-#        installroot: "{{ container_path }}"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:
@@ -160,9 +153,9 @@
           install
           openssh-server
     - ansible.builtin.command:
-        cmd: >
-          buildah run --network none {{ container_uuid }} systemctl unmask
-          systemd-logind.service
+        cmd: "{{ item }}"
+      loop:
+        - "buildah run --network none {{ container_uuid }} systemctl unmask systemd-logind.service"
     - ansible.builtin.command:
         cmd: "sed -i 's/session[ \t]*required[ \t]*pam_loginuid.so/#session    required     pam_loginuid.so/' {{ container_path }}/etc/pam.d/{{ item }}"
       loop:
