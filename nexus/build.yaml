@@ -28,14 +28,23 @@
       loop:
         - "/usr/lib/sonatype"
     - ansible.builtin.get_url:
-        url: "{{ nexus_url }}"
+        url: "{{ nexus_public_url }}"
         dest: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
         force: true
-        username: "{% if use_repository %}{{ repository_username }}{% endif %}"
-        password: "{% if use_repository %}{{ repository_password }}{% endif %}"
         owner: "root"
         group: "root"
         mode: "0644"
+      when: "not use_repository"
+    - ansible.builtin.get_url:
+        url: "{{ nexus_proxy_url }}"
+        dest: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
+        force: true
+        username: "{{ repository_username }}"
+        password: "{{ repository_password }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "use_repository"
     - ansible.builtin.unarchive:
         src: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
         dest: "{{ container_path }}/usr/lib/sonatype"
@@ -61,11 +70,19 @@
 #        group: "root"
 #        mode: "0644"
 #    - ansible.builtin.get_url:
-#        url: "https://github.com/groupe-edf/nexus-repository-dart/releases/download/{{ nexus_dart_version }}/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
+#        url: "{{ nexus_dart_public_url }}"
 #        dest: "{{ container_path }}/usr/lib/sonatype/nexus-{{ nexus_version }}/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
 #        owner: "root"
 #        group: "root"
 #        mode: "0644"
+#      when: "not use_repository"
+#    - ansible.builtin.get_url:
+#        url: "{{ nexus_dart_proxy_url }}"
+#        dest: "{{ container_path }}/usr/lib/sonatype/nexus-{{ nexus_version }}/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
+#        owner: "root"
+#        group: "root"
+#        mode: "0644"
+#      when: "use_repository"
     - ansible.posix.synchronize:
         src: "rootfs/"
         dest: "{{ container_path }}/"

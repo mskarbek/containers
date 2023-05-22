@@ -7,20 +7,6 @@
   tasks:
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
-#    - ansible.builtin.dnf:
-#        name:
-#          - "hostname"
-#          - "perl"
-#          - "policycoreutils"
-#          - "policycoreutils-python-utils"
-#          - "checkpolicy"
-#          - "git"
-#          - "libxcrypt-compat"
-#          - "tar"
-#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
-#        install_weak_deps: false
-#        state: "latest"
-#        installroot: "{{ container_path }}"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:
@@ -42,18 +28,27 @@
           libxcrypt-compat
           tar
     - ansible.builtin.get_url:
-        url: "{{ gitlab_url }}"
-        dest: "{{ result_tempfile.path }}/gitlab-ce-{{ gitlab_version }}-ce.0.el8.x86_64.rpm"
+        url: "{{ gitlab_public_url }}"
+        dest: "{{ result_tempfile.path }}/gitlab-ce-{{ gitlab_version }}-ce.0.el9.x86_64.rpm"
         force: true
-        username: "{% if use_repository %}{{ repository_username }}{% endif %}"
-        password: "{% if use_repository %}{{ repository_password }}{% endif %}"
         owner: "root"
         group: "root"
         mode: "0644"
+      when: "not use_repository"
+    - ansible.builtin.get_url:
+        url: "{{ gitlab_proxy_url }}"
+        dest: "{{ result_tempfile.path }}/gitlab-ce-{{ gitlab_version }}-ce.0.el9.x86_64.rpm"
+        force: true
+        username: "{{ repository_username }}"
+        password: "{{ repository_password }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "use_repository"
     - ansible.builtin.command:
         cmd: "{{ item }}"
       loop:
-        - "rpm -i --noscripts --root={{ container_path }} {{ result_tempfile.path }}/gitlab-ce-{{ gitlab_version }}-ce.0.el8.x86_64.rpm"
+        - "rpm -i --noscripts --root={{ container_path }} {{ result_tempfile.path }}/gitlab-ce-{{ gitlab_version }}-ce.0.el9.x86_64.rpm"
     - ansible.posix.synchronize:
         src: rootfs/
         dest: "{{ container_path }}/"
