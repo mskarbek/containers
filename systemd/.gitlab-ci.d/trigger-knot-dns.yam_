@@ -1,7 +1,0 @@
-trigger-knot-dns:
-  stage: trigger
-  trigger: containers/knot-dns
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

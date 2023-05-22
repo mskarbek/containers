@@ -1,7 +1,0 @@
-trigger-nats-kafka:
-  stage: trigger
-  trigger: containers/nats-kafka
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

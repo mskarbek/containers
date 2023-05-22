@@ -1,7 +1,0 @@
-trigger-prometheus:
-  stage: trigger
-  trigger: containers/prometheus
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

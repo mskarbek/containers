@@ -1,7 +1,0 @@
-trigger-knot-resolver:
-  stage: trigger
-  trigger: containers/knot-resolver
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

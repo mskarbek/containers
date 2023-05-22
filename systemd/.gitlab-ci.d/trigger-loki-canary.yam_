@@ -1,7 +1,0 @@
-trigger-loki-canary:
-  stage: trigger
-  trigger: containers/loki-canary
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

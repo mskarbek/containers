@@ -1,7 +1,0 @@
-trigger-minio-console:
-  stage: trigger
-  trigger: containers/minio-console
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

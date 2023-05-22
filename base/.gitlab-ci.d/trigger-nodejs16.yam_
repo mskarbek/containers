@@ -1,7 +1,0 @@
-trigger-nodejs16:
-  stage: trigger
-  trigger: containers/nodejs16
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

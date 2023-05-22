@@ -1,7 +1,0 @@
-trigger-python3:
-  stage: trigger
-  trigger: containers/python3
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

@@ -1,7 +1,0 @@
-trigger-openjdk11:
-  stage: trigger
-  trigger: containers/openjdk11
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

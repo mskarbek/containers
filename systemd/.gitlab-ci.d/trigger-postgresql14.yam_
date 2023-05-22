@@ -1,7 +1,0 @@
-trigger-postgresql14:
-  stage: trigger
-  trigger: containers/postgresql14
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

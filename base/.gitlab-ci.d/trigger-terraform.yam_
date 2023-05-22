@@ -1,7 +1,0 @@
-trigger-terraform:
-  stage: trigger
-  trigger: containers/terraform
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

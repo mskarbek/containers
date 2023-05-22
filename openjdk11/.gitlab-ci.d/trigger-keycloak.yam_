@@ -1,7 +1,0 @@
-trigger-keycloak:
-  stage: trigger
-  trigger: containers/keycloak
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

@@ -1,7 +1,0 @@
-trigger-grafana:
-  stage: trigger
-  trigger: containers/grafana
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

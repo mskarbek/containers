@@ -1,7 +1,0 @@
-trigger-host:
-  stage: trigger
-  trigger: containers/host
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

@@ -1,7 +1,0 @@
-trigger-rpmbuild:
-  stage: trigger
-  trigger: containers/rpmbuild
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image

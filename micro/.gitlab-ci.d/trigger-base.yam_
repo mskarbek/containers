@@ -1,7 +1,0 @@
-trigger-base:
-  stage: trigger
-  trigger: containers/base
-  variables:
-    FROM_TAG: $IMAGE_TAG
-  needs:
-    - build-image
