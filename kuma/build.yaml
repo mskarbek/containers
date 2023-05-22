@@ -17,10 +17,28 @@
       loop:
         - "kuma-cp"
         - "kumactl"
+    - ansible.builtin.get_url:
+        url: "{{ kuma_public_url }}"
+        dest: "{{ result_tempfile.path }}/kuma-{{ kuma_version }}-linux-amd64.tar.gz"
+        force: true
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "not use_repository"
+    - ansible.builtin.get_url:
+        url: "{{ kuma_proxy_url }}"
+        dest: "{{ result_tempfile.path }}/kuma-{{ kuma_version }}-linux-amd64.tar.gz"
+        force: true
+        username: "{{ repository_username }}"
+        password: "{{ repository_password }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "use_repository"
     - ansible.builtin.unarchive:
-        src: "https://download.konghq.com/kuma-binaries-release/kuma-{{ kuma_version }}-linux-amd64.tar.gz"
+        src: "{{ result_tempfile.path }}/kuma-{{ kuma_version }}-linux-amd64.tar.gz"
         dest: "{{ result_tempfile.path }}"
-        remote_src: true
+        #remote_src: true
     - ansible.builtin.copy:
         src: "{{ result_tempfile.path }}/kuma-{{ kuma_version }}/bin/{{ item }}"
         dest: "{{ container_path }}/usr/local/bin/{{ item }}"
@@ -66,10 +84,28 @@
         - "coredns"
         - "envoy"
         - "kuma-dp"
+    - ansible.builtin.get_url:
+        url: "{{ kuma_public_url }}"
+        dest: "{{ result_tempfile.path }}/kuma-{{ kuma_version }}-linux-amd64.tar.gz"
+        force: true
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "not use_repository"
+    - ansible.builtin.get_url:
+        url: "{{ kuma_proxy_url }}"
+        dest: "{{ result_tempfile.path }}/kuma-{{ kuma_version }}-linux-amd64.tar.gz"
+        force: true
+        username: "{{ repository_username }}"
+        password: "{{ repository_password }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "use_repository"
     - ansible.builtin.unarchive:
-        src: "https://download.konghq.com/kuma-binaries-release/kuma-{{ kuma_version }}-linux-amd64.tar.gz"
+        src: "{{ result_tempfile.path }}/kuma-{{ kuma_version }}-linux-amd64.tar.gz"
         dest: "{{ result_tempfile.path }}"
-        remote_src: true
+        #remote_src: true
     - ansible.builtin.copy:
         src: "{{ result_tempfile.path }}/kuma-{{ kuma_version }}/bin/{{ item }}"
         dest: "{{ container_path }}/usr/local/bin/{{ item }}"
