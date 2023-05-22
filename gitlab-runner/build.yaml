@@ -15,24 +15,23 @@
         group: "root"
         mode: "0755"
     - ansible.builtin.get_url:
-        url: "https://gitlab-runner-downloads.s3.amazonaws.com/v{{ gitlab_runner_version }}/binaries/gitlab-runner-linux-amd64"
+        url: "{{ gitlab_runner_public_url }}"
         dest: "{{ container_path }}/usr/local/bin/gitlab-runner"
         force: true
         owner: "root"
         group: "root"
         mode: "0755"
-      when: "proxy_url is not defined"
+      when: "not use_repository"
     - ansible.builtin.get_url:
-        url: "https://gitlab-runner-downloads.s3.amazonaws.com/v{{ gitlab_runner_version }}/binaries/gitlab-runner-linux-amd64"
+        url: "{{ gitlab_runner_proxy_url }}"
         dest: "{{ container_path }}/usr/local/bin/gitlab-runner"
         force: true
+        username: "{{ repository_username }}"
+        password: "{{ repository_password }}"
         owner: "root"
         group: "root"
         mode: "0755"
-      environment:
-        HTTP_PROXY: "{{ proxy_url }}"
-        HTTPS_PROXY: "{{ proxy_url }}"
-      when: "proxy_url is defined"
+      when: "use_repository"
     - ansible.posix.synchronize:
         src: rootfs/
         dest: "{{ container_path }}/"
@@ -59,20 +58,6 @@
   tasks:
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
-#    - ansible.builtin.dnf:
-#        name:
-#          - "git-core"
-#          - "git-lfs"
-#          - "hostname"
-#          - "jq"
-#          - "openssh-clients"
-#          - "rsync"
-#          - "tar"
-#          - "unzip"
-#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
-#        install_weak_deps: false
-#        state: "latest"
-#        installroot: "{{ container_path }}"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:
@@ -118,27 +103,26 @@
         group: "root"
         mode: "0755"
       loop:
-        - url: "https://gitlab-runner-downloads.s3.amazonaws.com/v{{ gitlab_runner_version }}/binaries/gitlab-runner-helper/gitlab-runner-helper.x86_64"
+        - url: "{{ gitlab_runner_helper_public_url }}"
           dest: "gitlab-runner-helper"
-        - url: "https://github.com/Yelp/dumb-init/releases/download/v{{ dumb_init_version }}/dumb-init_{{ dumb_init_version }}_x86_64"
+        - url: "{{ dumb_init_public_url }}"
           dest: "dumb-init"
-      when: "proxy_url is not defined"
+      when: "not use_repository"
     - ansible.builtin.get_url:
         url: "{{ item.url }}"
         dest: "{{ container_path }}/usr/bin/{{ item.dest }}"
         force: true
+        username: "{{ repository_username }}"
+        password: "{{ repository_password }}"
         owner: "root"
         group: "root"
         mode: "0755"
       loop:
-        - url: "https://gitlab-runner-downloads.s3.amazonaws.com/v{{ gitlab_runner_version }}/binaries/gitlab-runner-helper/gitlab-runner-helper.x86_64"
+        - url: "{{ gitlab_runner_helper_proxy_url }}"
           dest: "gitlab-runner-helper"
-        - url: "https://github.com/Yelp/dumb-init/releases/download/v{{ dumb_init_version }}/dumb-init_{{ dumb_init_version }}_x86_64"
+        - url: "{{ dumb_init_proxy_url }}"
           dest: "dumb-init"
-      environment:
-        HTTP_PROXY: "{{ proxy_url }}"
-        HTTPS_PROXY: "{{ proxy_url }}"
-      when: "proxy_url is defined"
+      when: "use_repository"
     - ansible.builtin.command:
         cmd: "{{ item }}"
       loop:
