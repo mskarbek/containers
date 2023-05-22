@@ -37,13 +37,16 @@
           policycoreutils
           policycoreutils-python-utils
           checkpolicy
+          git-lfs
           git
           libxcrypt-compat
           tar
     - ansible.builtin.get_url:
-        url: "https://packages.gitlab.com/gitlab/gitlab-ce/packages/el/8/gitlab-ce-{{ gitlab_version }}-ce.0.el8.x86_64.rpm/download.rpm"
+        url: "{{ gitlab_url }}"
         dest: "{{ result_tempfile.path }}/gitlab-ce-{{ gitlab_version }}-ce.0.el8.x86_64.rpm"
         force: true
+        username: "{% if use_repository %}{{ repository_username }}{% endif %}"
+        password: "{% if use_repository %}{{ repository_password }}{% endif %}"
         owner: "root"
         group: "root"
         mode: "0644"

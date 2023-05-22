@@ -1,5 +1,6 @@
 ---
 bootstrap: true
+use_repository: true
 # remove proxy_url if none
 proxy_url: "http://127.0.0.1:8888"
 registry_host: "registry.skarbek.lab"

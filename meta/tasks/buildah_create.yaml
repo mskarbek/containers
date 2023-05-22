@@ -19,7 +19,7 @@
     mode: "0644"
   loop:
     - "/etc/yum.repos.d/redhat.repo"
-  when: "bootstrap and base_name != 'scratch' and image_os == 'rhel"
+  when: "bootstrap and base_name != 'scratch' and image_os == 'rhel'"
 - ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ container_path }}{{ item }}"
@@ -28,4 +28,4 @@
     mode: "0644"
   loop:
     - "/etc/yum.repos.d/redhat.repo"
-  when: "bootstrap and base_name != 'scratch' and image_os == 'rhel"
+  when: "bootstrap and base_name != 'scratch' and image_os == 'rhel'"

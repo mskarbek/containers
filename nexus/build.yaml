@@ -7,13 +7,6 @@
   tasks:
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
-#    - ansible.builtin.dnf:
-#        name:
-#          - "curl"
-#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
-#        install_weak_deps: false
-#        state: "latest"
-#        installroot: "{{ container_path }}"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:
@@ -34,10 +27,19 @@
         mode: "0755"
       loop:
         - "/usr/lib/sonatype"
+    - ansible.builtin.get_url:
+        url: "{{ nexus_url }}"
+        dest: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
+        force: true
+        username: "{% if use_repository %}{{ repository_username }}{% endif %}"
+        password: "{% if use_repository %}{{ repository_password }}{% endif %}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
     - ansible.builtin.unarchive:
-        src: "https://download.sonatype.com/nexus/3/nexus-{{ nexus_version }}-unix.tar.gz"
+        src: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
         dest: "{{ container_path }}/usr/lib/sonatype"
-        remote_src: true
+        #remote_src: true
     - ansible.builtin.file:
         src: "{{ item.src }}"
         dest: "{{ container_path }}{{ item.dest }}"
