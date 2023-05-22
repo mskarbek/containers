@@ -2,5 +2,5 @@
 base_name: "systemd"
 base_tag: "9.2-1"
 image_name: "openssh"
-image_version: "8.7p1-24"
+image_version: "8.7p1-29"
 image_release: "1"
