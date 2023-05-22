@@ -22,8 +22,21 @@
         group: "root"
         mode: "0755"
       loop:
-        - url: "https://github.com/minio/console/releases/download/v{{ minio_console_version }}/console-linux-amd64"
+        - url: "{{ minio_console_public_url }}"
           dest: "console"
+      when: "not use_repository"
+    - ansible.builtin.get_url:
+        url: "{{ item.url }}"
+        dest: "{{ container_path }}/usr/local/bin/{{ item.dest }}"
+        username: "{{ repository_username }}"
+        password: "{{ repository_password }}"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - url: "{{ minio_console_proxy_url }}"
+          dest: "console"
+      when: "use_repository"
     - ansible.posix.synchronize:
         src: "rootfs/"
         dest: "{{ container_path }}/"
