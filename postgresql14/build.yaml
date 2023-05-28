@@ -34,24 +34,6 @@
       loop:
         - "RPM-GPG-KEY-PGDG"
       when: "bootstrap"
-#    - ansible.builtin.dnf:
-#        name:
-#          - "postgresql14-server"
-#          - "postgresql14-contrib"
-#          - "citus_14"
-#          - "pg_auto_failover_14"
-#          - "pg_qualstats_14"
-#          - "pg_stat_kcache_14"
-#          - "pg_wait_sampling_14"
-#          - "pg_track_settings_14"
-#          - "hypopg_14"
-#          #- "pgbackrest"
-#          #- "powa_14"
-#          #- "powa-collector"
-#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
-#        install_weak_deps: false
-#        state: "latest"
-#        installroot: "{{ container_path }}"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:
