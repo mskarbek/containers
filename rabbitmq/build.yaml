@@ -1,0 +1,67 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item }}"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - "/etc/yum.repos.d/rabbitmq.repo"
+        - "/etc/pki/rpm-gpg/RPM-GPG-KEY-rabbitmq"
+      when: "bootstrap"
+    - ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - src: "repos/rabbitmq.repo"
+          dest: "/etc/yum.repos.d/rabbitmq.repo"
+        - src: "rpm-gpg/RPM-GPG-KEY-rabbitmq"
+          dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-rabbitmq"
+      when: "bootstrap"
+    - ansible.builtin.command:
+        cmd: "rpm --root {{ container_path }} --import {{ container_path }}/etc/pki/rpm-gpg/{{ item }}"
+      loop:
+        - "RPM-GPG-KEY-rabbitmq"
+      when: "bootstrap"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          erlang-{{erlang_version}}.el9
+          rabbitmq-server-{{ rabbitmq_version }}.el8
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - "buildah run --network none {{ container_uuid }} systemctl enable rabbitmq-server.service"
+        - "buildah config --volume /etc/rabbitmq {{ container_uuid }}"
+        - "buildah config --volume /var/lib/rabbitmq {{ container_uuid }}"
+        - "buildah config --volume /var/log/rabbitmq {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
