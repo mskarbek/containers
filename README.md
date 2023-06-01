@@ -92,9 +92,11 @@ Those images are intended to replace UBI in their function, but they drop entire
 #### storeage
 * [minio-console](./minio-console/README.md)
 * [minio](./minio/README.md)
+* [vsftpd](./vsftpd/README.md)
 
 #### streaming/messaging
 * [nats](./nats/README.md)
+* [rabbitmq](./rabbitmq/README.md)
 
 ## Refactor:
 The below list contains old script-based images dropped after c5c2793414e506b25c12af8ec1ca4d0acd8f1ff3.
@@ -109,9 +111,6 @@ The below list contains old script-based images dropped after c5c2793414e506b25c
 
 #### databases
 * [pgadmin4](./pgadmin4/README.md)
-
-#### networking
-* [vsftpd](./vsftpd/README.md)
 
 #### monitoring
 * [alertmanager](./alertmanager/README.md)
@@ -128,4 +127,3 @@ The below list contains old script-based images dropped after c5c2793414e506b25c
 
 #### streaming/messaging
 * [nats-kafka](./nats-kafka/README.md)
-* [rabbitmq](./rabbitmq/README.md)
