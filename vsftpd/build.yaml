@@ -1,0 +1,28 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          vsftpd
+          passwd
+    - ansible.builtin.command:
+        cmd: >
+          buildah run --network none {{ container_uuid }} systemctl enable
+          vsftpd.service
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
