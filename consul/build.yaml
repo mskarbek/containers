@@ -8,11 +8,13 @@
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
     - ansible.builtin.file:
-        dest: "{{ container_path }}/usr/local/bin/consul"
+        dest: "{{ container_path }}{{ item }}"
         state: "touch"
         owner: "root"
         group: "root"
         mode: "0755"
+      loop:
+        - "/usr/local/bin/consul"
     - ansible.builtin.unarchive:
         src: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip"
         dest: "{{ result_tempfile.path }}"
@@ -27,12 +29,10 @@
           - "--exclude=.gitkeep"
           - "--ignore-existing"
     - ansible.builtin.command:
-        cmd: >
-          buildah run --network none {{ container_uuid }} systemctl enable
-          consul.service
-    - ansible.builtin.command:
-        cmd: "buildah config --volume /etc/consul.d {{ container_uuid }}"
-    - ansible.builtin.command:
-        cmd: "buildah config --volume /var/lib/consul {{ container_uuid }}"
+        cmd: "{{ item }}"
+      loop:
+        - "buildah run --network none {{ container_uuid }} systemctl enable consul.service"
+        - "buildah config --volume /etc/consul.d {{ container_uuid }}"
+        - "buildah config --volume /var/lib/consul {{ container_uuid }}"
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"

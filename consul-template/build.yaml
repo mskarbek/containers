@@ -8,20 +8,27 @@
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
     - ansible.builtin.file:
-        dest: "{{ container_path }}/usr/local/bin/consul-template"
+        dest: "{{ container_path }}{{ item }}"
         state: "touch"
         owner: "root"
         group: "root"
         mode: "0755"
+      loop:
+        - "/usr/local/bin/consul-template"
     - ansible.builtin.unarchive:
         src: "https://releases.hashicorp.com/consul-template/{{ consul_template_version }}/consul-template_{{ consul_template_version }}_linux_amd64.zip"
         dest: "{{ result_tempfile.path }}"
         remote_src: true
     - ansible.builtin.copy:
-        src: "{{ result_tempfile.path }}/consul-template"
-        dest: "{{ container_path }}/usr/local/bin/consul-template"
+        src: "{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
         owner: "root"
         group: "root"
         mode: "0755"
+      loop:
+        - src: "{{ result_tempfile.path }}/consul-template"
+          dest: "/usr/local/bin/consul-template"
+      loop_control:
+        label: "{{ item.dest }}"
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"

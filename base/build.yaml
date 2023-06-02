@@ -56,7 +56,9 @@
           systemd-udevd.service
           veritysetup.target
     - ansible.builtin.file:
-        dest: "{{ container_path }}/etc/machine-id"
+        dest: "{{ container_path }}{{ item }}"
         state: "absent"
+      loop:
+        - "/etc/machine-id"
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"

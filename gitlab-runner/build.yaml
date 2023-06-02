@@ -9,28 +9,40 @@
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
     - ansible.builtin.file:
-        dest: "{{ container_path }}/usr/local/bin/gitlab-runner"
+        dest: "{{ container_path }}{{ item }}"
         state: "touch"
         owner: "root"
         group: "root"
         mode: "0755"
+      loop:
+        - "/usr/local/bin/gitlab-runner"
     - ansible.builtin.get_url:
-        url: "{{ gitlab_runner_public_url }}"
-        dest: "{{ container_path }}/usr/local/bin/gitlab-runner"
+        url: "{{ item.url }}"
+        dest: "{{ container_path }}{{ item.dest }}"
         force: true
         owner: "root"
         group: "root"
         mode: "0755"
+      loop:
+        - url: "{{ gitlab_runner_public_url }}"
+          dest: "/usr/local/bin/gitlab-runner"
+      loop_control:
+        label: "{{ item.dest }}"
       when: "not use_repository"
     - ansible.builtin.get_url:
-        url: "{{ gitlab_runner_proxy_url }}"
-        dest: "{{ container_path }}/usr/local/bin/gitlab-runner"
+        url: "{{ item.url }}"
+        dest: "{{ container_path }}{{ item.dest }}"
         force: true
         username: "{{ repository_username }}"
         password: "{{ repository_password }}"
         owner: "root"
         group: "root"
         mode: "0755"
+      loop:
+        - url: "{{ gitlab_runner_proxy_url }}"
+          dest: "/usr/local/bin/gitlab-runner"
+      loop_control:
+        label: "{{ item.dest }}"
       when: "use_repository"
     - ansible.posix.synchronize:
         src: rootfs/
@@ -78,35 +90,40 @@
           tar
           unzip
     - ansible.builtin.file:
-        dest: "{{ container_path }}/usr/bin/{{ item }}"
+        dest: "{{ container_path }}{{ item }}"
         state: "touch"
         owner: "root"
         group: "root"
         mode: "0755"
       loop:
-        - "gitlab-runner-build"
-        - "gitlab-runner-helper"
-        - "dumb-init"
+        - "/usr/bin/gitlab-runner-build"
+        - "/usr/bin/gitlab-runner-helper"
+        - "/usr/bin/dumb-init"
     - ansible.builtin.copy:
-        src: "{{ item }}"
-        dest: "{{ container_path }}/usr/bin/{{ item }}"
+        src: "{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
         owner: "root"
         group: "root"
         mode: "0755"
       loop:
-        - "gitlab-runner-build"
+        - src: "gitlab-runner-build"
+          dest: "/usr/bin/gitlab-runner-build"
+      loop_control:
+        label: "{{ item.dest }}"
     - ansible.builtin.get_url:
         url: "{{ item.url }}"
-        dest: "{{ container_path }}/usr/bin/{{ item.dest }}"
+        dest: "{{ container_path }}{{ item.dest }}"
         force: true
         owner: "root"
         group: "root"
         mode: "0755"
       loop:
         - url: "{{ gitlab_runner_helper_public_url }}"
-          dest: "gitlab-runner-helper"
+          dest: "/usr/bin/gitlab-runner-helper"
         - url: "{{ dumb_init_public_url }}"
-          dest: "dumb-init"
+          dest: "/usr/bin/dumb-init"
+      loop_control:
+        label: "{{ item.dest }}"
       when: "not use_repository"
     - ansible.builtin.get_url:
         url: "{{ item.url }}"
@@ -122,6 +139,8 @@
           dest: "gitlab-runner-helper"
         - url: "{{ dumb_init_proxy_url }}"
           dest: "dumb-init"
+      loop_control:
+        label: "{{ item.dest }}"
       when: "use_repository"
     - ansible.builtin.command:
         cmd: "{{ item }}"

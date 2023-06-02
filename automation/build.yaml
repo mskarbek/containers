@@ -32,24 +32,25 @@
           unzip
     - ansible.builtin.copy:
         src: "storage.conf"
-        dest: "{{ container_path }}/etc/containers/storage.conf"
+        dest: "{{ container_path }}{{ item }}"
         owner: "root"
         group: "root"
         mode: "0644"
+      loop:
+        - "/etc/containers/storage.conf"
     - ansible.builtin.file:
-        dest: "{{ container_path }}/usr/local/bin/terraform"
-        state: "touch"
-        owner: "root"
-        group: "root"
-        mode: "0755"
-    - ansible.builtin.file:
-        dest: "{{ item }}"
-        state: "directory"
+        dest: "{{ container_path }}{{ item.dest }}"
+        state: "{{ item.state }}"
         owner: "root"
         group: "root"
         mode: "0755"
       loop:
-        - "{{ container_path }}/usr/local/share/terraform/plugins"
+        - dest: "/usr/local/bin/terraform"
+          state: "touch"
+        - dest: "/usr/local/share/terraform/plugins"
+          state: "directory"
+      loop_control:
+        label: "{{ item.dest }}"
     - ansible.builtin.get_url:
         url: "{{ terraform_public_url }}"
         dest: "{{ result_tempfile.path }}/terraform_{{ terraform_version }}_linux_amd64.zip"
@@ -71,12 +72,16 @@
     - ansible.builtin.unarchive:
         src: "{{ result_tempfile.path }}/terraform_{{ terraform_version }}_linux_amd64.zip"
         dest: "{{ result_tempfile.path }}"
-        #remote_src: true
     - ansible.builtin.copy:
-        src: "{{ result_tempfile.path }}/terraform"
-        dest: "{{ container_path }}/usr/local/bin/terraform"
+        src: "{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
         owner: "root"
         group: "root"
         mode: "0755"
+      loop:
+        - src: "{{ result_tempfile.path }}/terraform" 
+          dest: "/usr/local/bin/terraform"
+      loop_control:
+        label: "{{ item.dest }}"
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"

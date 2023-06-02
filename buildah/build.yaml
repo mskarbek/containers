@@ -31,9 +31,11 @@
           tar
     - ansible.builtin.copy:
         src: "storage.conf"
-        dest: "{{ container_path }}/etc/containers/storage.conf"
+        dest: "{{ container_path }}{{ item }}"
         owner: "root"
         group: "root"
         mode: "0644"
+      loop:
+        - "/etc/containers/storage.conf"
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"
