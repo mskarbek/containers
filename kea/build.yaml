@@ -55,9 +55,10 @@
           install
           isc-kea
           isc-stork-agent
-    - ansible.builtin.copy:
-        src: "{{ container_path }}{{ item }}"
+    - ansible.posix.synchronize:
+        src: "{{ container_path }}{{ item.src }}"
         dest: "{{ container_path }}{{ item.dest }}"
+        archive: true
       loop:
         - src: "/etc/kea/"
           dest: "/usr/share/kea/etc/"
