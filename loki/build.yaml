@@ -1,0 +1,74 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item }}"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - "/usr/local/bin/loki"
+        - "/usr/local/bin/logcli"
+    - ansible.builtin.get_url:
+        url: "{{ item }}"
+        dest: "{{ result_tempfile.path }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - "{{ loki_public_url }}"
+        - "{{ logcli_public_url }}"
+      when: "not use_repository"
+    - ansible.builtin.get_url:
+        url: "{{ item }}"
+        dest: "{{ result_tempfile.path }}"
+        username: "{{ repository_username }}"
+        password: "{{ repository_password }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - "{{ loki_proxy_url }}"
+        - "{{ logcli_proxy_url }}"
+      when: "use_repository"
+    - ansible.builtin.unarchive:
+        src: "{{ result_tempfile.path }}/{{ item }}"
+        dest: "{{ result_tempfile.path }}"
+      loop:
+        - "loki-linux-amd64.zip"
+        - "logcli-linux-amd64.zip"
+    - ansible.builtin.copy:
+        src: "{{ result_tempfile.path }}/{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - src: "loki-linux-amd64"
+          dest: "/usr/local/bin/loki"
+        - src: "logcli-linux-amd64"
+          dest: "/usr/local/bin/logcli"
+    - ansible.posix.synchronize:
+        src: "rootfs/"
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - "buildah run --network none {{ container_uuid }} systemctl enable loki.service"
+        - "buildah config --volume /etc/loki {{ container_uuid }}"
+        - "buildah config --volume /var/lib/loki {{ container_uuid }}"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"
