@@ -29,7 +29,7 @@
           --config={{ container_path }}/etc/dnf/dnf.conf
           --installroot={{ container_path }}
           install
-          grafana
+          grafana-{{ grafana_version }}
       when: "use_repository"
     - ansible.builtin.file:
         dest: "{{ container_path }}{{ item }}"

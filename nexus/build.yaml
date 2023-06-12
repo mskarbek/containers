@@ -52,6 +52,7 @@
     - ansible.builtin.file:
         src: "{{ item.src }}"
         dest: "{{ container_path }}{{ item.dest }}"
+        follow: false
         force: true
         state: "link"
       loop:
