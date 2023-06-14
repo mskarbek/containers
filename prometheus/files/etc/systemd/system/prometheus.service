@@ -1,0 +1,20 @@
+[Unit]
+Description=Prometheus
+Documentation=https://prometheus.io/docs/prometheus/
+After=network.target nss-lookup.target
+AssertFileNotEmpty=/etc/prometheus/config.yaml
+
+[Service]
+WorkingDirectory=/run/prometheus
+User=prometheus
+Group=prometheus
+ExecStart=/usr/bin/prometheus\
+ --storage.tsdb.path=/var/lib/prometheus\
+ --web.listen-address="0.0.0.0:9090"\
+ --web.enable-remote-write-receiver\
+ --config.file=/etc/prometheus/config.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

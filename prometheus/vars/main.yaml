@@ -1,0 +1,9 @@
+---
+base_name: "systemd"
+base_tag: "9.2-1"
+image_name: "prometheus"
+image_version: "{{ prometheus_version }}"
+image_release: "1"
+prometheus_version: "2.44.0"
+prometheus_public_url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+prometheus_proxy_url: "{{ repository_url }}/repository/{{ repository_raw_repo }}/p/prometheus/{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"

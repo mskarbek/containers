@@ -80,7 +80,10 @@ Those images are intended to replace UBI in their function, but they drop entire
 * [tinyproxy](./tinyproxy/README.md)
 
 #### monitoring
+* [grafana](./grafana/README.md)
 * [loki](./loki/README.md)
+* [mimir](./mimir/README.md)
+* [prometheus](./prometheus/README.md)
 * [vector](./vector/README.md)
 
 #### tools
@@ -114,9 +117,7 @@ The below list contains old script-based images dropped after c5c2793414e506b25c
 
 #### monitoring
 * [alertmanager](./alertmanager/README.md)
-* [grafana](./grafana/README.md)
 * [loki-canary](./loki-canary/README.md)
-* [prometheus](./prometheus/README.md)
 * [pushgateway](./pushgateway/README.md)
 
 #### tools
