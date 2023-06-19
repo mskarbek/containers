@@ -15,10 +15,38 @@
         mode: "0755"
       loop:
         - "/usr/local/bin/consul"
+    - ansible.builtin.get_url:
+        url: "{{ consul_public_url }}"
+        dest: "{{ result_tempfile.path }}/consul_{{ consul_version }}_linux_amd64.zip"
+        force: true
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "not use_repository"
+    - ansible.builtin.get_url:
+        url: "{{ consul_proxy_url }}"
+        dest: "{{ result_tempfile.path }}/consul_{{ consul_version }}_linux_amd64.zip"
+        force: true
+        username: "{{ repository_username }}"
+        password: "{{ repository_password }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "use_repository"
     - ansible.builtin.unarchive:
-        src: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip"
-        dest: "{{ result_tempfile.path }}"
+        src: "{{ result_tempfile.path }}/consul_{{ consul_version }}_linux_amd64.zip"
+        dest: "{{ result_tempfile.path }}/"
         remote_src: true
+    - ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
+        force: true
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - dest: "/usr/local/bin/consul"
+          src: "{{ result_tempfile.path }}/consul"
     - ansible.posix.synchronize:
         src: rootfs/
         dest: "{{ container_path }}/"

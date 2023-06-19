@@ -15,13 +15,33 @@
         mode: "0755"
       loop:
         - "/usr/local/bin/consul-template"
+
+    - ansible.builtin.get_url:
+        url: "{{ consul_template_public_url }}"
+        dest: "{{ result_tempfile.path }}/consul-template_{{ consul_template_version }}_linux_amd64.zip"
+        force: true
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "not use_repository"
+    - ansible.builtin.get_url:
+        url: "{{ consul_template_proxy_url }}"
+        dest: "{{ result_tempfile.path }}/consul-template_{{ consul_template_version }}_linux_amd64.zip"
+        force: true
+        username: "{{ repository_username }}"
+        password: "{{ repository_password }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "use_repository"
     - ansible.builtin.unarchive:
-        src: "https://releases.hashicorp.com/consul-template/{{ consul_template_version }}/consul-template_{{ consul_template_version }}_linux_amd64.zip"
-        dest: "{{ result_tempfile.path }}"
+        src: "{{ result_tempfile.path }}/consul-template_{{ consul_template_version }}_linux_amd64.zip"
+        dest: "{{ result_tempfile.path }}/"
         remote_src: true
     - ansible.builtin.copy:
         src: "{{ item.src }}"
         dest: "{{ container_path }}{{ item.dest }}"
+        force: true
         owner: "root"
         group: "root"
         mode: "0755"
