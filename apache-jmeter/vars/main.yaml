@@ -1,7 +1,7 @@
 ---
 base_name: "base/openjdk17"
 base_tag: "{{ openjdk17_version }}-1"
-image_name: "jmeter"
+image_name: "base/apache-jmeter"
 image_version: "{{ jmeter_version }}"
 image_release: "1"
 openjdk17_version: "17.0.7.0.7-3"
