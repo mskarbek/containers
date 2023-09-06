@@ -7,14 +7,6 @@
   tasks:
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
-#    - ansible.builtin.dnf:
-#        name:
-#          - "openssh-server"
-#          - "openssh-clients"
-#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
-#        install_weak_deps: false
-#        state: "latest"
-#        installroot: "{{ container_path }}"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:

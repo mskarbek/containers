@@ -7,16 +7,6 @@
   tasks:
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
-#    - ansible.builtin.dnf:
-#        name:
-#          - "knot"
-#          - "knot-dnssecutils"
-#          - "knot-module-dnstap"
-#          - "knot-utils"
-#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
-#        install_weak_deps: false
-#        state: "latest"
-#        installroot: "{{ container_path }}"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:
@@ -32,15 +22,35 @@
           knot-dnssecutils
           knot-module-dnstap
           knot-utils
-    - ansible.posix.synchronize:
-        src: rootfs/
-        dest: "{{ container_path }}/"
-        archive: false
-        links: true
-        recursive: true
-        rsync_opts:
-          - "--exclude=.gitkeep"
-          - "--ignore-existing"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item.dest }}"
+        state: "{{ item.state }}"
+        owner: "root"
+        group: "root"
+        mode: "{{ item.mode }}"
+      loop:
+        - dest: "/usr/share/knot"
+          state: "directory"
+          mode: "0755"
+        - dest: "/usr/share/knot/knot.conf"
+          state: "touch"
+          mode: "0644"
+        - dest: "/etc/tmpfiles.d/knot.conf"
+          state: "touch"
+          mode: "0644"
+    - ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
+        owner: "root"
+        group: "root"
+        mode: "{{ item.mode }}"
+      loop:
+        - src: "usr/share/knot/knot.conf"
+          dest: "/usr/share/knot/knot.conf"
+          mode: "0644"
+        - src: "etc/tmpfiles.d/knot.conf"
+          dest: "/etc/tmpfiles.d/knot.conf"
+          mode: "0644"
     - ansible.builtin.command:
         cmd: "{{ item }}"
       loop:

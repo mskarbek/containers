@@ -37,25 +37,6 @@
         - "/tmp"
     - ansible.builtin.import_tasks:
         file: "tasks/{{ image_os }}.yaml"
-    - ansible.builtin.file:
-        dest: "{{ container_path }}{{ item }}"
-        state: "touch"
-        owner: "root"
-        group: "root"
-        mode: "0644"
-      loop:
-        - "/etc/pki/ca-trust/source/anchors/{{ internal_ca }}"
-    - ansible.builtin.copy:
-        src: "{{ item.src }}"
-        dest: "{{ container_path }}{{ item.dest }}"
-        owner: "root"
-        group: "root"
-        mode: "0644"
-      loop:
-        - src: "{{ internal_ca }}"
-          dest: "/etc/pki/ca-trust/source/anchors/{{ internal_ca }}"
-    - ansible.builtin.command:
-        cmd: "buildah run --network none {{ container_uuid }} update-ca-trust"
     - ansible.posix.synchronize:
         src: rootfs/
         dest: "{{ container_path }}/"
