@@ -1,0 +1,7 @@
+---
+base_name: "base"
+base_tag: "9.2-1"
+image_name: "base/bun"
+image_version: "{{ bun_version }}"
+image_release: "1"
+bun_version: "1.0.0"
