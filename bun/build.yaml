@@ -7,10 +7,37 @@
   tasks:
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
+    - ansible.builtin.get_url:
+        url: "{{ item.url }}"
+        dest: "{{ result_tempfile.path }}{{ item.dest }}"
+        force: true
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - url: "{{ bun_public_url }}"
+          dest: "/bun-linux-x64.zip"
+      loop_control:
+        label: "{{ item.dest }}"
+      when: "not use_repository"
+    - ansible.builtin.get_url:
+        url: "{{ item.url }}"
+        dest: "{{ result_tempfile.path }}{{ item.dest }}"
+        force: true
+        username: "{{ repository_username }}"
+        password: "{{ repository_password }}"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - url: "{{ bun_proxy_url }}"
+          dest: "/bun-linux-x64.zip"
+      loop_control:
+        label: "{{ item.dest }}"
+      when: "use_repository"
     - ansible.builtin.unarchive:
-        src: "https://github.com/oven-sh/bun/releases/download/bun-v{{ bun_version }}/bun-linux-x64.zip"
+        src: "{{ result_tempfile.path }}/bun-linux-x64.zip"
         dest: "{{ result_tempfile.path }}"
-        remote_src: true
     - ansible.builtin.file:
         dest: "{{ container_path }}/usr/local/bin/bun"
         state: "touch"
