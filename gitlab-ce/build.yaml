@@ -27,6 +27,7 @@
           git
           libxcrypt-compat
           tar
+          which
     - ansible.builtin.get_url:
         url: "{{ gitlab_public_url }}"
         dest: "{{ result_tempfile.path }}/gitlab-ce-{{ gitlab_version }}-ce.0.el9.x86_64.rpm"
