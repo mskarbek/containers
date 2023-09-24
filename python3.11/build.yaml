@@ -34,21 +34,21 @@
       loop:
         - "/root/.netrc"
         - "/etc/pip.conf"
-      when: "not bootstrap"
+      when: "use_repository"
     - ansible.builtin.template:
-        src: ".netrc.j2"
-        dest: "{{ container_path }}/root/.netrc"
+        src: "{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
         owner: "root"
         group: "root"
-        mode: "0644"
-      when: "not bootstrap"
-    - ansible.builtin.template:
-        src: "pip.conf.j2"
-        dest: "{{ container_path }}/etc/pip.conf"
-        owner: "root"
-        group: "root"
-        mode: "0644"
-      when: "not bootstrap"
+        mode: "{{ item.mode }}"
+      when: "use_repository"
+      loop:
+        - src: ".netrc.j2"
+          dest: "/root/.netrc"
+          mode: "0400"
+        - src: "pip.conf.j2"
+          dest: "/etc/pip.conf"
+          mode: "0644"
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"
 - hosts: "localhost"

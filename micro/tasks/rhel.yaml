@@ -6,17 +6,9 @@
     group: "root"
     mode: "0644"
   loop:
-    - "/etc/dnf/dnf.conf"
     - "/etc/yum.repos.d/redhat.repo"
     - "/etc/yum.repos.d/epel.repo"
-    - "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
-    - "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9"
-- ansible.builtin.template:
-    src: "dnf.conf.j2"
-    dest: "{{ container_path }}/etc/dnf/dnf.conf"
-    owner: "root"
-    group: "root"
-    mode: "0644"
+  when: "not use_repository"
 - ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ container_path }}{{ item.dest }}"
@@ -28,10 +20,51 @@
       dest: "/etc/yum.repos.d/redhat.repo"
     - src: "repos/epel.repo"
       dest: "/etc/yum.repos.d/epel.repo"
+  when: "not use_repository"
+
+- ansible.builtin.file:
+    dest: "{{ container_path }}{{ item }}"
+    state: "touch"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop:
+    - "/etc/yum.repos.d/proxy.repo"
+  when: "use_repository"
+- ansible.builtin.template:
+    src: "proxy.repo.j2"
+    dest: "{{ container_path }}/etc/yum.repos.d/proxy.repo"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  when: "use_repository"
+- ansible.builtin.file:
+    dest: "{{ container_path }}{{ item }}"
+    state: "touch"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop:
+    - "/etc/dnf/dnf.conf"
+    - "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
+    - "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9"
+- ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ container_path }}{{ item.dest }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop:
     - src: "rpm-gpg/RPM-GPG-KEY-redhat-release"
       dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
     - src: "rpm-gpg/RPM-GPG-KEY-EPEL-9"
       dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9"
+- ansible.builtin.template:
+    src: "dnf.conf.j2"
+    dest: "{{ container_path }}/etc/dnf/dnf.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
 - ansible.builtin.command:

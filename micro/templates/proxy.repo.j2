@@ -1,10 +1,6 @@
-#!/usr/bin/env bash
-set -eu
-
-cat << EOF > ./proxy.repo
 [rhel-9-for-x86_64-baseos-rpms]
 name = Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)
-baseurl = {{ repository_url }}/repository/rpm-proxy-redhat/rhel9/9/x86_64/baseos/os
+baseurl = {{ repository_url }}/repository/rpm-proxy-redhat/dist/rhel9/9/x86_64/baseos/os
 username = {{ repository_username }}
 password = {{ repository_password }}
 enabled = 1
@@ -13,7 +9,7 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
 [rhel-9-for-x86_64-appstream-rpms]
 name = Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)
-baseurl = {{ repository_url }}/repository/rpm-proxy-redhat/rhel9/9/x86_64/appstream/os
+baseurl = {{ repository_url }}/repository/rpm-proxy-redhat/dist/rhel9/9/x86_64/appstream/os
 username = {{ repository_username }}
 password = {{ repository_password }}
 enabled = 1
@@ -22,7 +18,7 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
 [codeready-builder-for-rhel-9-x86_64-rpms]
 name = Red Hat CodeReady Linux Builder for RHEL 9 x86_64 (RPMs)
-baseurl = {{ repository_url }}/repository/rpm-proxy-redhat/rhel9/9/x86_64/codeready-builder/os
+baseurl = {{ repository_url }}/repository/rpm-proxy-redhat/dist/rhel9/9/x86_64/codeready-builder/os
 username = {{ repository_username }}
 password = {{ repository_password }}
 enabled = 1
@@ -43,7 +39,7 @@ name = RPM Fusion Free for Enterprise Linux 9 x86_64 (RPMs)
 baseurl = {{ repository_url }}/repository/rpm-proxy-rpmfusion/free/el/updates/9/x86_64
 username = {{ repository_username }}
 password = {{ repository_password }}
-enabled = 1
+enabled = 0
 gpgcheck = 1
 repo_gpgcheck = 0
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-el-9
@@ -75,12 +71,30 @@ enabled = 0
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
 
+[pgdg16]
+name = PostgreSQL 16 for Enterprise Linux 9 x86_64 (RPMs)
+baseurl = {{ repository_url }}/repository/rpm-proxy-pgdg/16/redhat/rhel-9-x86_64
+username = {{ repository_username }}
+password = {{ repository_password }}
+enabled = 1
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+
+[pgdg15]
+name = PostgreSQL 15 for Enterprise Linux 9 x86_64 (RPMs)
+baseurl = {{ repository_url }}/repository/rpm-proxy-pgdg/15/redhat/rhel-9-x86_64
+username = {{ repository_username }}
+password = {{ repository_password }}
+enabled = 0
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
+
 [pgdg14]
 name = PostgreSQL 14 for Enterprise Linux 9 x86_64 (RPMs)
 baseurl = {{ repository_url }}/repository/rpm-proxy-pgdg/14/redhat/rhel-9-x86_64
 username = {{ repository_username }}
 password = {{ repository_password }}
-enabled = 1
+enabled = 0
 gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG
 
@@ -107,6 +121,5 @@ name = Collection for Enterprise Linux 9 x86_64 (RPMs)
 baseurl = {{ repository_url }}/repository/rpm-hosted-prd/9
 username = {{ repository_username }}
 password = {{ repository_password }}
-enabled = 1
+enabled = 0
 gpgcheck = 0
-EOF

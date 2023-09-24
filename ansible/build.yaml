@@ -8,26 +8,57 @@
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
     - ansible.builtin.file:
-        dest: "{{ container_path }}{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
         state: "{{ item.state }}"
         owner: "root"
         group: "root"
         mode: "{{ item.mode }}"
       loop:
-        - src: "/root/.ansible"
+        - dest: "/root/.ansible"
           state: "directory"
           mode: "0755"
-        - src: "/etc/yum.repos.d/pgdg-redhat-all.repo"
+        - dest: "/etc/ansible"
+          state: "directory"
+          mode: "0755"
+        - dest: "/etc/ansible/hosts"
           state: "touch"
           mode: "0644"
-        - src: "/root/.ansible/requirements.yaml"
+        - dest: "/root/.ansible/requirements.yaml"
           state: "touch"
           mode: "0644"
-        - src: "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG"
+        - dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG"
           state: "touch"
           mode: "0644"
       loop_control:
-        label: "{{ item.src }}"
+        label: "{{ item.dest }}"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item.dest }}"
+        state: "{{ item.state }}"
+        owner: "root"
+        group: "root"
+        mode: "{{ item.mode }}"
+      loop:
+        - dest: "/etc/yum.repos.d/pgdg-redhat-all.repo"
+          state: "touch"
+          mode: "0644"
+      loop_control:
+        label: "{{ item.dest }}"
+      when: "not use_repository"
+    - ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      loop:
+        - src: "hosts"
+          dest: "/etc/ansible/hosts"
+        - src: "requirements.yaml"
+          dest: "/root/.ansible/requirements.yaml"
+        - src: "rpm-gpg/RPM-GPG-KEY-PGDG"
+          dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG"
+      loop_control:
+        label: "{{ item.dest }}"
     - ansible.builtin.copy:
         src: "{{ item.src }}"
         dest: "{{ container_path }}{{ item.dest }}"
@@ -37,12 +68,9 @@
       loop:
         - src: "repos/pgdg-redhat-all.repo"
           dest: "/etc/yum.repos.d/pgdg-redhat-all.repo"
-        - src: "rpm-gpg/RPM-GPG-KEY-PGDG"
-          dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG"
-        - src: "requirements.yaml"
-          dest: "/root/.ansible/requirements.yaml"
       loop_control:
         label: "{{ item.dest }}"
+      when: "not use_repository"
     - ansible.builtin.command:
         cmd: "rpm --root {{ container_path }} --import {{ container_path }}/etc/pki/rpm-gpg/{{ item }}"
       loop:
@@ -80,7 +108,7 @@
     - ansible.builtin.command:
         cmd: "{{ item }}"
       loop:
-        - "buildah run --network=host {{ container_uuid }} pip3 install ara=={{ ara_version }} python-consul hvac"
+        - "buildah run --network=host {{ container_uuid }} pip3.11 install ara=={{ ara_version }} python-consul hvac"
         - "buildah run --network=host --workingdir=/root {{ container_uuid }} ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections"
         - "buildah run --network=none {{ container_uuid }} ln -s /usr/bin/podman-remote /usr/bin/podman"
     - ansible.builtin.file:

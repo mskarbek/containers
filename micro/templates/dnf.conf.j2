@@ -4,8 +4,13 @@ installonly_limit=3
 clean_requirements_on_remove=True
 best=True
 skip_if_unavailable=False
+{% if image_os == 'fc' %}
+releasever=38
+module_platform_id=platform:fc38
+{% else %}
 releasever=9
 module_platform_id=platform:el9
+{% endif %}
 install_weak_deps=False
 tsflags=nodocs
 {% if proxy_url is defined %}

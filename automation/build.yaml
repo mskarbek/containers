@@ -49,6 +49,8 @@
           state: "touch"
         - dest: "/usr/local/share/terraform/plugins"
           state: "directory"
+        - dest: "/var/lib/containers/tmp"
+          state: "directory"
       loop_control:
         label: "{{ item.dest }}"
     - ansible.builtin.get_url:

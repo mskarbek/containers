@@ -1,0 +1,66 @@
+---
+- ansible.builtin.file:
+    dest: "{{ container_path }}{{ item }}"
+    state: "touch"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop:
+    - "/etc/dnf/dnf.conf"
+    - "/etc/yum.repos.d/fedora.repo"
+    - "/etc/yum.repos.d/fedora-updates.repo"
+    - "/etc/yum.repos.d/fedora-modular.repo"
+    - "/etc/yum.repos.d/fedora-updates-modular.repo"
+    - "/etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-38-x86_64"
+- ansible.builtin.template:
+    src: "dnf.conf.j2"
+    dest: "{{ container_path }}/etc/dnf/dnf.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+- ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ container_path }}{{ item.dest }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop:
+    - src: "/etc/yum.repos.d/fedora.repo"
+      dest: "/etc/yum.repos.d/fedora.repo"
+    - src: "/etc/yum.repos.d/fedora-updates.repo"
+      dest: "/etc/yum.repos.d/fedora-updates.repo"
+    - src: "/etc/yum.repos.d/fedora-modular.repo"
+      dest: "/etc/yum.repos.d/fedora-modular.repo"
+    - src: "/etc/yum.repos.d/fedora-updates-modular.repo"
+      dest: "/etc/yum.repos.d/fedora-updates-modular.repo"
+    - src: "rpm-gpg/RPM-GPG-KEY-fedora-38-x86_64"
+      dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-38-x86_64"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+- ansible.builtin.command:
+    cmd: >
+      dnf
+      --quiet
+      --assumeyes
+      --nogpgcheck
+      --releasever=38
+      --config={{ container_path }}/etc/dnf/dnf.conf
+      --installroot={{ container_path }}
+      install
+      glibc-minimal-langpack
+      coreutils-single
+- ansible.builtin.command:
+    cmd: "rpm --root {{ container_path }} --import {{ container_path }}/etc/pki/rpm-gpg/{{ item }}"
+  loop:
+    - "RPM-GPG-KEY-fedora-38-x86_64"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+- ansible.builtin.command:
+    cmd: >
+      dnf
+      --quiet
+      --assumeyes
+      --config={{ container_path }}/etc/dnf/dnf.conf
+      --installroot={{ container_path }}
+      install
+      ca-certificates
