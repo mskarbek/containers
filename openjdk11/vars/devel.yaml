@@ -1,6 +1,0 @@
----
-base_name: "base/openjdk11"
-base_tag: "{{ openjdk11_version }}-1"
-image_name: "base/openjdk11-devel"
-image_version: "{{ openjdk11_version }}"
-image_release: "1"

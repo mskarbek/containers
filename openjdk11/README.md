@@ -1,1 +1,0 @@
-# openjdk11-jre
