@@ -111,6 +111,14 @@
         - "buildah run --network=host {{ container_uuid }} pip3.11 install ara=={{ ara_version }} python-consul hvac"
         - "buildah run --network=host --workingdir=/root {{ container_uuid }} ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections"
         - "buildah run --network=none {{ container_uuid }} ln -s /usr/bin/podman-remote /usr/bin/podman"
+      when: "proxy_url is not defined"
+    - ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - "buildah run --network=host {{ container_uuid }} pip3.11 install ara=={{ ara_version }} python-consul hvac"
+        - "buildah run --network=host --env='HTTP_PROXY={{ proxy_url }}' --env='HTTPS_PROXY={{ proxy_url }}' --workingdir=/root {{ container_uuid }} ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections"
+        - "buildah run --network=none {{ container_uuid }} ln -s /usr/bin/podman-remote /usr/bin/podman"
+      when: "proxy_url is defined"
     - ansible.builtin.file:
         dest: "{{ container_path }}/root/.cache"
         state: "absent"
