@@ -16,7 +16,7 @@
       loop:
         - "/etc/yum.repos.d/rabbitmq.repo"
         - "/etc/pki/rpm-gpg/RPM-GPG-KEY-rabbitmq"
-      when: "bootstrap"
+      when: "not use_repository"
     - ansible.builtin.copy:
         src: "{{ item.src }}"
         dest: "{{ container_path }}{{ item.dest }}"
@@ -28,12 +28,12 @@
           dest: "/etc/yum.repos.d/rabbitmq.repo"
         - src: "rpm-gpg/RPM-GPG-KEY-rabbitmq"
           dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-rabbitmq"
-      when: "bootstrap"
+      when: "not use_repository"
     - ansible.builtin.command:
         cmd: "rpm --root {{ container_path }} --import {{ container_path }}/etc/pki/rpm-gpg/{{ item }}"
       loop:
         - "RPM-GPG-KEY-rabbitmq"
-      when: "bootstrap"
+      when: "not use_repository"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:
