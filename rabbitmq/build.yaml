@@ -14,9 +14,7 @@
         group: "root"
         mode: "0644"
       loop:
-        - "/etc/yum.repos.d/rabbitmq.repo"
         - "/etc/pki/rpm-gpg/RPM-GPG-KEY-rabbitmq"
-      when: "not use_repository"
     - ansible.builtin.copy:
         src: "{{ item.src }}"
         dest: "{{ container_path }}{{ item.dest }}"
@@ -24,16 +22,12 @@
         group: "root"
         mode: "0644"
       loop:
-        - src: "repos/rabbitmq.repo"
-          dest: "/etc/yum.repos.d/rabbitmq.repo"
         - src: "rpm-gpg/RPM-GPG-KEY-rabbitmq"
           dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-rabbitmq"
-      when: "not use_repository"
     - ansible.builtin.command:
         cmd: "rpm --root {{ container_path }} --import {{ container_path }}/etc/pki/rpm-gpg/{{ item }}"
       loop:
         - "RPM-GPG-KEY-rabbitmq"
-      when: "not use_repository"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:
@@ -45,8 +39,21 @@
           --config={{ container_path }}/etc/dnf/dnf.conf
           --installroot={{ container_path }}
           install
-          erlang-{{erlang_version}}.el9
-          rabbitmq-server-{{ rabbitmq_version }}.el8
+          erlang-{{erlang_version}}-1.el9
+          rabbitmq-server-{{ rabbitmq_version }}-1.el8
+      when: "use_repository"
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          https://github.com/rabbitmq/erlang-rpm/releases/download/v{{erlang_version}}/erlang-{{erlang_version}}-1.el9.x86_64.rpm
+          https://github.com/rabbitmq/rabbitmq-server/releases/download/v{{ rabbitmq_version }}/rabbitmq-server-{{ rabbitmq_version }}-1.el8.noarch.rpm
+      when: "not use_repository"
     - ansible.posix.synchronize:
         src: rootfs/
         dest: "{{ container_path }}/"
