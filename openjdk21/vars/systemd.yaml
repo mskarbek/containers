@@ -1,0 +1,6 @@
+---
+base_name: "base/openjdk21"
+base_tag: "{{ openjdk21_version }}-1"
+image_name: "openjdk21"
+image_version: "{{ openjdk21_version }}"
+image_release: "1"
