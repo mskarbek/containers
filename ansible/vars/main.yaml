@@ -1,7 +1,7 @@
 ---
 base_name: "base/python3.11"
-base_tag: "3.11.2-2-1"
+base_tag: "3.11.5-1-1"
 image_name: "base/ansible"
-image_version: "2.14.2-4"
+image_version: "2.14.9-1"
 image_release: "1"
 ara_version: "1.7.0"

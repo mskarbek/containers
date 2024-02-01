@@ -45,15 +45,15 @@
           --config={{ container_path }}/etc/dnf/dnf.conf
           --installroot={{ container_path }}
           install
-          postgresql14-server
-          postgresql14-contrib
-          citus_14
-          pg_auto_failover_14
-          pg_qualstats_14
-          pg_stat_kcache_14
-          pg_wait_sampling_14
-          pg_track_settings_14
-          hypopg_14
+          postgresql16-server
+          postgresql16-contrib
+          citus_16
+          pg_auto_failover_16
+          pg_qualstats_16
+          pg_stat_kcache_16
+          pg_wait_sampling_16
+          pg_track_settings_16
+          hypopg_16
     - ansible.posix.synchronize:
         src: rootfs/
         dest: "{{ container_path }}/"
@@ -64,10 +64,10 @@
           - "--exclude=.gitkeep"
           - "--ignore-existing"
     - ansible.builtin.command:
-        cmd: "buildah run --network none {{ container_uuid }} systemctl enable postgresql-14.service"
+        cmd: "buildah run --network none {{ container_uuid }} systemctl enable postgresql-16.service"
     - ansible.builtin.command:
-        cmd: "buildah config --volume /var/lib/pgsql/14/data {{ container_uuid }}"
+        cmd: "buildah config --volume /var/lib/pgsql/16/data {{ container_uuid }}"
     - ansible.builtin.command:
-        cmd: "buildah config --volume /var/lib/pgsql/14/backups {{ container_uuid }}"
+        cmd: "buildah config --volume /var/lib/pgsql/16/backups {{ container_uuid }}"
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"

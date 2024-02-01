@@ -7,40 +7,6 @@
   tasks:
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
-#    - ansible.builtin.dnf:
-#        name:
-#          - "bzip2"
-#          - "clang"
-#          - "coreutils"
-#          - "cpio"
-#          - "diffutils"
-#          - "dnf"
-#          - "dnf-plugins-core"
-#          - "findutils"
-#          - "gawk"
-#          - "gcc"
-#          - "gcc-c++"
-#          - "git"
-#          - "grep"
-#          - "gzip"
-#          - "info"
-#          - "libtool"
-#          - "llvm"
-#          - "patch"
-#          - "redhat-rpm-config"
-#          - "rpm-build"
-#          - "sed"
-#          - "shadow-utils"
-#          - "tar"
-#          - "unzip"
-#          - "util-linux"
-#          - "which"
-#          - "xz"
-#          - "yum-utils"
-#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
-#        install_weak_deps: false
-#        state: "latest"
-#        installroot: "{{ container_path }}"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:
