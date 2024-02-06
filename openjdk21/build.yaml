@@ -68,15 +68,6 @@
           --config={{ container_path }}/etc/dnf/dnf.conf
           --installroot={{ container_path }}
           module enable maven:3.8
-#    - ansible.builtin.dnf:
-#        name:
-#          - "java-21-openjdk-devel"
-#          - "maven"
-#          - "maven-openjdk21"
-#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
-#        install_weak_deps: false
-#        state: "latest"
-#        installroot: "{{ container_path }}"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:
@@ -89,7 +80,8 @@
           --installroot={{ container_path }}
           install
           java-21-openjdk-devel
+          java-17-openjdk-headless
           maven
-          maven-openjdk21
+          maven-openjdk17
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"
