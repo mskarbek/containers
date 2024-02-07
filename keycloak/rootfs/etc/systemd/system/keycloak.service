@@ -1,0 +1,18 @@
+[Unit]
+Description=Keycloak
+Documentation=https://www.keycloak.org/docs/
+AssertFileNotEmpty=/run/secrets/keycloak-password
+After=network.target nss-lookup.target keycloak-password.service
+Requires=keycloak-password.service
+
+[Service]
+User=keycloak
+Group=keycloak
+EnvironmentFile=/run/secrets/keycloak-password
+ExecStart=/usr/bin/bash /usr/lib/keycloak/bin/kc.sh start-dev
+Restart=on-abort
+LimitNOFILE=65536
+TimeoutSec=600
+
+[Install]
+WantedBy=multi-user.target

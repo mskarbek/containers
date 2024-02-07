@@ -1,0 +1,99 @@
+---
+- hosts: "localhost"
+  gather_facts: false
+  vars_files:
+    - "vars/common.yaml"
+    - "vars/main.yaml"
+  tasks:
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_create.yaml"
+# Ansible DNF module issue:
+# https://github.com/ansible/ansible/issues/80644
+    - ansible.builtin.command:
+        cmd: >
+          dnf
+          --quiet
+          --assumeyes
+          --disableplugin="subscription-manager"
+          --config={{ container_path }}/etc/dnf/dnf.conf
+          --installroot={{ container_path }}
+          install
+          krb5-workstation
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item.dest }}"
+        state: "{{ item.state }}"
+        owner: "root"
+        group: "root"
+        mode: "{{ item.mode }}"
+      loop:
+        - dest: "/usr/lib/keycloak"
+          state: "directory"
+          mode: "0755"
+        - dest: "/usr/share/keycloak"
+          state: "directory"
+          mode: "0755"
+        - dest: "/usr/share/keycloak/cache-ispn.xml"
+          state: "touch"
+          mode: "0644"
+        - dest: "/usr/share/keycloak/keycloak.conf"
+          state: "touch"
+          mode: "0644"
+    - ansible.builtin.get_url:
+        url: "{{ keycloak_public_url }}"
+        dest: "{{ result_tempfile.path }}/keycloak-{{ keycloak_version }}.tar.gz"
+        force: true
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "not use_repository"
+    - ansible.builtin.get_url:
+        url: "{{ keycloak_proxy_url }}"
+        dest: "{{ result_tempfile.path }}/keycloak-{{ keycloak_version }}.tar.gz"
+        force: true
+        username: "{{ repository_username }}"
+        password: "{{ repository_password }}"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "use_repository"
+    - ansible.builtin.unarchive:
+        src: "{{ result_tempfile.path }}/keycloak-{{ keycloak_version }}.tar.gz"
+        dest: "{{ container_path }}/usr/lib/keycloak"
+        extra_opts:
+          - "--strip-components"
+          - "1"
+    - ansible.builtin.copy:
+        src: "{{ container_path }}{{ item.src }}"
+        dest: "{{ container_path }}{{ item.dest }}"
+        owner: "root"
+        group: "root"
+        mode: "{{ item.mode }}"
+      loop:
+        - src: "/usr/lib/keycloak/conf/cache-ispn.xml"
+          dest: "/usr/share/keycloak/cache-ispn.xml"
+          mode: "0644"
+        - src: "/usr/lib/keycloak/conf/keycloak.conf"
+          dest: "/usr/share/keycloak/keycloak.conf"
+          mode: "0644"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item }}"
+        state: "absent"
+      loop:
+        - "/usr/lib/keycloak/conf"
+    - ansible.posix.synchronize:
+        src: rootfs/
+        dest: "{{ container_path }}/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+    - ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - "buildah config --volume=/usr/lib/keycloak/conf {{ container_uuid }}"
+        - "buildah config --volume=/usr/lib/keycloak/data {{ container_uuid }}"
+        - "buildah run --network=none {{ container_uuid }} systemctl enable keycloak.service"
+    - ansible.builtin.import_tasks:
+        file: "tasks/buildah_commit.yaml"

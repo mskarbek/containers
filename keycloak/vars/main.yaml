@@ -1,0 +1,9 @@
+---
+base_name: "openjdk21"
+base_tag: "21.0.1.0.13-1-1"
+image_name: "keycloak"
+image_version: "{{ keycloak_version }}"
+image_release: "1"
+keycloak_version: "23.0.6"
+keycloak_public_url: "https://github.com/keycloak/keycloak/releases/download/{{ keycloak_version }}/keycloak-{{ keycloak_version }}.tar.gz"
+keycloak_proxy_url: "{{ repository_url }}/repository/{{ repository_raw_repo }}/k/keycloak/{{ keycloak_version }}/keycloak-{{ keycloak_version }}.tar.gz"
