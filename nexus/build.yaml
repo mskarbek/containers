@@ -26,7 +26,7 @@
         group: "root"
         mode: "0755"
       loop:
-        - "/usr/lib/sonatype"
+        - "/usr/lib/sonatype/nexus"
     - ansible.builtin.get_url:
         url: "{{ nexus_public_url }}"
         dest: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
@@ -47,43 +47,34 @@
       when: "use_repository"
     - ansible.builtin.unarchive:
         src: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
-        dest: "{{ container_path }}/usr/lib/sonatype"
-        #remote_src: true
-    - ansible.builtin.file:
-        src: "{{ item.src }}"
-        dest: "{{ container_path }}{{ item.dest }}"
-        follow: false
-        force: true
-        state: "link"
-      loop:
-        - src: "/usr/lib/sonatype/nexus-{{ nexus_version }}"
-          dest: "/usr/lib/sonatype/nexus"
+        dest: "{{ container_path }}/usr/lib/sonatype/nexus"
+        extra_opts:
+          - "--strip-components"
+          - "1"
     - ansible.builtin.replace:
-        dest: "{{ container_path }}/usr/lib/sonatype/nexus-{{ nexus_version }}/bin/nexus.vmoptions"
+        dest: "{{ container_path }}/usr/lib/sonatype/nexus/bin/nexus.vmoptions"
         regexp: "=../sonatype-work/"
         replace: "=/var/lib/sonatype-work/"
-# Nexus 3.53 have an issue with custom plugins so Dart is disabled for now:
-# https://help.sonatype.com/repomanager3/product-information/release-notes/2023-release-notes/sonatype-nexus-repository-3.53.0---3.53.1-release-notes
-#    - ansible.builtin.file:
-#        dest: "{{ container_path }}/usr/lib/sonatype/nexus-{{ nexus_version }}/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
-#        state: "touch"
-#        owner: "root"
-#        group: "root"
-#        mode: "0644"
-#    - ansible.builtin.get_url:
-#        url: "{{ nexus_dart_public_url }}"
-#        dest: "{{ container_path }}/usr/lib/sonatype/nexus-{{ nexus_version }}/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
-#        owner: "root"
-#        group: "root"
-#        mode: "0644"
-#      when: "not use_repository"
-#    - ansible.builtin.get_url:
-#        url: "{{ nexus_dart_proxy_url }}"
-#        dest: "{{ container_path }}/usr/lib/sonatype/nexus-{{ nexus_version }}/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
-#        owner: "root"
-#        group: "root"
-#        mode: "0644"
-#      when: "use_repository"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}/usr/lib/sonatype/nexus/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
+        state: "touch"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    - ansible.builtin.get_url:
+        url: "{{ nexus_dart_public_url }}"
+        dest: "{{ container_path }}/usr/lib/sonatype/nexus/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "not use_repository"
+    - ansible.builtin.get_url:
+        url: "{{ nexus_dart_proxy_url }}"
+        dest: "{{ container_path }}/usr/lib/sonatype/nexus/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      when: "use_repository"
     - ansible.posix.synchronize:
         src: "rootfs/"
         dest: "{{ container_path }}/"
