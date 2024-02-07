@@ -8,15 +8,6 @@
   tasks:
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
-#    - ansible.builtin.dnf:
-#        name:
-#          - "java-21-openjdk-headless"
-#          - "apr"
-#          - "tomcat-native"
-#        conf_file: "{{ container_path }}/etc/dnf/dnf.conf"
-#        install_weak_deps: false
-#        state: "latest"
-#        installroot: "{{ container_path }}"
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:
@@ -43,11 +34,11 @@
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_create.yaml"
     - ansible.builtin.command:
-        cmd: "buildah config --cmd '[ \"/usr/sbin/init\" ]' {{ container_uuid }}"
-    - ansible.builtin.command:
-        cmd: "buildah config --stop-signal 'SIGRTMIN+3' {{ container_uuid }}"
-    - ansible.builtin.command:
-        cmd: "buildah config --volume /var/log/journal {{ container_uuid }}"
+        cmd: "{{ item }}"
+      loop:
+        - "buildah config --cmd '[ \"/usr/sbin/init\" ]' {{ container_uuid }}"
+        - "buildah config --stop-signal 'SIGRTMIN+3' {{ container_uuid }}"
+        - "buildah config --volume /var/log/journal {{ container_uuid }}"
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"
 - hosts: "localhost"
