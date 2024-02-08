@@ -1,6 +1,6 @@
 ---
 base_name: "base/nodejs16"
-base_tag: "16.20.1-2-1"
+base_tag: "16.20.2-1"
 image_name: "nodejs16"
-image_version: "16.20.1-2"
+image_version: "16.20.2"
 image_release: "1"
