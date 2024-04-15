@@ -19,7 +19,7 @@
           --config={{ container_path }}/etc/dnf/dnf.conf
           --installroot={{ container_path }}
           install
-          java-1.8.0-openjdk-headless
+          java-11-openjdk-headless
           apr
           tomcat-native
     - ansible.builtin.import_tasks:
@@ -70,8 +70,8 @@
           --config={{ container_path }}/etc/dnf/dnf.conf
           --installroot={{ container_path }}
           install
-          java-1.8.0-openjdk-devel
+          java-11-openjdk-devel
           maven
-          maven-openjdk8
+          maven-openjdk11
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"
