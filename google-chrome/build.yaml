@@ -19,26 +19,25 @@
           --installroot={{ container_path }}
           install {{ google_chrome_proxy_url }}
     - ansible.builtin.get_url:
-        url: "{{ google_chromedriver_proxy_url }}"
-        dest: "{{ result_tempfile.path }}/chromedriver-linux64.zip"
+        url: "{{ item.url }}"
+        dest: "{{ result_tempfile.path }}/{{ item.dest }}"
         force: true
         owner: "root"
         group: "root"
         mode: "0644"
+      loop:
+        - url: "{{ google_chrome_proxy_url }}" 
+          dest: "chrome-linux64.zip"
+        - url: "{{ google_chromedriver_proxy_url }}"
+          dest: "chromedriver-linux64.zip"
+        - url: "{{ google_chrome_headless_shell_proxy_url }}"
+          dest: "chrome-headless-shell-linux64.zip"
     - ansible.builtin.unarchive:
-        src: "{{ result_tempfile.path }}/chromedriver-linux64.zip"
-        dest: "{{ result_tempfile.path }}"
-    - ansible.builtin.file:
-        dest: "{{ container_path }}/usr/bin/chromedriver"
-        state: "touch"
-        owner: "root"
-        group: "root"
-        mode: "0755"
-    - ansible.builtin.copy:
-        src: "{{ result_tempfile.path }}/chromedriver-linux64/chromedriver"
-        dest: "{{ container_path }}/usr/bin/chromedriver"
-        owner: "root"
-        group: "root"
-        mode: "0755"
+        src: "{{ result_tempfile.path }}/{{ item }}"
+        dest: "{{ container_path }}/opt"
+      loop:
+        - "chrome-linux64.zip"
+        - "chromedriver-linux64.zip"
+        - "chrome-headless-shell-linux64.zip"
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"
