@@ -19,7 +19,7 @@
           --installroot={{ container_path }}
           install {{ google_chrome_proxy_url }}
     - ansible.builtin.get_url:
-        url: "{{ chrome_driver_proxy_url }}"
+        url: "{{ google_chromedriver_proxy_url }}"
         dest: "{{ result_tempfile.path }}/chromedriver-linux64.zip"
         force: true
         owner: "root"
