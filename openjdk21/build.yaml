@@ -71,8 +71,7 @@
           --installroot={{ container_path }}
           install
           java-21-openjdk-devel
-          java-17-openjdk-headless
           maven
-          maven-openjdk17
+          maven-openjdk21
     - ansible.builtin.import_tasks:
         file: "tasks/buildah_commit.yaml"
