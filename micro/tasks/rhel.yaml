@@ -8,7 +8,7 @@
   loop:
     - "/etc/yum.repos.d/redhat.repo"
     - "/etc/yum.repos.d/epel.repo"
-  when: "not use_repository"
+  when: "not proxy_repos"
 - ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ container_path }}{{ item.dest }}"
@@ -20,8 +20,7 @@
       dest: "/etc/yum.repos.d/redhat.repo"
     - src: "repos/epel.repo"
       dest: "/etc/yum.repos.d/epel.repo"
-  when: "not use_repository"
-
+  when: "not proxy_repos"
 - ansible.builtin.file:
     dest: "{{ container_path }}{{ item }}"
     state: "touch"
@@ -30,14 +29,14 @@
     mode: "0644"
   loop:
     - "/etc/yum.repos.d/proxy.repo"
-  when: "use_repository"
+  when: "proxy_repos"
 - ansible.builtin.template:
     src: "proxy.repo.j2"
     dest: "{{ container_path }}/etc/yum.repos.d/proxy.repo"
     owner: "root"
     group: "root"
     mode: "0644"
-  when: "use_repository"
+  when: "proxy_repos"
 - ansible.builtin.file:
     dest: "{{ container_path }}{{ item }}"
     state: "touch"

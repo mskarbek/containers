@@ -68,7 +68,16 @@
             owner: "root"
             group: "root"
             mode: "0644"
-      when: "not bootstrap"
+      when: "proxy_repos"
+    - ansible.posix.synchronize:
+        src: files/ca-trust/
+        dest: "{{ container_path }}/etc/pki/ca-trust/source/anchors/"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
     - ansible.builtin.command:
         cmd: "{{ item }}"
       loop:
