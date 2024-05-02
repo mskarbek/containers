@@ -5,7 +5,7 @@
 - ansible.builtin.set_fact:
     container_uuid: "{{ lookup('ansible.builtin.file', '/proc/sys/kernel/random/uuid') }}"
 - ansible.builtin.command:
-    cmd: "buildah from --quiet --pull=false --name={{ container_uuid }} {{ registry_host }}/{% if bootstrap %}bootstrap/{% endif %}{{ base_name }}:{{ base_tag }}"
+    cmd: "buildah from --quiet --pull=false --name={{ container_uuid }} {{ registry_host }}/{{ base_name }}:{{ base_tag }}"
 - ansible.builtin.command:
     cmd: "buildah mount {{ container_uuid }}"
   register: "result_command"
@@ -19,7 +19,7 @@
     mode: "0644"
   loop:
     - "/etc/yum.repos.d/redhat.repo"
-  when: "bootstrap and base_name != 'scratch' and image_os == 'rhel'"
+  when: "not proxy_repos and base_name != 'scratch' and image_os == 'rhel'"
 - ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ container_path }}{{ item }}"
@@ -28,4 +28,4 @@
     mode: "0644"
   loop:
     - "/etc/yum.repos.d/redhat.repo"
-  when: "bootstrap and base_name != 'scratch' and image_os == 'rhel'"
+  when: "not proxy_repos and base_name != 'scratch' and image_os == 'rhel'"

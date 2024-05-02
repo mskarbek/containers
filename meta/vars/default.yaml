@@ -1,16 +1,14 @@
 ---
-bootstrap: true
-use_repository: true
-# remove proxy_url if none
-proxy_url: "http://127.0.0.1:8888"
-registry_host: "registry.skarbek.lab"
+proxy_repos: false
+# assents types: remote, proxy, local
+assents: "local"
+registry_host: "REGISTRY"
 registry_username: "username"
 registry_password: "password"
-repository_url: "https://repo.skarbek.lab"
+repository_url: "https://REPOSITORY"
 repository_username: "username"
 repository_password: "passwrd"
 repository_rpm_repo: "rpm-hosted-prd"
 repository_raw_repo: "raw-hosted-prd"
 # "rhel", "alma" or "c9s"
 image_os: "rhel"
-internal_ca: "skarbek.lab_ca.pem"
