@@ -19,12 +19,12 @@
           --config={{ container_path }}/etc/dnf/dnf.conf
           --installroot={{ container_path }}
           install
-          python3.11
-          python3.11-pip
-          python3.11-setuptools
-          python3.11-wheel
-          python3.11-pip-wheel
-          python3.11-setuptools-wheel
+          python3.12
+          python3.12-pip
+          python3.12-setuptools
+          python3.12-wheel
+          python3.12-pip-wheel
+          python3.12-setuptools-wheel
     - ansible.builtin.file:
         dest: "{{ container_path }}{{ item }}"
         state: "touch"
@@ -88,7 +88,7 @@
           --config={{ container_path }}/etc/dnf/dnf.conf
           --installroot={{ container_path }}
           install
-          python3.11-devel
+          python3.12-devel
           libffi-devel
           gcc
           make
