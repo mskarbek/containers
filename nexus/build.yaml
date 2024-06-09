@@ -28,15 +28,15 @@
       loop:
         - "/usr/lib/sonatype/nexus"
     - ansible.builtin.get_url:
-        url: "{{ nexus_public_url }}"
+        url: "{{ nexus_public_url[base_name] }}"
         dest: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
         force: true
         owner: "root"
         group: "root"
         mode: "0644"
-      when: "not use_repository"
+      when: "assents == 'remote'"
     - ansible.builtin.get_url:
-        url: "{{ nexus_proxy_url }}"
+        url: "{{ nexus_proxy_url[base_name] }}"
         dest: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
         force: true
         username: "{{ repository_username }}"
@@ -44,7 +44,7 @@
         owner: "root"
         group: "root"
         mode: "0644"
-      when: "use_repository"
+      when: "assents == 'proxy'"
     - ansible.builtin.unarchive:
         src: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
         dest: "{{ container_path }}/usr/lib/sonatype/nexus"
@@ -67,14 +67,19 @@
         owner: "root"
         group: "root"
         mode: "0644"
-      when: "not use_repository"
+      when: "assents == 'remote'"
     - ansible.builtin.get_url:
         url: "{{ nexus_dart_proxy_url }}"
         dest: "{{ container_path }}/usr/lib/sonatype/nexus/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
         owner: "root"
         group: "root"
         mode: "0644"
-      when: "use_repository"
+      when: "assents == 'proxy'"
+    - ansible.builtin.lineinfile:
+        dest: "{{ container_path }}/var/lib/sonatype-work/nexus3/etc/nexus.properties"
+          line: "nexus.datastore.enabled=true"
+          state: present
+      when: "base_name == 'openjdk17'"
     - ansible.posix.synchronize:
         src: "rootfs/"
         dest: "{{ container_path }}/"
