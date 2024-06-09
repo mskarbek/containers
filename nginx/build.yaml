@@ -17,7 +17,7 @@
           --installroot={{ container_path }}
           module
           enable
-          nginx:1.22
+          nginx:1.24
 # Ansible DNF module issue:
 # https://github.com/ansible/ansible/issues/80644
     - ansible.builtin.command:
