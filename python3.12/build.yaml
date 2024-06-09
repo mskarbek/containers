@@ -34,14 +34,14 @@
       loop:
         - "/root/.netrc"
         - "/etc/pip.conf"
-      when: "use_repository"
+      when: "assents == 'proxy'"
     - ansible.builtin.template:
         src: "{{ item.src }}"
         dest: "{{ container_path }}{{ item.dest }}"
         owner: "root"
         group: "root"
         mode: "{{ item.mode }}"
-      when: "use_repository"
+      when: "assents == 'proxy'"
       loop:
         - src: ".netrc.j2"
           dest: "/root/.netrc"
