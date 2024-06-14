@@ -47,10 +47,23 @@
       when: "assents == 'proxy'"
     - ansible.builtin.unarchive:
         src: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
-        dest: "{{ container_path }}/usr/lib/sonatype/nexus"
-        extra_opts:
-          - "--strip-components"
-          - "1"
+        dest: "{{ result_tempfile.path }}"
+    - ansible.posix.synchronize:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        archive: false
+        links: true
+        recursive: true
+        rsync_opts:
+          - "--exclude=.gitkeep"
+          - "--ignore-existing"
+      loop:
+        - src: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}/"
+          dest: "{{ container_path }}/usr/lib/sonatype/nexus/"
+        - src: "{{ result_tempfile.path }}/sonatype-work"
+          dest: "{{ container_path }}/usr/lib/sonatype/"
+        - src: "rootfs/"
+          dest: "{{ container_path }}/"
     - ansible.builtin.replace:
         dest: "{{ container_path }}/usr/lib/sonatype/nexus/bin/nexus.vmoptions"
         regexp: "=../sonatype-work/"
@@ -75,10 +88,23 @@
         group: "root"
         mode: "0644"
       when: "assents == 'proxy'"
+    - ansible.builtin.file:
+        dest: "{{ container_path }}{{ item.dest }}"
+        state: "{{ item.state }}"
+        owner: "root"
+        group: "root"
+        mode: "{{ item.mode }}"
+      loop:
+        - state: "directory"
+          dest: "/usr/lib/sonatype/sonatype-work/nexus3/etc"
+          mode: "0755"
+        - state: "touch"
+          dest: "/usr/lib/sonatype/sonatype-work/nexus3/etc/nexus.properties"
+          mode: "0644"
     - ansible.builtin.lineinfile:
-        dest: "{{ container_path }}/var/lib/sonatype-work/nexus3/etc/nexus.properties"
-          line: "nexus.datastore.enabled=true"
-          state: present
+        dest: "{{ container_path }}/usr/lib/sonatype/sonatype-work/nexus3/etc/nexus.properties"
+        line: "nexus.datastore.enabled=true"
+        state: "present"
       when: "base_name == 'openjdk17'"
     - ansible.posix.synchronize:
         src: "rootfs/"
