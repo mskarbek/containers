@@ -19,7 +19,7 @@
           dest: "/bun-linux-x64.zip"
       loop_control:
         label: "{{ item.dest }}"
-      when: "not use_repository"
+      when: "assents == 'remote'"
     - ansible.builtin.get_url:
         url: "{{ item.url }}"
         dest: "{{ result_tempfile.path }}{{ item.dest }}"
@@ -34,7 +34,7 @@
           dest: "/bun-linux-x64.zip"
       loop_control:
         label: "{{ item.dest }}"
-      when: "use_repository"
+      when: "assents == 'proxy'"
     - ansible.builtin.unarchive:
         src: "{{ result_tempfile.path }}/bun-linux-x64.zip"
         dest: "{{ result_tempfile.path }}"
