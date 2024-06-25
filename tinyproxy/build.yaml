@@ -18,19 +18,7 @@
           --config={{ container_path }}/etc/dnf/dnf.conf
           --installroot={{ container_path }}
           install
-          https://download.copr.fedorainfracloud.org/results/mskarbek/tinyproxy/epel-9-x86_64/04426720-tinyproxy/tinyproxy-1.11.0-1.el9.x86_64.rpm
-      when: "not use_repository"
-    - ansible.builtin.command:
-        cmd: >
-          dnf
-          --quiet
-          --assumeyes
-          --disableplugin="subscription-manager"
-          --config={{ container_path }}/etc/dnf/dnf.conf
-          --installroot={{ container_path }}
-          install
           tinyproxy
-      when: "use_repository"
     - ansible.builtin.command:
         cmd: "{{ item }}"
       loop:
