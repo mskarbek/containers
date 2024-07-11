@@ -1,9 +1,0 @@
----
-base_name: "systemd"
-base_tag: "9.2-1"
-image_name: "minio-console"
-image_version: "{{ minio_console_version }}"
-image_release: "1"
-minio_console_version: "0.38.0"
-minio_console_public_url: "https://github.com/minio/console/releases/download/v{{ minio_console_version }}/console-linux-amd64"
-minio_console_proxy_url: "{{ repository_url }}/repository/{{ repository_raw_repo }}/m/minio-console/{{ minio_console_version }}/console-linux-amd64"

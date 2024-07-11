@@ -1,6 +1,0 @@
----
-base_name: "base"
-base_tag: "9.3-1"
-image_name: "base/rpmbuild"
-image_version: "9.3"
-image_release: "1"

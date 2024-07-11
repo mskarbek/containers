@@ -1,6 +1,0 @@
----
-base_name: "base"
-base_tag: "9.3-1"
-image_name: "base/nodejs16"
-image_version: "16.20.2"
-image_release: "1"

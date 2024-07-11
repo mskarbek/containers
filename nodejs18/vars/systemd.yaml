@@ -1,6 +1,0 @@
----
-base_name: "base/nodejs18"
-base_tag: "18.18.2-1"
-image_name: "nodejs18"
-image_version: "18.18.2"
-image_release: "1"

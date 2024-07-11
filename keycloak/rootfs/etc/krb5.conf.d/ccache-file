@@ -1,2 +1,0 @@
-[libdefaults]
-default_ccache_name = FILE:/run/krb5.ccache

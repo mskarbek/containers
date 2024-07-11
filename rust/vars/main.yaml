@@ -1,6 +1,0 @@
----
-base_name: "base"
-base_tag: "9.2-1"
-image_name: "base/rust"
-image_version: "1.62.1-1"
-image_release: "1"

@@ -1,9 +1,0 @@
----
-base_name: "base/ansible"
-base_tag: "2.14.2-4-1"
-image_name: "base/automation"
-image_version: "23.02"
-image_release: "1"
-terraform_version: "1.5.7"
-terraform_public_url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
-terraform_proxy_url: "{{ repository_url }}/repository/{{ repository_raw_repo }}/t/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"

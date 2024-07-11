@@ -1,6 +1,0 @@
----
-base_name: "base/toolbox"
-base_tag: "23.01-1"
-image_name: "toolbox"
-image_version: "23.01"
-image_release: "1"

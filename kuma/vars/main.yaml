@@ -1,6 +1,0 @@
----
-image_version: "{{ kuma_version }}"
-image_release: "1"
-kuma_version: "2.4.0"
-kuma_public_url: "https://download.konghq.com/kuma-binaries-release/kuma-{{ kuma_version }}-linux-amd64.tar.gz"
-kuma_proxy_url: "{{ repository_url }}/repository/{{ repository_raw_repo }}/k/kuma/{{ kuma_version }}/kuma-{{ kuma_version }}-linux-amd64.tar.gz"

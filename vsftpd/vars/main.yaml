@@ -1,6 +1,0 @@
----
-base_name: "systemd"
-base_tag: "9.2-1"
-image_name: "vsftpd"
-image_version: "3.0.5-4"
-image_release: "1"
