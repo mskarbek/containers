@@ -2,5 +2,5 @@
 base_name: "systemd"
 base_tag: "9.4-1"
 image_name: "postgresql"
-image_version: "16.4"
+image_version: "17.0"
 image_release: "1"
