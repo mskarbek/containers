@@ -12,7 +12,7 @@
     - "/etc/yum.repos.d/epel-next.repo"
     - "/etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
     - "/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Extras"
-    - "/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Extras-SHA512z"
+    - "/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Extras-SHA512"
     - "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9"
 - ansible.builtin.template:
     src: "dnf.conf.j2"
@@ -37,8 +37,8 @@
       dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
     - src: "rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Extras"
       dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Extras"
-    - src: "rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Extras-SHA512z"
-      dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Extras-SHA512z"
+    - src: "rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Extras-SHA512"
+      dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Extras-SHA512"
     - src: "rpm-gpg/RPM-GPG-KEY-EPEL-9"
       dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9"
 #- ansible.builtin.dnf:

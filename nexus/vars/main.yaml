@@ -1,19 +1,13 @@
 ---
 base_name: "openjdk17"
-base_tag: "{{ openjdk_version[base_name] }}-1"
+base_tag: "{{ openjdk_version }}-1"
 image_name: "nexus"
 image_version: "{{ nexus_version }}"
 image_release: "2"
-openjdk_version:
-  openjdk11: "11.0.23.0.9"
-  openjdk17: "17.0.11.0.9"
-nexus_version: "3.69.0-02"
+openjdk_version: "17.0.13.0.11"
+nexus_version: "3.73.0-12"
 nexus_dart_version: "1.1.0"
-nexus_public_url:
-  openjdk11: "https://download.sonatype.com/nexus/3/nexus-{{ nexus_version }}-java11-unix.tar.gz"
-  openjdk17: "https://download.sonatype.com/nexus/3/nexus-{{ nexus_version }}-java17-unix.tar.gz"
-nexus_proxy_url:
-  openjdk11: "{{ repository_url }}/repository/{{ repository_raw_repo }}/n/nexus/{{ nexus_version }}/nexus-{{ nexus_version }}-java11-unix.tar.gz"
-  openjdk17: "{{ repository_url }}/repository/{{ repository_raw_repo }}/n/nexus/{{ nexus_version }}/nexus-{{ nexus_version }}-java17-unix.tar.gz"
+nexus_public_url: "https://download.sonatype.com/nexus/3/nexus-{{ nexus_version }}-unix.tar.gz"
+nexus_proxy_url: "{{ repository_url }}/repository/{{ repository_raw_repo }}/n/nexus/{{ nexus_version }}/nexus-{{ nexus_version }}-unix.tar.gz"
 nexus_dart_public_url: "https://github.com/groupe-edf/nexus-repository-dart/releases/download/{{ nexus_dart_version }}/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
 nexus_dart_proxy_url: "{{ repository_url }}/repository/{{ repository_raw_repo }}/n/nexus-dart/{{ nexus_dart_version }}/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"

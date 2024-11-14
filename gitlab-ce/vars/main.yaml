@@ -1,9 +1,9 @@
 ---
 base_name: "openssh"
-base_tag: "8.7p1-34-1"
+base_tag: "8.7p1-1"
 image_name: "gitlab-ce"
 image_version: "{{ gitlab_version }}-0"
 image_release: "1"
-gitlab_version: "16.6.0"
+gitlab_version: "17.0.3"
 gitlab_public_url: "https://packages.gitlab.com/gitlab/gitlab-ce/packages/el/9/gitlab-ce-{{ gitlab_version }}-ce.0.el9.x86_64.rpm/download.rpm"
 gitlab_proxy_url: "{{ repository_url }}/repository/{{ repository_raw_repo }}/g/gitlab/{{ gitlab_version }}/gitlab-ce-{{ gitlab_version }}-ce.0.el9.x86_64.rpm"

@@ -28,7 +28,7 @@
           dest: "/usr/local/bin/gitlab-runner"
       loop_control:
         label: "{{ item.dest }}"
-      when: "not use_repository"
+      when: "assents == 'remote'"
     - ansible.builtin.get_url:
         url: "{{ item.url }}"
         dest: "{{ container_path }}{{ item.dest }}"
@@ -43,7 +43,7 @@
           dest: "/usr/local/bin/gitlab-runner"
       loop_control:
         label: "{{ item.dest }}"
-      when: "use_repository"
+      when: "assents == 'proxy'"
     - ansible.posix.synchronize:
         src: rootfs/
         dest: "{{ container_path }}/"
@@ -124,7 +124,7 @@
           dest: "/usr/bin/dumb-init"
       loop_control:
         label: "{{ item.dest }}"
-      when: "not use_repository"
+      when: "assents == 'remote'"
     - ansible.builtin.get_url:
         url: "{{ item.url }}"
         dest: "{{ container_path }}/usr/bin/{{ item.dest }}"
@@ -141,7 +141,7 @@
           dest: "dumb-init"
       loop_control:
         label: "{{ item.dest }}"
-      when: "use_repository"
+      when: "assents == 'proxy'"
     - ansible.builtin.command:
         cmd: "{{ item }}"
       loop:
