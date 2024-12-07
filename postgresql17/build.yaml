@@ -49,8 +49,9 @@
           postgresql17-contrib
           pg_qualstats_17
           pg_stat_kcache_17
-          pg_wait_sampling_17
           pg_track_settings_17
+          pg_uuidv7_17
+          pg_wait_sampling_17
           hypopg_17
           pgvector_17
 #          pg_auto_failover_17
