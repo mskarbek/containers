@@ -1,1 +1,0 @@
-# openjdk21-jre

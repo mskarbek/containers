@@ -1,6 +1,6 @@
 ---
 base_name: "systemd"
-base_tag: "9.4-1"
+base_tag: "9.5-1"
 image_name: "tinyproxy"
-image_version: "1.11.1"
+image_version: "1.11.2"
 image_release: "1"
