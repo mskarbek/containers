@@ -1,0 +1,6 @@
+---
+base_name: "base/nodejs22"
+base_tag: "22.13.1-1"
+image_name: "base/nodejs22-devel"
+image_version: "22.13.1"
+image_release: "1"
