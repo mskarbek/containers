@@ -1,0 +1,20 @@
+[Unit]
+Description=RabbitMq configuration
+After=rabbitmq-password.service
+Requires=rabbitmq-password.service
+ConditionPathExists=!/var/lib/rabbitmq/.lock
+AssertFileNotEmpty=/run/secrets/rabbitmq-passowrd
+
+[Service]
+Type=oneshot
+Environment=LC_ALL=C.UTF-8
+EnvironmentFile=/run/secrets/rabbitmq-passowrd
+ExecStart=/usr/sbin/rabbitmq-plugins enable rabbitmq_management
+ExecStart=/usr/sbin/rabbitmq-plugins enable rabbitmq_auth_backend_ldap
+ExecStart=/usr/sbin/rabbitmq-plugins enable rabbitmq_prometheus
+ExecStart=/usr/sbin/rabbitmqctl add_user ${RABBITMQ_USER} ${RABBITMQ_PASS}
+ExecStart=/usr/sbin/rabbitmqctl set_permissions -p "/" ${RABBITMQ_USER} ".*" ".*" ".*"
+ExecStart=/usr/sbin/rabbitmqctl set_user_tags ${RABBITMQ_USER} administrator
+ExecStart=/usr/sbin/rabbitmqctl delete_user guest
+ExecStartPost=/usr/bin/touch /var/lib/rabbitmq/.lock
+RemainAfterExit=false
