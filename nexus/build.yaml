@@ -29,7 +29,7 @@
         - "/usr/lib/sonatype/nexus"
     - ansible.builtin.get_url:
         url: "{{ nexus_public_url }}"
-        dest: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
+        dest: "{{ result_tempfile.path }}/nexus-unix-x86-64-{{ nexus_version }}.tar.gz"
         force: true
         owner: "root"
         group: "root"
@@ -37,7 +37,7 @@
       when: "assents == 'remote'"
     - ansible.builtin.get_url:
         url: "{{ nexus_proxy_url }}"
-        dest: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
+        dest: "{{ result_tempfile.path }}/nexus-unix-x86-64-{{ nexus_version }}.tar.gz"
         force: true
         username: "{{ repository_username }}"
         password: "{{ repository_password }}"
@@ -46,7 +46,7 @@
         mode: "0644"
       when: "assents == 'proxy'"
     - ansible.builtin.unarchive:
-        src: "{{ result_tempfile.path }}/nexus-{{ nexus_version }}-unix.tar.gz"
+        src: "{{ result_tempfile.path }}/nexus-unix-x86-64-{{ nexus_version }}.tar.gz"
         dest: "{{ result_tempfile.path }}"
     - ansible.posix.synchronize:
         src: "{{ item.src }}"
@@ -68,26 +68,26 @@
         dest: "{{ container_path }}/usr/lib/sonatype/nexus/bin/nexus.vmoptions"
         regexp: "=../sonatype-work/"
         replace: "=/var/lib/sonatype-work/"
-    - ansible.builtin.file:
-        dest: "{{ container_path }}/usr/lib/sonatype/nexus/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
-        state: "touch"
-        owner: "root"
-        group: "root"
-        mode: "0644"
-    - ansible.builtin.get_url:
-        url: "{{ nexus_dart_public_url }}"
-        dest: "{{ container_path }}/usr/lib/sonatype/nexus/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
-        owner: "root"
-        group: "root"
-        mode: "0644"
-      when: "assents == 'remote'"
-    - ansible.builtin.get_url:
-        url: "{{ nexus_dart_proxy_url }}"
-        dest: "{{ container_path }}/usr/lib/sonatype/nexus/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
-        owner: "root"
-        group: "root"
-        mode: "0644"
-      when: "assents == 'proxy'"
+#    - ansible.builtin.file:
+#        dest: "{{ container_path }}/usr/lib/sonatype/nexus/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
+#        state: "touch"
+#        owner: "root"
+#        group: "root"
+#        mode: "0644"
+#    - ansible.builtin.get_url:
+#        url: "{{ nexus_dart_public_url }}"
+#        dest: "{{ container_path }}/usr/lib/sonatype/nexus/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
+#        owner: "root"
+#        group: "root"
+#        mode: "0644"
+#      when: "assents == 'remote'"
+#    - ansible.builtin.get_url:
+#        url: "{{ nexus_dart_proxy_url }}"
+#        dest: "{{ container_path }}/usr/lib/sonatype/nexus/deploy/nexus-repository-dart-{{ nexus_dart_version }}-bundle.kar"
+#        owner: "root"
+#        group: "root"
+#        mode: "0644"
+#      when: "assents == 'proxy'"
     - ansible.builtin.file:
         dest: "{{ container_path }}{{ item.dest }}"
         state: "{{ item.state }}"
