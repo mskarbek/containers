@@ -1,0 +1,6 @@
+---
+base_name: "systemd"
+base_tag: "9.5-1"
+image_name: "knot-resolver"
+image_version: "5.7.4"
+image_release: "1"
