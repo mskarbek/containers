@@ -1,6 +1,6 @@
 ---
 base_name: "base"
-base_tag: "9.4-1"
+base_tag: "9.5-1"
 image_name: "base/python3.9"
 image_version: "{{ python_version }}"
 image_release: "1"
