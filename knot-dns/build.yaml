@@ -45,7 +45,7 @@
         group: "root"
         mode: "{{ item.mode }}"
       loop:
-        - src: "usr/share/knot/knot.conf"
+        - src: "{{ container_path }}/etc/knot/knot.conf"
           dest: "/usr/share/knot/knot.conf"
           mode: "0644"
         - src: "etc/tmpfiles.d/knot.conf"
