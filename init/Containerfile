@@ -1,0 +1,6 @@
+FROM docker.io/redhat/ubi10-init:10.1
+
+RUN dnf clean all;\
+ dnf -y update;\
+ dnf -y install unzip;\
+ dnf clean all
