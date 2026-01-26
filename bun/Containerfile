@@ -1,0 +1,11 @@
+ARG REGISTRY
+
+FROM ${REGISTRY}/init:10.1
+
+RUN curl -Lo /tmp/bun.zip https://github.com/oven-sh/bun/releases/download/bun-v1.3.6/bun-linux-x64.zip;\
+ cd /tmp;\
+ unzip bun.zip;\
+ mv /tmp/bun-linux-x64/bun /usr/local/bin/bun;\
+ chmod 0755 /usr/local/bin/bun;\
+ ln -s /usr/local/bin/bun /usr/local/bin/bunx;\
+ rm -rf /tmp/bun.zip /tmp/bun-linux-x64
