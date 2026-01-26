@@ -1,0 +1,15 @@
+ARG REGISTRY
+
+FROM ${REGISTRY}/init:10.1
+
+RUN curl -Lo /tmp/pocketbase.zip https://github.com/pocketbase/pocketbase/releases/download/v0.36.1/pocketbase_0.36.1_linux_amd64.zip;\
+ cd /tmp;\
+ unzip pocketbase.zip -d ./pocketbase/;\
+ mv /tmp/pocketbase/pocketbase /usr/local/bin/pocketbase;\
+ chmod 0755 /usr/local/bin/pocketbase;\
+ rm -rf /tmp/pocketbase.zip /tmp/pocketbase;\
+ ln -s /etc/systemd/system/pocketbase.service /etc/systemd/system/multi-user.target.wants/pocketbase.service
+
+COPY rootfs/ /
+
+VOLUME /var/lib/pocketbase
