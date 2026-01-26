@@ -1,0 +1,22 @@
+[Unit]
+Description = PgDog
+
+[Service]
+Type             = simple
+User             = pgdog
+Group            = pgdog
+LimitNOFILE      = 4096
+Restart          = always
+RestartSec       = 5s
+WorkingDirectory = /run/pgdog
+ExecStartPre     = /usr/local/bin/pgdog\
+ --config=/etc/pgdog/pgdog.toml\
+ --users=/etc/pgdog/users.toml\
+ configcheck
+ExecStart        = /usr/local/bin/pgdog\
+ --config=/etc/pgdog/pgdog.toml\
+ --users=/etc/pgdog/users.toml\
+ run
+
+[Install]
+WantedBy = multi-user.target

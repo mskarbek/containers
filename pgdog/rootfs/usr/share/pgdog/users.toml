@@ -1,0 +1,4 @@
+[[users]]
+name = "some_user"
+database = "postgres"
+password = "some_password"
