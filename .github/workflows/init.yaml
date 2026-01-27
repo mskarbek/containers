@@ -9,7 +9,8 @@ on:
   workflow_dispatch:
 env:
   REGISTRY: "ghcr.io"
-  IMAGE_NAME: "mskarbek/containers/init"
+  NAMESPACE: "mskarbek"
+  IMAGE_NAME: "init"
   VERSION: "10.1"
 jobs:
   build-and-push-image:
@@ -29,7 +30,9 @@ jobs:
       - id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ NAMESPACE }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ VERSION }}
       - id: push
         uses: docker/build-push-action@v5
         with:
