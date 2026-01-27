@@ -1,6 +1,4 @@
-ARG REGISTRY
-
-FROM ${REGISTRY}/rust:1.88.0 as builder
+FROM ghcr.io/mskarbek/containers/rust:1.88.0 as builder
 
 WORKDIR /root/
 
@@ -13,7 +11,7 @@ RUN dnf -y install openssl-devel;\
  cargo build --release
 
 
-FROM ${REGISTRY}/init:10.1
+FROM ghcr.io/mskarbek/containers/init:10.1
 
 COPY --from=builder /root/pgdog/target/release/pgdog /usr/local/bin/pgdog
 
