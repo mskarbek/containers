@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "init/**"
+  workflow_dispatch:
 env:
   REGISTRY: "ghcr.io"
   IMAGE_NAME: "mskarbek/containers/init"
