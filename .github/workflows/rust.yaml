@@ -10,8 +10,8 @@ on:
   workflow_dispatch:
 env:
   REGISTRY: "ghcr.io"
-  NAMESPACE: "mskarbek"
-  IMAGE_NAME: "containers/rust"
+  NAMESPACE: "mskarbek/containers"
+  IMAGE_NAME: "rust"
   VERSION: "1.88.0"
 jobs:
   build-and-push-image:
@@ -42,8 +42,4 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - uses: actions/attest-build-provenance@v3
-        with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+          build-args: REGISTRY=${{ env.REGISTRY }}/${{ env.NAMESPACE }}
