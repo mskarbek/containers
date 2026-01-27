@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "init/**"
+      - ".github/workflows/init.yaml"
   workflow_dispatch:
 env:
   REGISTRY: "ghcr.io"
@@ -30,7 +31,7 @@ jobs:
       - id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ NAMESPACE }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=${{ VERSION }}
       - id: push
