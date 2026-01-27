@@ -1,8 +1,6 @@
-ARG REGISTRY
+FROM ghcr.io/mskarbek/containers/init:10.1
 
-FROM ${REGISTRY}/init:10.1
-
-RUN curl -Lo /tmp/bun.zip https://github.com/oven-sh/bun/releases/download/bun-v1.3.6/bun-linux-x64.zip;\
+RUN curl -Lo /tmp/bun.zip https://github.com/oven-sh/bun/releases/download/bun-v1.3.7/bun-linux-x64.zip;\
  cd /tmp;\
  unzip bun.zip;\
  mv /tmp/bun-linux-x64/bun /usr/local/bin/bun;\
