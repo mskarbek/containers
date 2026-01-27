@@ -33,7 +33,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=${{ VERSION }}
+            type=raw,value=${{ env.VERSION }}
       - id: push
         uses: docker/build-push-action@v5
         with:
