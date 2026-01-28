@@ -5,8 +5,7 @@ RUN printf "tsflags=nodocs\ninstall_weak_deps=False\n" >> /etc/dnf/dnf.conf;\
  dnf -y update;\
  dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm;\
  dnf -y install procps-ng unzip;\
- dnf clean all;\
- rm /etc/machine-id
+ dnf clean all
 
 COPY rootfs/ /
 
