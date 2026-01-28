@@ -1,0 +1,8 @@
+FROM ghcr.io/mskarbek/containers/python:3.12.12
+
+RUN dnf -y install\
+ python3-devel\
+ libffi-devel\
+ gcc\
+ make;\
+ dnf clean all
