@@ -1,6 +1,0 @@
----
-base_name: "base/bun"
-base_tag: "1.2.4-1"
-image_name: "base/nodejs18"
-image_version: "18.20.6"
-image_release: "1"

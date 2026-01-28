@@ -1,6 +1,0 @@
----
-base_name: "base"
-base_tag: "9.5-1"
-image_name: "systemd"
-image_version: "9.5"
-image_release: "1"

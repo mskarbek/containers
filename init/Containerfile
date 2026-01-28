@@ -2,5 +2,8 @@ FROM docker.io/redhat/ubi10-init:10.1
 
 RUN dnf clean all;\
  dnf -y update;\
+ dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm;\
  dnf -y install unzip;\
  dnf clean all
+
+ENV SYSTEMD_LOG_TARGET=console
