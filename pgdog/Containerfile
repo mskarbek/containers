@@ -1,4 +1,4 @@
-FROM ghcr.io/mskarbek/containers/rust:1.88.0 as builder
+FROM ghcr.io/mskarbek/containers/rust:1.88.0 AS builder
 
 WORKDIR /root/
 
