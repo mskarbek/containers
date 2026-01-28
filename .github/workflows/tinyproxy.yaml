@@ -12,7 +12,7 @@ env:
   REGISTRY: "ghcr.io"
   NAMESPACE: "mskarbek/containers"
   IMAGE_NAME: "tinyproxy"
-  VERSION: "4.2.3"
+  VERSION: "1.11.2"
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
