@@ -1,0 +1,10 @@
+FROM ghcr.io/mskarbek/containers/init:10.1
+
+RUN dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm;\
+ dnf -y install tinyproxy-1.11.2-5.el10_1.x86_64;\
+ dnf clean all;\
+ ln -s\
+ /usr/lib/systemd/system/tinyproxy.service\
+ /etc/systemd/system/multi-user.target.wants/tinyproxy.service
+
+VOLUME /etc/tinyproxy
