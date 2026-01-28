@@ -7,4 +7,7 @@ RUN dnf clean all;\
  dnf clean all;\
  rm /etc/machine-id;\
  printf "tsflags=nodocs\ninstall_weak_deps=False\n" >> /etc/dnf/dnf.conf
+
+COPY rootfs/ /
+
 ENV SYSTEMD_LOG_TARGET=console
