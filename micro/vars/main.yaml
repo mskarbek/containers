@@ -1,6 +1,0 @@
----
-base_name: "scratch"
-base_tag: "lates"
-image_name: "micro"
-image_version: "9.5"
-image_release: "1"
