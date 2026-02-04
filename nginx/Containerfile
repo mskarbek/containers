@@ -1,0 +1,14 @@
+FROM ghcr.io/mskarbek/containers/init:10.1
+
+COPY rootfs/ /
+
+RUN dnf -y install\
+ nginx\
+ nginx-mod-stream;\
+ dnf clean all;\
+ systemctl enable etc-nginx-conf.d.path etc-nginx-stream.d.path nginx.service
+
+VOLUME /etc/nginx/conf.d
+VOLUME /etc/nginx/stream.d
+#VOLUME /etc/pki/tls/private
+#VOLUME /var/log/nginx
