@@ -1,0 +1,7 @@
+FROM ghcr.io/mskarbek/containers/init:10.1
+
+STOPSIGNAL SIGTERM
+
+ENTRYPOINT ["/usr/libexec/catatonit/catatonit", "--"]
+
+CMD []
