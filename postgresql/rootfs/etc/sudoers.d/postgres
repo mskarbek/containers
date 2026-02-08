@@ -1,0 +1,3 @@
+Cmnd_Alias CHMOD_PGDATA=/usr/bin/chmod 0700 /var/lib/pgsql/18/data
+Cmnd_Alias CHOWN_PGDATA=/usr/bin/chown -R postgres\:postgres /var/lib/pgsql/18/data
+postgres ALL=(root) NOPASSWD: CHMOD_PGDATA,CHOWN_PGDATA

@@ -2,7 +2,10 @@ FROM ghcr.io/mskarbek/containers/init:10.1
 
 COPY rootfs/ /
 
-RUN dnf install -y\
+RUN chmod 0440 /etc/sudoers.d/postgres;\
+ chmod 0755 /usr/local/bin/bootstrap.sh;\
+ chown root:root /usr/local/bin/bootstrap.sh /etc/sudoers.d/postgres;\
+ dnf install -y\
  sudo\
  postgresql18-server\
  postgresql18-contrib\
