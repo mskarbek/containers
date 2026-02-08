@@ -1,0 +1,23 @@
+FROM ghcr.io/mskarbek/containers/init:10.1
+
+COPY rootfs/ /
+
+RUN dnf install -y\
+ sudo\
+ postgresql18-server\
+ postgresql18-contrib\
+ pg_qualstats_18\
+ pg_stat_kcache_18\
+ pg_track_settings_18\
+ pg_wait_sampling_18\
+ hypopg_18\
+ pgvector_18;\
+ #pg_uuidv7_18\
+ #pg_auto_failover_18\
+ #citus_18\
+ dnf clean all;\
+ mkdir /usr/share/pgsql;
+ mv /var/lib/pgsql/.bash_profile /usr/share/pgsql/.bash_profile;\
+ systemctl enable postgresql-18.service
+
+VOLUME /var/lib/pgsql
