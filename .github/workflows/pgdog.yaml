@@ -12,7 +12,7 @@ env:
   REGISTRY: "ghcr.io"
   NAMESPACE: "mskarbek/containers"
   IMAGE_NAME: "pgdog"
-  VERSION: "0.1.27"
+  VERSION: "0.1.28"
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
