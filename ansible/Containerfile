@@ -1,0 +1,32 @@
+FROM ghcr.io/mskarbek/containers/init:10.1
+
+COPY rootfs/ /
+
+RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG;\
+ dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm;\
+ dnf -y install\
+ ansible-core\
+ git-core\
+ openssh-clients\
+ podman-remote\
+ python3-attrs\
+ python3-boto3\
+ python3-botocore\
+ python3-certifi\
+ python3-charset-normalizer\
+ python3-dns\
+ python3-idna\
+ python3-pbr\
+ python3-prettytable\
+ python3-psycopg2\
+ python3-psycopg3\
+ python3-requests\
+ python3-urllib3\
+ python3-wcwidth\
+ rsync;\
+ dnf clean all;\
+ cd root;\
+ pip install ara python-consul hvac
+ ansible-galaxy collection install -r .ansible/requirements.yaml -p .ansible/collections;\
+ ln -s /usr/bin/podman-remote /usr/bin/podman;\
+ rm -rf /root/.cache
