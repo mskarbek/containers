@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 env:
   REGISTRY: "ghcr.io"
-  NAMESPACE: "mskarbek/containers"
+  NAMESPACE: "mskarbek"
   IMAGE_NAME: "catatonit"
   VERSION: "10.1"
 jobs:
