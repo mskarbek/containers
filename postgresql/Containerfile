@@ -1,4 +1,4 @@
-FROM ghcr.io/mskarbek/containers/init:10.1
+FROM ghcr.io/mskarbek/init:10.1
 
 COPY rootfs/ /
 
@@ -19,7 +19,7 @@ RUN chmod 0440 /etc/sudoers.d/postgres;\
  #pg_auto_failover_18\
  #citus_18\
  dnf clean all;\
- mkdir /usr/share/pgsql;
+ mkdir /usr/share/pgsql;\
  mv /var/lib/pgsql/.bash_profile /usr/share/pgsql/.bash_profile;\
  systemctl enable postgresql-18.service
 
