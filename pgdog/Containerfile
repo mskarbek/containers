@@ -11,14 +11,12 @@ RUN dnf -y install openssl-devel;\
  cargo build --release
 
 
-FROM ghcr.io/mskarbek/containers/init:10.1
+FROM ghcr.io/mskarbek/init:10.1
 
 COPY --from=builder /root/pgdog/target/release/pgdog /usr/local/bin/pgdog
 
 COPY rootfs/ /
 
-RUN ln -s\
- /etc/systemd/system/pgdog.service\
- /etc/systemd/system/multi-user.target.wants/pgdog.service
+RUN systemctl enable pgdog.service
 
 VOLUME /etc/pgdog
