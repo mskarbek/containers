@@ -1,4 +1,4 @@
-FROM ghcr.io/mskarbek/containers/init:10.1
+FROM ghcr.io/mskarbek/init:10.1
 
 RUN dnf -y install rust cargo clang-devel mold;\
  dnf clean all
