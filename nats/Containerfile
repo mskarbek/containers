@@ -1,0 +1,28 @@
+#FROM ghcr.io/mskarbek/containers/init:10.1
+FROM localhost/init:latest
+
+COPY rootfs/ /
+
+RUN <<EOT
+    cd /tmp
+    curl -Lo nats-server.tar.gz https://github.com/nats-io/nats-server/releases/download/v2.12.4/nats-server-v2.12.4-linux-amd64.tar.gz
+    curl -Lo nats-top.tar.gz https://github.com/nats-io/nats-top/releases/download/v0.6.3/nats-top_0.6.3_linux_amd64.tar.gz
+    curl -Lo nats.zip https://github.com/nats-io/natscli/releases/download/v0.3.1/nats-0.3.1-linux-amd64.zip
+    curl -Lo nsc.zip https://github.com/nats-io/nsc/releases/download/v2.12.0/nsc-linux-amd64.zip
+    curl -Lo nskeys.zip https://github.com/nats-io/nkeys/releases/download/v0.4.15/nkeys-v0.4.15-linux-amd64.zip
+    tar -xf nats-server.tar.gz --strip-components=1
+    tar -xf nats-top.tar.gz
+    unzip -jo nats.zip
+    unzip -jo nsc.zip
+    unzip -jo nskeys.zip
+    cp ./nats-server /usr/local/bin/
+    cp ./nats /usr/local/bin/
+    cp ./nats-top /usr/local/bin/
+    cp ./nsc /usr/local/bin/
+    cp ./nk /usr/local/bin/
+    chmod 0755 /usr/local/bin/*
+    systemctl enable nats.service
+EOT
+
+VOLUME /etc/nats
+VOLUME /var/lib/nats
