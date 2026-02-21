@@ -1,17 +1,17 @@
 ---
-name: catatonit image
+name: inits image
 on:
   push:
     branches:
       - main
     paths:
-      - "catatonit/**"
-      - ".github/workflows/catatonit.yaml"
+      - "inits/**"
+      - ".github/workflows/inits.yaml"
   workflow_dispatch:
 env:
   REGISTRY: "ghcr.io"
   NAMESPACE: "mskarbek"
-  IMAGE_NAME: "catatonit"
+  IMAGE_NAME: "inits"
   VERSION: "10.1"
 jobs:
   build-and-push-image:
@@ -37,8 +37,8 @@ jobs:
       - id: push
         uses: docker/build-push-action@v5
         with:
-          context: ./catatonit/
-          file: ./catatonit/Containerfile
+          context: ./inits/
+          file: ./inits/Containerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
