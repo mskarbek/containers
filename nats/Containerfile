@@ -1,4 +1,4 @@
-#FROM ghcr.io/mskarbek/containers/init:10.1
+#FROM ghcr.io/mskarbek/containers/inits:10.1
 FROM localhost/init:latest
 
 COPY rootfs/ /
