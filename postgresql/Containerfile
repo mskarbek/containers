@@ -1,4 +1,4 @@
-FROM ghcr.io/mskarbek/init:10.1
+FROM ghcr.io/mskarbek/inits:10.1
 
 COPY rootfs/ /
 
