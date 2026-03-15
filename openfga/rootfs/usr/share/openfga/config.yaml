@@ -1,0 +1,4 @@
+datastore:
+  engine: memory
+playground:
+  enabled: true

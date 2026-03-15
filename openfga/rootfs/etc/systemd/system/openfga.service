@@ -1,0 +1,14 @@
+[Unit]
+Description=OpenFGA Server
+Documentation=https://openfga.dev/docs/
+After=network.target nss-lookup.target
+
+[Service]
+WorkingDirectory=/run/openfga
+User=openfga
+Group=openfga
+ExecStart=/usr/local/bin/openfga
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
