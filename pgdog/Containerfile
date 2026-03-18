@@ -4,14 +4,14 @@ WORKDIR /root/
 
 RUN dnf -y install openssl-devel;\
  dnf clean all;\
- curl -Lo pgdog.tar.gz https://github.com/pgdogdev/pgdog/archive/refs/tags/v0.1.28.tar.gz;\
+ curl -Lo pgdog.tar.gz https://github.com/pgdogdev/pgdog/archive/refs/tags/v0.1.32.tar.gz;\
  mkdir pgdog;\
  cd pgdog;\
  tar -xf ../pgdog.tar.gz --strip-components=1;\
  cargo build --release
 
 
-FROM ghcr.io/mskarbek/init:10.1
+FROM ghcr.io/mskarbek/inits:10.1
 
 COPY --from=builder /root/pgdog/target/release/pgdog /usr/local/bin/pgdog
 
