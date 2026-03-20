@@ -4,8 +4,8 @@ COPY rootfs/ /
 
 RUN <<EOT
     cd /tmp
-    curl -Lo openfga.tar.gz https://github.com/openfga/openfga/releases/download/v1.12.0/openfga_1.12.0_linux_amd64.tar.gz
-    curl -Lo fga.tar.gz https://github.com/openfga/cli/releases/download/v0.7.10/fga_0.7.10_linux_amd64.tar.gz
+    curl -Lo openfga.tar.gz https://github.com/openfga/openfga/releases/download/v1.12.0/openfga_1.12.1_linux_amd64.tar.gz
+    curl -Lo fga.tar.gz https://github.com/openfga/cli/releases/download/v0.7.10/fga_0.7.11_linux_amd64.tar.gz
     tar -xf openfga.tar.gz
     tar -xf fga.tar.gz
     cp ./openfga /usr/local/bin/
