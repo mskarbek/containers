@@ -1,9 +1,12 @@
-FROM ghcr.io/mskarbek/rust:1.88.0 AS builder
+FROM ghcr.io/mskarbek/inits:10.1 AS builder
 
 WORKDIR /root/
 
-RUN dnf -y install openssl-devel;\
+RUN dnf -y install openssl-devel clang-devel mold;\
  dnf clean all;\
+
+ curl -Lo rustup-init.sh https://sh.rustup.rs
+ sh rustup-init.sh -qy
  curl -Lo pgdog.tar.gz https://github.com/pgdogdev/pgdog/archive/refs/tags/v0.1.32.tar.gz;\
  mkdir pgdog;\
  cd pgdog;\
