@@ -4,9 +4,8 @@ WORKDIR /root/
 
 RUN dnf -y install openssl-devel clang-devel mold;\
  dnf clean all;\
-
- curl -Lo rustup-init.sh https://sh.rustup.rs
- sh rustup-init.sh -qy
+ curl -Lo rustup-init.sh https://sh.rustup.rs;\
+ sh rustup-init.sh -qy;\
  curl -Lo pgdog.tar.gz https://github.com/pgdogdev/pgdog/archive/refs/tags/v0.1.32.tar.gz;\
  mkdir pgdog;\
  cd pgdog;\
