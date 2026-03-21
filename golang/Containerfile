@@ -1,0 +1,4 @@
+FROM ghcr.io/mskarbek/inits:10.1
+
+RUN dnf -y install golang;\
+ dnf clean all
