@@ -1,0 +1,22 @@
+FROM ghcr.io/mskarbek/golang:1.25.7 AS builder
+
+WORKDIR /root/
+
+RUN <<EOT
+    curl -Lo xcaddy.tar.gz https://github.com/caddyserver/xcaddy/releases/download/v0.4.5/xcaddy_0.4.5_linux_amd64.tar.gz
+    tar -xf xcaddy.tar.gz
+    chmod 0755 xcaddy
+    ./xcaddy build  v2.11.2 \
+    --with github.com/caddy-dns/route53@v1.6.0 \
+    --with github.com/caddy-dns/cloudflare@v0.2.3
+EOT
+
+FROM ghcr.io/mskarbek/inits:10.1
+
+COPY --from=builder /root/caddy /usr/local/bin/caddy
+
+COPY rootfs/ /
+
+RUN systemctl enable caddy.service
+
+VOLUME /etc/caddy
