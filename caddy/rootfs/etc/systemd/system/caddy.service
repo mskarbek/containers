@@ -1,0 +1,14 @@
+[Unit]
+Description=Caddy Server
+Documentation=https://caddyserver.com/docs/
+After=network.target nss-lookup.target
+
+[Service]
+WorkingDirectory=/run/caddy
+User=caddy
+Group=caddy
+ExecStart=/usr/local/bin/caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
