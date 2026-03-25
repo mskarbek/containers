@@ -1,26 +1,56 @@
+FROM ghcr.io/mskarbek/inits:10.1 AS builder
+
+COPY rootfs/ /
+
+WORKDIR /root/
+
+RUN --mount=type=secret,id=rh_org,env=RH_ORG\
+    --mount=type=secret,id=rh_activationkey,env=RH_ACTIVATIONKEY <<EOT
+    dnf -y install openssl
+    subscription-manager register --name=gh-action-builder --org=$RH_ORG --activationkey=$RH_ACTIVATIONKEY
+    subscription-manager repos --enable codeready-builder-for-rhel-10-x86_64-rpms
+    dnf -y install openssl-devel clang-devel make postgresql18-devel
+    subscription-manager unregister
+    dnf clean all
+    curl -Lo rustup-init.sh https://sh.rustup.rs
+    sh rustup-init.sh -qy
+    curl -Lo vchord.tar.gz https://github.com/tensorchord/VectorChord/archive/refs/tags/1.1.1.tar.gz
+    mkdir vchord
+    cd vchord
+    tar -xf ../vchord.tar.gz --strip-components=1
+    export PATH=$HOME/.cargo/bin:/usr/pgsql-18/bin:$PATH
+    make
+EOT
+
 FROM ghcr.io/mskarbek/inits:10.1
 
 COPY rootfs/ /
 
-RUN chmod 0440 /etc/sudoers.d/postgres;\
- chmod 0755 /usr/local/bin/bootstrap.sh;\
- chown root:root /usr/local/bin/bootstrap.sh /etc/sudoers.d/postgres;\
- dnf install -y\
- sudo\
- postgresql18-server\
- postgresql18-contrib\
- pg_qualstats_18\
- pg_stat_kcache_18\
- pg_track_settings_18\
- pg_wait_sampling_18\
- hypopg_18\
- pgvector_18;\
- #pg_uuidv7_18\
- #pg_auto_failover_18\
- #citus_18\
- dnf clean all;\
- mkdir /usr/share/pgsql;\
- mv /var/lib/pgsql/.bash_profile /usr/share/pgsql/.bash_profile;\
- systemctl enable postgresql-18.service
+RUN <<EOT
+    chmod 0440 /etc/sudoers.d/postgres
+    chmod 0755 /usr/local/bin/bootstrap.sh
+    chown root:root /usr/local/bin/bootstrap.sh /etc/sudoers.d/postgres
+    dnf install -y \
+    sudo \
+    postgresql18-server \
+    postgresql18-contrib \
+    hypopg_18 \
+    pg_cron_18 \
+    pg_partman_18 \
+    pg_qualstats_18 \
+    pg_stat_kcache_18 \
+    pg_track_settings_18 \
+    pg_wait_sampling_18 \
+    pgaudit_18 \
+    pgvector_18 \
+    timescaledb_18
+    dnf clean all
+    mkdir /usr/share/pgsql
+    mv /var/lib/pgsql/.bash_profile /usr/share/pgsql/.bash_profile
+    systemctl enable postgresql-18.service
+EOT
+
+COPY --from=builder /root/vchord/build/pkglibdir/ /usr/pgsql-18/lib/
+COPY --from=builder /root/vchord/build/sharedir/ /usr/pgsql-18/share/
 
 VOLUME /var/lib/pgsql
