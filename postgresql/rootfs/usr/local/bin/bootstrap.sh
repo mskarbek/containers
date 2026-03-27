@@ -11,7 +11,9 @@ if [ -z "$( ls -A ${PGDATA} )" ]; then
     fi
 
     /usr/pgsql-18/bin/initdb --auth-host=scram-sha-256 --pwfile=/tmp/pwfile --locale=C.UTF-8 --encoding=UTF8
-    sed -Ei 's/(#listen_addresses = .*)/listen_addresses = '\''*'\''\n\1/' ${PGDATA}/postgresql.conf
+    sed -Ei 's/(#listen_addresses = .*)/\1\nlisten_addresses = '\''*'\''/' ${PGDATA}/postgresql.conf
+    sed -Ei 's/(#shared_preload_libraries = .*)/\1\nshared_preload_libraries = '\''timescaledb'\''/' ${PGDATA}/postgresql.conf
+    echo "timescaledb.telemetry_level=off" >> ${PGDATA}/postgresql.conf
     echo "host    all             all             0.0.0.0/0               scram-sha-256" >> ${PGDATA}/pg_hba.conf
 fi
 

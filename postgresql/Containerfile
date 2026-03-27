@@ -20,6 +20,7 @@ RUN --mount=type=secret,id=rh_org,env=RH_ORG\
     tar -xf ../vchord.tar.gz --strip-components=1
     export PATH=$HOME/.cargo/bin:/usr/pgsql-18/bin:$PATH
     make
+    cargo install pgtui
 EOT
 
 FROM ghcr.io/mskarbek/inits:10.1

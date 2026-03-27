@@ -7,7 +7,9 @@ Requires=postgresql-password.service
 
 [Service]
 Type=oneshot
-Environment="PGSETUP_INITDB_OPTIONS=--encoding=UTF8 --locale=C.UTF-8 --pwfile=/run/secrets/postgres-password --set listen_addresses='*'"
+Environment="PGSETUP_INITDB_OPTIONS=--encoding=UTF8 --locale=C.UTF-8 --pwfile=/run/secrets/postgres-password --set listen_addresses='*' --set shared_preload_libraries='timescaledb'"
 ExecStart=/usr/pgsql-18/bin/postgresql-18-setup initdb
 ExecStartPost=/usr/bin/touch /var/lib/pgsql/18/data/.lock
+ExecStartPost=/usr/bin/bash -c "echo \"timescaledb.telemetry_level=off\" >> /var/lib/pgsql/18/data/postgresql.conf"
+ExecStartPost=/usr/bin/bash -c "echo \"host    all             all             0.0.0.0/0               scram-sha-256\" >> /var/lib/pgsql/18/data/pg_hba.conf'
 RemainAfterExit=no
