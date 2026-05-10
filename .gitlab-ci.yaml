@@ -1,5 +1,7 @@
 ---
 build:
   stage: build
-  script:
-    - echo "Hello, $GITLAB_USER_LOGIN!"
+  script: |
+    dnf clean all
+    dnf -y install buildah
+    buildah -t buildah .
