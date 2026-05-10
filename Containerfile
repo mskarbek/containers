@@ -1,4 +1,4 @@
-FROM docker.io/redhat/ubi9/ubi9:latest
+FROM docker.io/redhat/ubi9:latest
 
 RUN <<EOF
     dnf -y install buildah
