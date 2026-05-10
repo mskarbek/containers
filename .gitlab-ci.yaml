@@ -4,5 +4,5 @@ build:
   image: docker.io/redhat/ubi10:latest
   script: |
     dnf clean all
-    dnf -y install buildah
+    dnf -y install buildah fuse-overlayfs
     buildah build -t buildah .
