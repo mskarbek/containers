@@ -5,4 +5,4 @@ build:
   script: |
     dnf clean all
     dnf -y install buildah
-    buildah -t buildah .
+    buildah build -t buildah .
