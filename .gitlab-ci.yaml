@@ -8,5 +8,5 @@ build:
     dnf clean all
     dnf -y install buildah fuse-overlayfs
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
-    buildah build -t $REPO_URL/buildah .
-    buildah push
+    buildah build -t $REPO_URL/buildah --network=host .
+    buildah push $REPO_URL/buildah
