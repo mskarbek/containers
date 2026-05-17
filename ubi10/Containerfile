@@ -1,0 +1,11 @@
+FROM repo.skarbek.name/p-con-docker/redhat/ubi10:10.1
+
+COPY rootfs/ /
+
+RUN <<EOF
+    rm /etc/yum.repos.d/ubi.repo
+    dnf -y install catatonit dinit
+    dnf clean all
+EOF
+
+ENTRYPOINT ["/usr/libexec/catatonit/catatonit", "--"]

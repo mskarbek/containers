@@ -1,12 +1,12 @@
 ---
-build:
+bootstrap:
   tags:
     - dc02
   stage: build
-  image: docker.io/redhat/ubi10:latest
+  image: repo.skarbek.name/p-con-docker/redhat/ubi10:10.1
   script: |
     dnf clean all
     dnf -y install buildah fuse-overlayfs
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
-    buildah build -t $REPO_URL/buildah --network=host .
+    buildah build -t $REPO_URL/buildah --network=host ./bootstrap/
     buildah push $REPO_URL/buildah

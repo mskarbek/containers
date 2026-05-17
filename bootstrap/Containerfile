@@ -1,0 +1,10 @@
+FROM repo.skarbek.name/p-con-docker/redhat/ubi10:10.1
+
+COPY rootfs/ /
+
+RUN <<EOF
+    dnf -y install buildah fuse-overlayfs catatonit
+    dnf clean all
+EOF
+
+ENTRYPOINT ["/usr/libexec/catatonit/catatonit", "--"]
