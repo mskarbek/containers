@@ -10,3 +10,14 @@ bootstrap:
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
     buildah build -t $REPO_URL/buildah --network=host ./bootstrap/
     buildah push $REPO_URL/buildah
+ubi10:
+  tags:
+    - dc02
+  stage: build
+  needs:
+    - job: bootstrap
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/ubi10:10.1 --network=host ./ubi10/
+    buildah push $REPO_URL/ubi10:10.1
