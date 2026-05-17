@@ -3,6 +3,9 @@ bootstrap:
   tags:
     - dc02
   stage: build
+  rules:
+    - changes:
+        - bootstrap/**/*
   image: repo.skarbek.name/p-con-docker/redhat/ubi10:10.1
   script: |
     dnf clean all
@@ -14,6 +17,9 @@ ubi10:
   tags:
     - dc02
   stage: build
+  rules:
+    - changes:
+        - ubi10/**/*
   needs:
     - job: bootstrap
   image: $REPO_URL/buildah:latest
