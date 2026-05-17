@@ -41,7 +41,7 @@ golang:
   image: $REPO_URL/buildah:latest
   script: |
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
-    buildah build -t $REPO_URL/caddy --network=host ./golang/
+    buildah build -t $REPO_URL/golang --network=host ./golang/
     buildah push $REPO_URL/golang
 caddy:
   tags:
