@@ -27,3 +27,31 @@ ubi10:
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
     buildah build -t $REPO_URL/ubi10:10.1 --network=host ./ubi10/
     buildah push $REPO_URL/ubi10:10.1
+golang:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - golang/**/*
+  needs:
+    - job: ubi10
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/caddy --network=host ./golang/
+    buildah push $REPO_URL/golang
+caddy:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - caddy/**/*
+  needs:
+    - job: golang
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/caddy --network=host ./caddy/
+    buildah push $REPO_URL/caddy

@@ -1,0 +1,6 @@
+FROM repo.skarbek.name/h-con-infra/ubi10:10.1
+
+RUN <<EOF
+    dnf -y install golang
+    dnf clean all
+EOF
