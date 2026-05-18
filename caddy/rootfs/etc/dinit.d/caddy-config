@@ -1,0 +1,4 @@
+type = scripted
+command = /usr/local/bin/caddy-config
+logfile = /var/log/caddy-config.log
+restart = false

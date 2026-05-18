@@ -1,0 +1,6 @@
+type = process
+command = /usr/local/bin/caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
+logfile = /var/log/caddy.log
+smooth-recovery = true
+restart = on-failure
+waits-for: caddy-config
