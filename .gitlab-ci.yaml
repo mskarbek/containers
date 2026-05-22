@@ -6,7 +6,7 @@ bootstrap:
   rules:
     - changes:
         - bootstrap/**/*
-  image: repo.skarbek.name/p-con-docker/redhat/ubi10:10.1
+  image: repo.skarbek.name/p-con-docker/redhat/ubi10:10.2
   script: |
     dnf clean all
     dnf -y install buildah fuse-overlayfs
@@ -26,8 +26,23 @@ ubi10:
   image: $REPO_URL/buildah:latest
   script: |
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
-    buildah build -t $REPO_URL/ubi10:10.1 --network=host ./ubi10/
-    buildah push $REPO_URL/ubi10:10.1
+    buildah build -t $REPO_URL/ubi10:10.2 --network=host ./ubi10/
+    buildah push $REPO_URL/ubi10:10.2
+bento:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - bento/**/*
+  needs:
+    - job: ubi10
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/bento --network=host ./bento/
+    buildah push $REPO_URL/bento
 golang:
   tags:
     - dc02

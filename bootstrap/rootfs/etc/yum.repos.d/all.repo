@@ -33,3 +33,11 @@ gpgcheck=1
 gpgkey=https://repo.skarbek.name/repository/p-rpm-epel/RPM-GPG-KEY-EPEL-$releasever_major
 metadata_expire=24h
 enabled_metadata = 1
+
+[infra]
+name=Infra Packages for Enterprise Linux $releasever - $basearch
+baseurl=https://repo.skarbek.name/repository/h-rpm-infra/$releasever/
+enabled=1
+gpgcheck=0
+metadata_expire=24h
+enabled_metadata = 1

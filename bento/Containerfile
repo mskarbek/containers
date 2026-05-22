@@ -1,0 +1,16 @@
+FROM repo.skarbek.name/h-con-infra/ubi10:10.2
+
+RUN <<EOF
+    mkdir /tmp/bento
+    cd /tmp/bento
+    curl -Lo ./bento.tar.gz https://github.com/warpstreamlabs/bento/releases/download/v1.17.0/bento_1.17.0_linux_amd64.tar.gz
+    tar -xf ./bento.tar.gz
+    chmod 0755 ./bento
+    mv ./bento /usr/local/bin/bento
+    cd $HOME
+    rm -rf /tmp/bento
+EOF
+
+CMD ["/usr/local/bin/bento", "-c", "/etc/bento/config.yaml"]
+
+VOLUME /etc/bento

@@ -11,7 +11,7 @@ RUN <<EOT
     --with github.com/caddy-dns/cloudflare@v0.2.4
 EOT
 
-FROM repo.skarbek.name/h-con-infra/ubi10:10.1
+FROM repo.skarbek.name/h-con-infra/ubi10:10.2
 
 COPY --from=builder /root/caddy /usr/local/bin/caddy
 
