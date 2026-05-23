@@ -73,3 +73,18 @@ caddy:
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
     buildah build -t $REPO_URL/caddy --network=host ./caddy/
     buildah push $REPO_URL/caddy
+python:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - python/**/*
+  needs:
+    - job: ubi10
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/python --network=host ./python/
+    buildah push $REPO_URL/python
