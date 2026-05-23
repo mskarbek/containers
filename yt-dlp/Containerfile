@@ -1,0 +1,9 @@
+FROM repo.skarbek.name/h-con-infra/python:latest
+
+COPY rootfs/ /
+
+RUN <<EOF
+    dnf -y install ffmpeg
+    dnf clean all
+    uv pip install --python=/usr/bin/python3.14 --default-index=https://repo.skarbek.name/repository/p-ppi-pypi/simple yt-dlp
+EOF

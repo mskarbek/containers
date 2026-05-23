@@ -118,3 +118,18 @@ zensical:
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
     buildah build -t $REPO_URL/zensical --network=host ./zensical/
     buildah push $REPO_URL/zensical
+yt-dlp:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - yt-dlp/**/*
+  needs:
+    - job: python
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/yt-dlp --network=host ./yt-dlp/
+    buildah push $REPO_URL/yt-dlp

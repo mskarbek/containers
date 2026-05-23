@@ -1,0 +1,52 @@
+[rhel-10-for-x86_64-baseos-rpms]
+name = Red Hat Enterprise Linux 10 for x86_64 - BaseOS (RPMs)
+baseurl = https://repo.skarbek.name/repository/p-rpm-redhat/dist/rhel10/$releasever/x86_64/baseos/os
+enabled = 1
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+metadata_expire = 24h
+enabled_metadata = 1
+
+[rhel-10-for-x86_64-appstream-rpms]
+name = Red Hat Enterprise Linux 10 for x86_64 - AppStream (RPMs)
+baseurl = https://repo.skarbek.name/repository/p-rpm-redhat/dist/rhel10/$releasever/x86_64/appstream/os
+enabled = 1
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+metadata_expire = 24h
+enabled_metadata = 1
+
+[codeready-builder-for-rhel-10-x86_64-rpms]
+name = Red Hat CodeReady Linux Builder for RHEL 10 x86_64 (RPMs)
+baseurl = https://repo.skarbek.name/repository/p-rpm-redhat/dist/rhel10/$releasever/x86_64/codeready-builder/os
+enabled = 1
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+metadata_expire = 24h
+enabled_metadata = 1
+
+[epel]
+name = Extra Packages for Enterprise Linux $releasever - $basearch
+baseurl = https://repo.skarbek.name/repository/p-rpm-epel/$releasever${releasever_minor:+z}/Everything/$basearch/
+enabled = 1
+gpgcheck = 1
+gpgkey = https://repo.skarbek.name/repository/p-rpm-epel/RPM-GPG-KEY-EPEL-$releasever_major
+metadata_expire = 24h
+enabled_metadata = 1
+
+[epel-multimedia]
+name = negativo17 - Multimedia
+baseurl = https://repo.skarbek.name/repository/p-rpm-negativo17/multimedia/epel-$releasever/$basearch/
+enabled = 1
+gpgcheck = 1
+gpgkey = https://repo.skarbek.name/repository/p-rpm-negativo17/RPM-GPG-KEY-slaanesh
+metadata_expire = 24h
+enabled_metadata = 1
+
+[infra]
+name = Infra Packages for Enterprise Linux $releasever - $basearch
+baseurl = https://repo.skarbek.name/repository/h-rpm-infra/$releasever/
+enabled = 1
+gpgcheck = 0
+metadata_expire = 24h
+enabled_metadata = 1
