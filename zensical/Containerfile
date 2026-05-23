@@ -1,0 +1,5 @@
+FROM repo.skarbek.name/h-con-infra/python:latest
+
+RUN <<EOF
+    uv pip install --python=/usr/bin/python3.14 --default-index=https://repo.skarbek.name/repository/p-ppi-pypi/simple zensical
+EOF
