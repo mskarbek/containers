@@ -88,3 +88,18 @@ python:
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
     buildah build -t $REPO_URL/python --network=host ./python/
     buildah push $REPO_URL/python
+ansible:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - ansible/**/*
+  needs:
+    - job: ubi10
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/ansible --network=host ./ansible/
+    buildah push $REPO_URL/ansible
