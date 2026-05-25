@@ -1,5 +1,5 @@
 ---
-golang:
+jellyfin:
   tags:
     - dc02
   stage: build
