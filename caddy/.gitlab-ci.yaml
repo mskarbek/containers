@@ -1,0 +1,16 @@
+---
+caddy:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - caddy/**/*
+  needs:
+    - job: golang
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/caddy --network=host ./caddy/
+    buildah push $REPO_URL/caddy

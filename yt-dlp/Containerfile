@@ -1,7 +1,5 @@
 FROM repo.skarbek.name/h-con-infra/python:latest
 
-COPY rootfs/ /
-
 RUN <<EOF
     dnf -y install ffmpeg
     dnf clean all
