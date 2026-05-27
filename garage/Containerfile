@@ -8,6 +8,4 @@ EOF
 
 CMD ["/usr/bin/dinit", "--container"]
 
-VOLUME /etc/garage
-
 VOLUME /var/lib/garage
