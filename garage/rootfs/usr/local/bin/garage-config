@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+mkdir -p /var/lib/garage/{meta,data,config}
+if [ ! -f /var/lib/garage/config/admin_token ]; then
+    openssl rand -base64 32 > /var/lib/garage/config/admin_token
+fi
+if [ ! -f /var/lib/garage/config/metrics_token ]; then
+    openssl rand -base64 32 > /var/lib/garage/config/metrics_token
+fi
+if [ ! -f /var/lib/garage/config/rpc_secret ]; then
+    openssl rand -hex 32 > /var/lib/garage/config/rpc_secret
+fi
+if [ ! -f /var/lib/garage/config/config.toml ]; then
+    cp /usr/share/garage/config.toml /var/lib/garage/config/config.toml
+fi

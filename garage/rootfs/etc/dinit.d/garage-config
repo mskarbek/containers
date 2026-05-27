@@ -1,0 +1,4 @@
+type = scripted
+command = /usr/local/bin/garage-config
+logfile = /var/log/garage-config.log
+restart = false

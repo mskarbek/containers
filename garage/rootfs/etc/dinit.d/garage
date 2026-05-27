@@ -1,0 +1,12 @@
+type = process
+command = /usr/local/bin/garage
+command += --config=/var/lib/garage/config/config.toml
+command += --admin-token-file=/var/lib/garage/config/admin_token
+command += --metrics-token-file=/var/lib/garage/config/metrics_token
+command += --rpc-secret-file=/var/lib/garage/config/rpc_secret
+command += server
+logfile = /var/log/garage.log
+smooth-recovery = true
+restart = on-failure
+env-file = /etc/sysconfig/garage
+waits-for: garage-config
