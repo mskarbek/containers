@@ -1,5 +1,4 @@
 RUST_LOG=info
-RUSTFS_VOLUMES="/var/lib/rustfs"
 RUSTFS_CONSOLE_ENABLE=true
 RUSTFS_OBS_LOG_DIRECTORY="/var/log/rustfs/"
-RUSTFS_REGION=eu-west-1
+RUSTFS_REGION="eu-west-1"
