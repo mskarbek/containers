@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
 echo "INFO: Configuring RustFS"
-mkdir -p /var/log/rustfs
+mkdir -p /var/log/rustfs /etc/rustfs
 
-if [ ! -f /etc/sysconfig/rustfs ]; then
-    echo "INFO: Copying default config file"
-    cp /usr/share/rustfs/rustfs /etc/sysconfig/rustfs
-    echo "RUSTFS_ACCESS_KEY=$(openssl rand -hex 26)" >> /etc/sysconfig/rustfs
-    echo "RUSTFS_SECRET_KEY=$(openssl rand -hex 64)" >> /etc/sysconfig/rustfs
+if [ ! -f /etc/rustfs/access_key || ! -f /etc/rustfs/secret_key ]; then
+    echo "INFO: Generating access and secret key"
+    echo "RUSTFS_ACCESS_KEY=$(openssl rand -hex 13)" > /etc/rustfs/access_key
+    echo "RUSTFS_SECRET_KEY=$(openssl rand -hex 32)" > /etc/rustfs/secret_key
 fi
