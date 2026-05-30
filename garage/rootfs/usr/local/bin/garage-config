@@ -13,3 +13,7 @@ fi
 if [ ! -f /var/lib/garage/config/config.toml ]; then
     cp /usr/share/garage/config.toml /var/lib/garage/config/config.toml
 fi
+
+chmod 0600 /var/lib/garage/config/admin_token
+chmod 0600 /var/lib/garage/config/metrics_token
+chmod 0600 /var/lib/garage/config/rpc_secret
