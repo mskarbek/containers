@@ -5,12 +5,12 @@ COPY rootfs/ /
 RUN <<EOF
     dnf -y install unzip openssl
     dnf clean all
-    curl -Lo /tmp/rustfs.zip https://github.com/rustfs/rustfs/releases/download/1.0.0-beta.6/rustfs-linux-x86_64-gnu-v1.0.0-beta.6.zip
+    curl -Lo /tmp/rustfs.zip https://repo.skarbek.name/repository/h-raw-infra/rustfs/1.0.0-beta.6/rustfs.zip
     unzip -d /usr/local/bin/ /tmp/rustfs.zip
     rm /tmp/rustfs.zip
     chmod 0755 /usr/local/bin/rustfs
     cd /usr/local/bin
-    curl -L https://github.com/rustfs/cli/releases/download/v0.1.18/rustfs-cli-linux-amd64-gnu-v0.1.18.tar.gz|tar xz
+    curl -L https://repo.skarbek.name/repository/h-raw-infra/rustfs-cli/0.1.18/rustfs-cli.tar.gz|tar xz
     chmod 0755 /usr/local/bin/rc
 EOF
 
