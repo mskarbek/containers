@@ -1,5 +1,8 @@
 type = process
-command = /usr/local/bin/rustfs server --access-key-file=/etc/rustfs/access_key --secret-key-file=/etc/rustfs/secret_key
+command = /usr/local/bin/rustfs server
+command += --access-key-file=/etc/rustfs/access_key
+command += --secret-key-file=/etc/rustfs/secret_key
+command += $RUSTFS_VOLUMES
 smooth-recovery = true
 restart = on-failure
 env-file = /etc/sysconfig/rustfs

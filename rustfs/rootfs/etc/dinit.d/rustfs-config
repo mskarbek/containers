@@ -1,4 +1,4 @@
 type = scripted
 command = /usr/local/bin/rustfs-config
-options: starts-on-console
 restart = false
+options: starts-on-console
