@@ -1,5 +1,5 @@
 ---
-golang:
+rust:
   tags:
     - dc02
   stage: build
