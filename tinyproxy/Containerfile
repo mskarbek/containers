@@ -1,0 +1,14 @@
+FROM repo.skarbek.name/h-con-infra/ubi10:10.2
+
+COPY rootfs/ /
+
+RUN <<EOF
+    dnf -y install tinyproxy
+    dnf clean all
+    mkdir -p /usr/share/tinyproxy
+    mv /etc/tinyproxy/* /usr/share/tinyproxy/
+EOF
+
+CMD ["/usr/bin/dinit", "--container"]
+
+VOLUME /etc/tinyproxy

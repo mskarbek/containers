@@ -1,0 +1,6 @@
+type = process
+command = /usr/bin/tinyproxy
+smooth-recovery = true
+restart = on-failure
+options: runs-on-console
+waits-for: tinyproxy-config
