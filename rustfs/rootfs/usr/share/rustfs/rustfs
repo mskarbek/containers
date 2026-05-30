@@ -1,0 +1,5 @@
+RUSTFS_VOLUMES="/var/lib/rustfs"
+RUSTFS_ADDRESS=":9000"
+RUSTFS_CONSOLE_ENABLE=true
+RUST_LOG=error
+RUSTFS_OBS_LOG_DIRECTORY="/var/log/rustfs/"

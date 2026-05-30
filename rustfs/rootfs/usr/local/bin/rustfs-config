@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+mkdir -p /var/log/rustfs
+
+if [ ! -f /etc/sysconfig/rustfs ]; then
+    cp /usr/share/rustfs/rustfs /etc/sysconfig/rustfs
+    echo "RUSTFS_ACCESS_KEY=$(openssl rand -hex 26)" >> /etc/sysconfig/rustfs
+    echo "RUSTFS_SECRET_KEY=$(openssl rand -hex 64)" >> /etc/sysconfig/rustfs
+fi

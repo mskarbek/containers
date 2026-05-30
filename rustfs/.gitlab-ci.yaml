@@ -1,0 +1,16 @@
+---
+rustfs:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - rustfs/**/*
+  needs:
+    - job: ubi10
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/rustfs --network=host ./rustfs/
+    buildah push $REPO_URL/rustfs

@@ -1,0 +1,7 @@
+type = process
+command = /usr/local/bin/rustfs
+smooth-recovery = true
+restart = on-failure
+env-file = /etc/sysconfig/rustfs
+options: runs-on-console
+waits-for: rustfs-config

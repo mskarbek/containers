@@ -1,0 +1,14 @@
+FROM repo.skarbek.name/h-con-infra/ubi10:10.2
+
+COPY rootfs/ /
+
+RUN <<EOF
+    curl -Lo /tmp/rustfs.zip https://github.com/rustfs/rustfs/releases/download/1.0.0-beta.6/rustfs-linux-x86_64-gnu-v1.0.0-beta.6.zip
+    unzip -d /usr/local/bin/ /tmp/rustfs.zip
+    rm /tmp/rustfs.zip
+    chmod 0755 /usr/local/bin/rustfs
+EOF
+
+CMD ["/usr/bin/dinit", "--container"]
+
+VOLUME /var/lib/rustfs
