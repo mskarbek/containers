@@ -3,7 +3,7 @@ FROM repo.skarbek.name/h-con-infra/ubi10:10.2
 COPY rootfs/ /
 
 RUN <<EOF
-    dnf -y install unzip
+    dnf -y install unzip openssl
     dnf clean all
     curl -Lo /tmp/rustfs.zip https://github.com/rustfs/rustfs/releases/download/1.0.0-beta.6/rustfs-linux-x86_64-gnu-v1.0.0-beta.6.zip
     unzip -d /usr/local/bin/ /tmp/rustfs.zip
