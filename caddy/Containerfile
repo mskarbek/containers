@@ -15,8 +15,7 @@ EOT
 
 FROM repo.skarbek.name/h-con-infra/ubi10:10.2
 
-COPY --from=builder /root/caddy /usr/local/bin/caddy
-COPY --from=builder /root/bin/authcrunch /usr/local/bin/authcrunch
+COPY --from=builder --chmod=755 /root/bin/authcrunch /root/caddy /usr/local/bin/
 
 COPY rootfs/ /
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+echo "INFO: Configuring Caddy"
 if [ ! -f /etc/caddy/Caddyfile ]; then
     cp /usr/share/caddy/Caddyfile /etc/caddy/Caddyfile
 fi
