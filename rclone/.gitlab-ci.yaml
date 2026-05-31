@@ -1,0 +1,16 @@
+---
+rclone:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - rclone/**/*
+  needs:
+    - job: ubi10
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/rclone --network=host ./rclone/
+    buildah push $REPO_URL/rclone
