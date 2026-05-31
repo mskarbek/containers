@@ -6,6 +6,8 @@ zensical:
   rules:
     - changes:
         - zensical/**/*
+    - changes:
+        - python/**/*
   needs:
     - job: python
       optional: true

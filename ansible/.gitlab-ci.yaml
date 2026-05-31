@@ -6,6 +6,8 @@ ansible:
   rules:
     - changes:
         - ansible/**/*
+    - changes:
+        - ubi10/**/*
   needs:
     - job: ubi10
       optional: true

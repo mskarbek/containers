@@ -6,6 +6,8 @@ yt-dlp:
   rules:
     - changes:
         - yt-dlp/**/*
+    - changes:
+        - python/**/*
   needs:
     - job: python
       optional: true

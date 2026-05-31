@@ -6,6 +6,8 @@ rclone:
   rules:
     - changes:
         - rclone/**/*
+    - changes:
+        - ubi10/**/*
   needs:
     - job: ubi10
       optional: true

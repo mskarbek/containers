@@ -6,6 +6,8 @@ bento:
   rules:
     - changes:
         - bento/**/*
+    - changes:
+        - ubi10/**/*
   needs:
     - job: ubi10
       optional: true

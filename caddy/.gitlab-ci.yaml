@@ -6,6 +6,8 @@ caddy:
   rules:
     - changes:
         - caddy/**/*
+    - changes:
+        - golang/**/*
   needs:
     - job: golang
       optional: true
