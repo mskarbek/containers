@@ -1,5 +1,5 @@
 ---
-ubi10:
+ubi10-minimal:
   tags:
     - dc02
   stage: build
