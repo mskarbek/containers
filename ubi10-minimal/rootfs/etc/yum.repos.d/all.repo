@@ -33,7 +33,7 @@ metadata_expire = 24h
 [epel-multimedia]
 name = negativo17 - Multimedia
 baseurl = https://repo.skarbek.name/repository/p-rpm-negativo17/multimedia/epel-$releasever/$basearch/
-enabled = 1
+enabled = 0
 gpgcheck = 1
 gpgkey = https://repo.skarbek.name/repository/p-rpm-negativo17/RPM-GPG-KEY-slaanesh
 metadata_expire = 24h
