@@ -4,7 +4,7 @@ COPY rootfs/ /
 
 RUN <<EOF
     rm /etc/yum.repos.d/ubi.repo
-    micordnf -y install catatonit dinit gettext-envsubst
+    microdnf -y install catatonit dinit gettext-envsubst
     microdnf clean all
 EOF
 
