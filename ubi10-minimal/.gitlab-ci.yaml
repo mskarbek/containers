@@ -1,0 +1,16 @@
+---
+ubi10:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - ubi10-minimal/**/*
+  needs:
+    - job: bootstrap
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/ubi10-minimal:10.2 --network=host ./ubi10-minimal/
+    buildah push $REPO_URL/ubi10-minimal:10.2
