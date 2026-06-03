@@ -1,11 +1,11 @@
 ---
-golang:
+tinyproxy:
   tags:
     - dc02
   stage: build
   rules:
     - changes:
-        - golang/**/*
+        - tinyproxy/**/*
     - changes:
         - ubi10-minimal/**/*
   needs:
@@ -14,5 +14,5 @@ golang:
   image: $REPO_URL/buildah:latest
   script: |
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
-    buildah build -t $REPO_URL/golang --network=host ./golang/
-    buildah push $REPO_URL/golang
+    buildah build -t $REPO_URL/tinyproxy --network=host ./tinyproxy/
+    buildah push $REPO_URL/tinyproxy
