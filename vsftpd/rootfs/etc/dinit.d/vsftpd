@@ -1,6 +1,6 @@
 type = process
-command = /usr/bin/tinyproxy -d
+command = /usr/sbin/vsftpd -obackground=NO /etc/vsftpd/vsftpd.conf
 smooth-recovery = true
 restart = on-failure
 options: runs-on-console
-waits-for: tinyproxy-config
+waits-for: vsftpd-config
