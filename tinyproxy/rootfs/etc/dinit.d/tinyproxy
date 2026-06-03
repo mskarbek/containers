@@ -1,5 +1,5 @@
 type = process
-command = /usr/bin/tinyproxy
+command = /usr/bin/tinyproxy -d
 smooth-recovery = true
 restart = on-failure
 options: runs-on-console

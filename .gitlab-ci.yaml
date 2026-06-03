@@ -11,6 +11,7 @@ include:
   - local: rclone/.gitlab-ci.yaml
   - local: rust/.gitlab-ci.yaml
   - local: rustfs/.gitlab-ci.yaml
+  - local: tinyproxy/.gitlab-ci.yaml
   - local: ubi10/.gitlab-ci.yaml
   - local: ubi10-minimal/.gitlab-ci.yaml
   - local: yt-dlp/.gitlab-ci.yaml
