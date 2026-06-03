@@ -1,0 +1,18 @@
+---
+vsftpd:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - vsftpd/**/*
+    - changes:
+        - ubi10/**/*
+  needs:
+    - job: ubi10
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/vsftpd --network=host ./vsftpd/
+    buildah push $REPO_URL/vsftpd

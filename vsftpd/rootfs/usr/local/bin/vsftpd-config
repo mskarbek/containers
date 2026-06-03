@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+mkdir -p /var/ftp/pub
+
+if [ ! -f /etc/vsftpd/ftpusers ]; then
+    cp /usr/share/vsftpd/ftpusers /etc/vsftpd/ftpusers
+fi
+
+if [ ! -f /etc/vsftpd/user_list ]; then
+    cp /usr/share/vsftpd/user_list /etc/vsftpd/user_list
+fi
+
+if [ ! -f /etc/vsftpd/vsftpd.conf ]; then
+    cp /usr/share/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf
+fi
