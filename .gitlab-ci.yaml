@@ -8,6 +8,7 @@ include:
   - local: golang/.gitlab-ci.yaml
   - local: jellyfin/.gitlab-ci.yaml
   - local: python/.gitlab-ci.yaml
+  - local: rabbitmq/.gitlab-ci.yaml
   - local: rclone/.gitlab-ci.yaml
   - local: rust/.gitlab-ci.yaml
   - local: rustfs/.gitlab-ci.yaml

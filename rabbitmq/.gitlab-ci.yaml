@@ -1,0 +1,18 @@
+---
+rabbitmq:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - rabbitmq/**/*
+    - changes:
+        - ubi10/**/*
+  needs:
+    - job: ubi10
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/rabbitmq --network=host ./rabbitmq/
+    buildah push $REPO_URL/rabbitmq
