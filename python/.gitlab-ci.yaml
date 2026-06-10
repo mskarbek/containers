@@ -7,9 +7,9 @@ python:
     - changes:
         - python/**/*
     - changes:
-        - ubi10/**/*
+        - ubi10-minimal/**/*
   needs:
-    - job: ubi10
+    - job: ubi10-minimal
       optional: true
   image: $REPO_URL/buildah:latest
   script: |
