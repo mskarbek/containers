@@ -1,0 +1,6 @@
+type = process
+command = /usr/local/bin/airflow standalone
+smooth-recovery = true
+restart = on-failure
+options: runs-on-console
+waits-for: airflow-config

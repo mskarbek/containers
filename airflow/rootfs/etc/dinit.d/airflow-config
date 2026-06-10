@@ -1,0 +1,4 @@
+type = scripted
+command = /usr/local/bin/airflow-config
+restart = false
+options: starts-on-console

@@ -1,0 +1,18 @@
+---
+airflow:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - airflow/**/*
+    - changes:
+        - python/**/
+  needs:
+    - job: python
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/airflow --network=host ./airflow/
+    buildah push $REPO_URL/airflow
