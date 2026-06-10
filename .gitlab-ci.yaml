@@ -1,5 +1,6 @@
 ---
 include:
+  - local: airflow/.gitlab-ci.yaml
   - local: ansible/.gitlab-ci.yaml
   - local: bento/.gitlab-ci.yaml
   - local: bootstrap/.gitlab-ci.yaml
