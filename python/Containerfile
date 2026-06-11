@@ -1,7 +1,7 @@
 FROM repo.skarbek.name/h-con-infra/ubi10-minimal:10.2
 
 RUN <<EOF
-    microdnf -y install python3.14 tar gzip
+    microdnf -y install python3.14 tar gzip gcc python3.14-devel
     microdnf clean all
     cd /usr/local/bin
     curl -L https://releases.astral.sh/github/uv/releases/download/0.11.16/uv-x86_64-unknown-linux-gnu.tar.gz|tar xvz --strip-components=1
