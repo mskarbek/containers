@@ -1,7 +1,7 @@
 FROM repo.skarbek.name/h-con-infra/python:latest AS builder
 
 RUN <<EOF
-    microdnf -y install gcc python3.14-devel openldap-devel
+    microdnf -y install openldap-devel
     uv --system-certs --no-progress venv --no-project --python=/usr/bin/python3.14 --relocatable /opt/airflow
     uv --system-certs --no-progress pip install --python=/opt/airflow/bin/python3.14 --default-index=https://repo.skarbek.name/repository/p-ppi-pypi/simple apache-airflow[celery,otel,cncf-kubernetes,ldap,ftp,sftp,sqlite,imap,http,ssh,oracle,microsoft-mssql,gunicorn]==3.2.2 --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-3.2.2/constraints-3.14.txt"
 EOF
@@ -13,7 +13,7 @@ COPY rootfs/ /
 COPY --from=builder /opt/airflow/ /opt/airflow/
 
 RUN <<EOF
-    microdnf -y install openldap
+    microdnf -y install python3.14 openldap
     microdnf clean all
 EOF
 
