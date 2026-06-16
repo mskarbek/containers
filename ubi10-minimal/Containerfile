@@ -1,11 +1,25 @@
-FROM repo.skarbek.name/p-con-docker/redhat/ubi10-minimal:10.2
+ARG BASE_IMAGES_REPO
+
+FROM ${BASE_IMAGES_REPO}/ubi10-minimal:10.2
+
+ARG PROJ_YUM_REPO
+ARG REPO_USERNAME
+ARG REPO_PASSWORD
 
 COPY rootfs/ /
 
 RUN <<EOF
     rm /etc/yum.repos.d/ubi.repo
-    microdnf -y install catatonit dinit gettext-envsubst
+    microdnf -y update
+    microdnf -y install catatonit gettext-envsubst
+    envsubst < /etc/yum.repos.d/proj.tmpl > /etc/yum.repos.d/proj.repo
+    microdnf -y install dinit
     microdnf clean all
+    rm /etc/yum.repos.d/proj.*
 EOF
 
+ENV DINIT_SOCKET_PATH=/tmp/.dinitctl
+
 ENTRYPOINT ["/usr/libexec/catatonit/catatonit", "--"]
+
+CMD ["/usr/bin/dinit", "-u", "-p", "/tmp/.dinitctl", "-d", "/etc/dinit.d"]

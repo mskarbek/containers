@@ -9,6 +9,6 @@ RUN <<EOF
     mv /etc/tinyproxy/tinyproxy.conf /usr/share/tinyproxy/
 EOF
 
-CMD ["/usr/bin/dinit", "--container"]
+CMD ["/usr/bin/dinit", "-u", "-d", "/etc/dinit.d"]
 
 VOLUME /etc/tinyproxy
