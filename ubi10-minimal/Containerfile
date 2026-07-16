@@ -9,6 +9,7 @@ ARG REPO_PASSWORD
 COPY rootfs/ /
 
 RUN <<EOF
+    set -euxo pipefail
     rm /etc/yum.repos.d/ubi.repo
     microdnf -y update
     microdnf -y install catatonit gettext-envsubst
