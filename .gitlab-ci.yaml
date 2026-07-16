@@ -1,10 +1,10 @@
 ---
+.rules_template: &default_rules
+  - if: '$CI_COMMIT_MESSAGE  !~ /^wip(.?)*/'
+    when: always
 variables:
   BASE_IMAGES_REPO: repo.skarbek.name/p-con-docker/redhat
   PROJ_IMAGES_REPO: repo.skarbek.name/h-con-infra
-rules:
-    - if: '$CI_COMMIT_MESSAGE  !~ /^wip(.?)*/'
-      when: always
 include:
   - local: airflow/.gitlab-ci.yaml
   - local: ansible/.gitlab-ci.yaml
