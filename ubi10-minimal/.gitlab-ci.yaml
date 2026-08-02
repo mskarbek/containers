@@ -13,9 +13,10 @@ ubi10-minimal:
   script: |-
     set -euxo pipefail
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
-    buildah build -t $REPO_URL/ubi10-minimal:latest --network=host ./ubi10-minimal/ \
+    buildah build -t $REPO_URL/ubi10-minimal:latest --network=host \
     --build-arg PROJ_YUM_REPO=${PROJ_YUM_REPO} \
-    --build-arg BASE_IMAGES_REPO=${REPO_URL} \
+    --build-arg BASE_IMAGES_REPO=repo.skarbek.name/p-con-docker/redhat \
     --build-arg REPO_USERNAME=${REPO_USERNAME} \
-    --build-arg REPO_PASSWORD=${REPO_PASSWORD}
+    --build-arg REPO_PASSWORD=${REPO_PASSWORD} \
+    ./ubi10-minimal/
     buildah push $REPO_URL/ubi10-minimal:latest
