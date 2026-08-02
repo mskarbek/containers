@@ -14,9 +14,9 @@ RUN <<EOF
     microdnf -y update
     microdnf -y install catatonit gettext-envsubst
     envsubst < /etc/yum.repos.d/proj.tmpl > /etc/yum.repos.d/proj.repo
+    rm /etc/yum.repos.d/proj.tmpl
     microdnf -y install dinit
     microdnf clean all
-    rm /etc/yum.repos.d/proj.*
 EOF
 
 ENV DINIT_SOCKET_PATH=/tmp/.dinitctl

@@ -53,10 +53,3 @@ enabled = 0
 gpgcheck = 1
 gpgkey = https://repo.skarbek.name/repository/p-rpm-rpmfusion/nonfree/el/RPM-GPG-KEY-rpmfusion-nonfree-el-10
 metadata_expire = 24h
-
-[infra]
-name = Infra Packages for Enterprise Linux $releasever - $basearch
-baseurl = https://repo.skarbek.name/repository/h-rpm-infra/$releasever/
-enabled = 1
-gpgcheck = 0
-metadata_expire = 24h
