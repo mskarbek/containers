@@ -4,8 +4,7 @@ COPY rootfs/ /
 
 RUN <<EOF
     set -euxo pipefail
-    envsubst < /etc/yum.repos.d/all.tmpl > /etc/yum.repos.d/all.repo
-    rm /etc/yum.repos.d/ubi.repo /etc/yum.repos.d/all.tmpl
+    rm /etc/yum.repos.d/ubi.repo
     dnf -y install buildah fuse-overlayfs catatonit gettext-envsubst
     dnf clean all
 EOF
