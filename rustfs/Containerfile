@@ -6,7 +6,7 @@ COPY rootfs/ /
 
 RUN <<EOF
     set -euxo pipefail
-    microdnf -y install unzip openssl tar
+    microdnf -y install unzip openssl tar gzip
     microdnf clean all
     curl -Lo /tmp/rustfs.zip https://repo.skarbek.name/repository/p-raw-github/rustfs/rustfs/releases/download/1.0.0-beta.12/rustfs-linux-x86_64-gnu-latest.zip
     unzip -d /usr/local/bin/ /tmp/rustfs.zip
