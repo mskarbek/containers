@@ -5,6 +5,7 @@ FROM ${BASE_IMAGES_REPO}/ubi10-minimal:latest
 COPY rootfs/ /
 
 RUN <<EOF
+    set -euxo pipefail
     microdnf -y install tinyproxy
     microdnf clean all
     mkdir -p /usr/share/tinyproxy
