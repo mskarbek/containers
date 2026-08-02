@@ -1,4 +1,6 @@
-FROM repo.skarbek.name/h-con-infra/ubi10-minimal:10.2
+ARG BASE_IMAGES_REPO
+
+FROM ${BASE_IMAGES_REPO}/ubi10-minimal:latest
 
 COPY rootfs/ /
 
@@ -8,7 +10,5 @@ RUN <<EOF
     mkdir -p /usr/share/tinyproxy
     mv /etc/tinyproxy/tinyproxy.conf /usr/share/tinyproxy/
 EOF
-
-CMD ["/usr/bin/dinit", "-u", "-d", "/etc/dinit.d"]
 
 VOLUME /etc/tinyproxy

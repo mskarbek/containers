@@ -12,7 +12,10 @@ tinyproxy:
     - job: ubi10-minimal
       optional: true
   image: $REPO_URL/buildah:latest
-  script: |
+  script: |-
+    set -euxo pipefail
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
-    buildah build -t $REPO_URL/tinyproxy --network=host ./tinyproxy/
+    buildah build -t $REPO_URL/tinyproxy --network=host \
+    --build-arg BASE_IMAGES_REPO=${REPO_URL} \
+    ./tinyproxy/
     buildah push $REPO_URL/tinyproxy
