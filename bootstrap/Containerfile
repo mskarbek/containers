@@ -3,6 +3,7 @@ FROM repo.skarbek.name/p-con-docker/redhat/ubi10:latest
 COPY rootfs/ /
 
 RUN <<EOF
+    set -euxo pipefail
     rm /etc/yum.repos.d/ubi.repo
     dnf -y install buildah fuse-overlayfs catatonit
     dnf clean all

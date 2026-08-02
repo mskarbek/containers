@@ -7,7 +7,8 @@ bootstrap:
     - changes:
         - bootstrap/**/*
   image: repo.skarbek.name/p-con-docker/redhat/ubi10:latest
-  script: |
+  script: |-
+    set -euxo pipefail
     dnf clean all
     dnf -y install buildah fuse-overlayfs
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
