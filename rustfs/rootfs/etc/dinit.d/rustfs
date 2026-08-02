@@ -3,8 +3,6 @@ command = /usr/local/bin/rustfs server
 command += --access-key-file=/etc/rustfs/access_key
 command += --secret-key-file=/etc/rustfs/secret_key
 command += /var/lib/rustfs
-smooth-recovery = true
-restart = on-failure
+restart = false
 env-file = /etc/sysconfig/rustfs
 options: runs-on-console
-waits-for: rustfs-config

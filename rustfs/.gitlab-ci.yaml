@@ -7,12 +7,14 @@ rustfs:
     - changes:
         - rustfs/**/*
     - changes:
-        - ubi10/**/*
+        - ubi10-minimal/**/*
   needs:
-    - job: ubi10
+    - job: ubi10-minimal
       optional: true
   image: $REPO_URL/buildah:latest
-  script: |
+  script: |-
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
-    buildah build -t $REPO_URL/rustfs --network=host ./rustfs/
+    buildah build -t $REPO_URL/rustfs --network=host \
+    --build-arg BASE_IMAGES_REPO=${REPO_URL} \
+    ./rustfs/
     buildah push $REPO_URL/rustfs
