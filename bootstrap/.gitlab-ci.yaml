@@ -10,7 +10,7 @@ bootstrap:
   script: |-
     set -euxo pipefail
     dnf clean all
-    dnf -y install buildah fuse-overlayfs
+    dnf -y install buildah fuse-overlayfs gettext-envsubst
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
     buildah build -t $REPO_URL/buildah --network=host ./bootstrap/
     buildah push $REPO_URL/buildah
