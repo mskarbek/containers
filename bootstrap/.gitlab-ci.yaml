@@ -6,7 +6,7 @@ bootstrap:
   rules:
     - changes:
         - bootstrap/**/*
-  image: repo.skarbek.name/p-con-docker/redhat/ubi10:10.2
+  image: repo.skarbek.name/p-con-docker/redhat/ubi10:latest
   script: |
     dnf clean all
     dnf -y install buildah fuse-overlayfs

@@ -1,4 +1,4 @@
-FROM repo.skarbek.name/p-con-docker/redhat/ubi10:10.2
+FROM repo.skarbek.name/p-con-docker/redhat/ubi10:latest
 
 COPY rootfs/ /
 
