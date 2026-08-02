@@ -13,8 +13,8 @@ ubi10-minimal:
   script: |-
     set -euxo pipefail
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
-    buildah build -t $REPO_URL/ubi10-minimal:10.2 --network=host ./ubi10-minimal/\
-    --build-arg PROJ_YUM_REPO=${PROJ_YUM_REPO}\
-    --build-arg REPO_USERNAME=${REPO_USERNAME}\
+    buildah build -t $REPO_URL/ubi10-minimal:10.2 --network=host ./ubi10-minimal/ \
+    --build-arg PROJ_YUM_REPO=${PROJ_YUM_REPO} \
+    --build-arg REPO_USERNAME=${REPO_USERNAME} \
     --build-arg REPO_PASSWORD=${REPO_PASSWORD}
     buildah push $REPO_URL/ubi10-minimal:10.2
