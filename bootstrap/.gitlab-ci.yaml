@@ -11,8 +11,8 @@ bootstrap:
     set -euxo pipefail
     dnf clean all
     dnf -y install buildah fuse-overlayfs gettext-envsubst
-    envsubst < bootstrap/rootfs/etc/yum.repos.d/all.tmpl > bootstrap/rootfs/etc/yum.repos.d/all.repo
-    rm bootstrap/rootfs/etc/yum.repos.d/all.tmpl
+    envsubst < bootstrap/rootfs/etc/yum.repos.d/proj.tmpl > bootstrap/rootfs/etc/yum.repos.d/proj.repo
+    rm bootstrap/rootfs/etc/yum.repos.d/proj.tmpl
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
     buildah build -t $REPO_URL/buildah --network=host ./bootstrap/
     buildah push $REPO_URL/buildah
