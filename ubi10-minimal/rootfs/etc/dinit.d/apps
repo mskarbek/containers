@@ -1,0 +1,5 @@
+type = internal
+chain-to = stop
+waits-for: conf
+depends-on.d: apps.d
+options: always-chain

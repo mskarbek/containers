@@ -1,2 +1,2 @@
-type = intrenal
-options: kill-all-on-stop
+type = scripted
+command = /usr/bin/dinitctl shutdown
