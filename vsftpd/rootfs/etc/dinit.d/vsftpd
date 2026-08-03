@@ -1,6 +1,4 @@
 type = process
 command = /usr/sbin/vsftpd -obackground=NO /etc/vsftpd/vsftpd.conf
-smooth-recovery = true
-restart = on-failure
+restart = false
 options: runs-on-console
-waits-for: vsftpd-config

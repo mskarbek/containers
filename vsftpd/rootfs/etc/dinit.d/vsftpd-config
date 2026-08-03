@@ -1,4 +1,4 @@
 type = scripted
-command = /usr/local/bin/vsftpd-config
+command = /usr/bin/vsftpd-config
 restart = false
 options: starts-on-console

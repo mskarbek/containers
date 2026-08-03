@@ -1,6 +1,6 @@
-ARG BASE_IMAGES_REPO
+ARG PROJ_IMAGES_REPO
 
-FROM ${BASE_IMAGES_REPO}/ubi10-minimal:latest
+FROM ${PROJ_IMAGES_REPO}/ubi10-minimal:latest
 
 COPY rootfs/ /
 
