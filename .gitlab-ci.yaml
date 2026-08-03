@@ -24,3 +24,7 @@ include:
   - local: vsftpd/.gitlab-ci.yaml
   - local: yt-dlp/.gitlab-ci.yaml
   - local: zensical/.gitlab-ci.yaml
+  - local: openjdk21-jre/.gitlab-ci.yaml
+  - local: openjdk21-jdk/.gitlab-ci.yaml
+  - local: openjdk25-jre/.gitlab-ci.yaml
+  - local: openjdk25-jdk/.gitlab-ci.yaml

@@ -1,0 +1,21 @@
+---
+openjdk21-jdk:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - openjdk21-jdk/**/*
+    - changes:
+        - openjdk21-jre/**/*
+  needs:
+    - job: openjdk21-jre
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |-
+    set -euxo pipefail
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/openjdk21-jdk --network=host \
+    --build-arg BASE_IMAGES_REPO=${REPO_URL} \
+    ./openjdk21-jdk/
+    buildah push $REPO_URL/openjdk21-jdk

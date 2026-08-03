@@ -1,0 +1,21 @@
+---
+openjdk25-jre:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - openjdk25-jre/**/*
+    - changes:
+        - ubi10-minimal/**/*
+  needs:
+    - job: ubi10-minimal
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |-
+    set -euxo pipefail
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/openjdk25-jre --network=host \
+    --build-arg BASE_IMAGES_REPO=${REPO_URL} \
+    ./openjdk25-jre/
+    buildah push $REPO_URL/openjdk25-jre

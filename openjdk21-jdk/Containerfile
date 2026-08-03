@@ -1,0 +1,11 @@
+ARG BASE_IMAGES_REPO
+
+FROM ${BASE_IMAGES_REPO}/openjdk21-jre:latest
+
+COPY rootfs/ /
+
+RUN <<EOF
+    set -euxo pipefail
+    microdnf -y install java-21-openjdk-devel
+    microdnf clean all
+EOF
