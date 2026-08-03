@@ -1,2 +1,0 @@
-RUST_LOG=garage=info
-RUST_BACKTRACE=1

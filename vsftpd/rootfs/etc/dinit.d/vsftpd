@@ -1,4 +1,0 @@
-type = process
-command = /usr/sbin/vsftpd -obackground=NO /etc/vsftpd/vsftpd.conf
-restart = false
-options: runs-on-console

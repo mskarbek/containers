@@ -1,4 +1,0 @@
-type = scripted
-command = /usr/bin/vsftpd-config
-restart = false
-options: starts-on-console

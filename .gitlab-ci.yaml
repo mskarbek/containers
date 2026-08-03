@@ -10,8 +10,8 @@ include:
   - local: ansible/.gitlab-ci.yaml
   - local: bento/.gitlab-ci.yaml
   - local: bootstrap/.gitlab-ci.yaml
+  - local: buildah/.gitlab-ci.yaml
   - local: caddy/.gitlab-ci.yaml
-  - local: garage/.gitlab-ci.yaml
   - local: golang/.gitlab-ci.yaml
   - local: jellyfin/.gitlab-ci.yaml
   - local: python/.gitlab-ci.yaml
@@ -21,10 +21,10 @@ include:
   - local: rustfs/.gitlab-ci.yaml
   - local: tinyproxy/.gitlab-ci.yaml
   - local: ubi10-minimal/.gitlab-ci.yaml
-  - local: vsftpd/.gitlab-ci.yaml
   - local: yt-dlp/.gitlab-ci.yaml
   - local: zensical/.gitlab-ci.yaml
   - local: openjdk21-jre/.gitlab-ci.yaml
   - local: openjdk21-jdk/.gitlab-ci.yaml
   - local: openjdk25-jre/.gitlab-ci.yaml
   - local: openjdk25-jdk/.gitlab-ci.yaml
+  - local: unftp/.gitlab-ci.yaml
