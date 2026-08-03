@@ -1,4 +1,4 @@
 type = scripted
-command = /usr/local/bin/tinyproxy-config
+command = /usr/bin/tinyproxy-config
 restart = false
 options: starts-on-console

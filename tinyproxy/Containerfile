@@ -1,6 +1,6 @@
-ARG BASE_IMAGES_REPO
+ARG PROJ_IMAGES_REPO
 
-FROM ${BASE_IMAGES_REPO}/ubi10-minimal:latest
+FROM ${PROJ_IMAGES_REPO}/ubi10-minimal:latest
 
 COPY rootfs/ /
 
@@ -8,8 +8,7 @@ RUN <<EOF
     set -euxo pipefail
     microdnf -y install tinyproxy
     microdnf clean all
-    mkdir -p /usr/share/tinyproxy
-    mv /etc/tinyproxy/tinyproxy.conf /usr/share/tinyproxy/
+    rm /etc/tinyproxy/tinyproxy.conf
 EOF
 
 VOLUME /etc/tinyproxy

@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-if [ ! -f /etc/tinyproxy/tinyproxy.conf ]; then
-    cp /usr/share/tinyproxy/tinyproxy.conf /etc/tinyproxy/tinyproxy.conf
-fi

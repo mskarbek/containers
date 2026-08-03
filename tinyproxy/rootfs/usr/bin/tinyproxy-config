@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+if [ ! -f /etc/tinyproxy/tinyproxy.conf ]; then
+    envsubst < /usr/share/tinyproxy/tinyproxy.conf > /etc/tinyproxy/tinyproxy.conf
+fi
