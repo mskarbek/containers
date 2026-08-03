@@ -2,8 +2,6 @@ ARG BASE_IMAGES_REPO
 
 FROM ${BASE_IMAGES_REPO}/openjdk25-jre:latest
 
-COPY rootfs/ /
-
 RUN <<EOF
     set -euxo pipefail
     microdnf -y install java-25-openjdk-devel
