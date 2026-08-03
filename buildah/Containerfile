@@ -1,0 +1,9 @@
+ARG PROJ_IMAGES_REPO
+
+FROM ${PROJ_IMAGES_REPO}/ubi10-minimal:latest
+
+RUN <<EOF
+    set -euxo pipefail
+    microdnf -y install buildah fuse-overlayfs
+    microdnf clean all
+EOF
