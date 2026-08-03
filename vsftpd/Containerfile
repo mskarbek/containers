@@ -1,15 +1,16 @@
-FROM repo.skarbek.name/h-con-infra/ubi10:10.2
+ARG BASE_IMAGES_REPO
+
+FROM ${BASE_IMAGES_REPO}/ubi10-minimal:latest
 
 COPY rootfs/ /
 
 RUN <<EOF
-    dnf -y install vsftpd
-    dnf clean all
+    set -euxo pipefail
+    microdnf -y install vsftpd
+    microdnf clean all
     mkdir -p /usr/share/vsftpd
     mv /etc/vsftpd/* /usr/share/vsftpd/
 EOF
-
-CMD ["/usr/bin/dinit", "--container"]
 
 VOLUME /etc/vsftpd
 VOLUME /var/ftp

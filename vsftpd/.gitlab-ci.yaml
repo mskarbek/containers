@@ -7,12 +7,15 @@ vsftpd:
     - changes:
         - vsftpd/**/*
     - changes:
-        - ubi10/**/*
+        - ubi10-minimal/**/*
   needs:
-    - job: ubi10
+    - job: ubi10-minimal
       optional: true
   image: $REPO_URL/buildah:latest
-  script: |
+  script: |-
+    set -euxo pipefail
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
-    buildah build -t $REPO_URL/vsftpd --network=host ./vsftpd/
+    buildah build -t $REPO_URL/vsftpd --network=host \
+    --build-arg BASE_IMAGES_REPO=${REPO_URL} \
+    ./vsftpd/
     buildah push $REPO_URL/vsftpd
