@@ -1,4 +1,4 @@
 type = scripted
-command = /usr/local/bin/caddy-config
+command = /usr/bin/caddy-config
 restart = false
 options: starts-on-console

@@ -1,0 +1,24 @@
+FROM repo.skarbek.name/h-con-infra/golang:latest AS builder
+
+WORKDIR /root/
+
+RUN <<EOT
+    curl -L xcaddy.tar.gz https://github.com/caddyserver/xcaddy/releases/download/v0.4.5/xcaddy_0.4.5_linux_amd64.tar.gz|tar xz
+    chmod 0755 xcaddy
+    ./xcaddy build  v2.11.3 \
+    --with github.com/caddy-dns/route53@v1.6.2 \
+    --with github.com/caddy-dns/cloudflare@v0.2.4 \
+    --with github.com/sagikazarmark/caddy-fs-s3@v0.12.0 \
+    --with github.com/greenpau/caddy-security@v1.1.62
+    curl -L https://github.com/greenpau/caddy-security/releases/download/v1.1.62/authcrunch_1.1.62_linux_amd64.tar.gz|tar xz
+EOT
+
+FROM repo.skarbek.name/h-con-infra/ubi10:10.2
+
+COPY --from=builder --chmod=755 /root/bin/authcrunch /root/caddy /usr/local/bin/
+
+COPY rootfs/ /
+
+CMD ["/usr/bin/dinit", "--container"]
+
+VOLUME /etc/caddy
