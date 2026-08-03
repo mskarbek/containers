@@ -1,0 +1,21 @@
+---
+unftp:
+  tags:
+    - dc02
+  stage: build
+  rules:
+    - changes:
+        - unftp/**/*
+    - changes:
+        - ubi10-minimal/**/*
+  needs:
+    - job: ubi10-minimal
+      optional: true
+  image: $REPO_URL/buildah:latest
+  script: |-
+    set -euxo pipefail
+    buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
+    buildah build -t $REPO_URL/unftp --network=host \
+    --build-arg PROJ_IMAGES_REPO=${REPO_URL} \
+    ./unftp/
+    buildah push $REPO_URL/unftp

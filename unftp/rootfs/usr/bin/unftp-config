@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+echo "INFO: Configuring RustFS"
+mkdir -p /var/log/rustfs /etc/rustfs
+
+if [ ! -f /etc/rustfs/access_key ] || [ ! -f /etc/rustfs/secret_key ]; then
+    echo "INFO: Generating access and secret key"
+    openssl rand -hex 13 > /etc/rustfs/access_key
+    openssl rand -hex 32 > /etc/rustfs/secret_key
+fi

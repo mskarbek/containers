@@ -1,0 +1,8 @@
+type = process
+command = /usr/local/bin/rustfs server
+command += --access-key-file=/etc/rustfs/access_key
+command += --secret-key-file=/etc/rustfs/secret_key
+command += /var/lib/rustfs
+restart = false
+env-file = /etc/sysconfig/rustfs
+options: runs-on-console
