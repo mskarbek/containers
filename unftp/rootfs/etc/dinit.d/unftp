@@ -1,8 +1,8 @@
 type = process
-command = /usr/local/bin/rustfs server
-command += --access-key-file=/etc/rustfs/access_key
-command += --secret-key-file=/etc/rustfs/secret_key
-command += /var/lib/rustfs
+command = /usr/bin/unftp
+command += --auth-type=json
+command += --auth-json-path=/etc/unftp/auth.json
+command += --sbe-type=filesystem
+command += --root-dir=/var/lib/unftp
 restart = false
-env-file = /etc/sysconfig/rustfs
 options: runs-on-console

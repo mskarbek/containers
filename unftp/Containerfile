@@ -10,4 +10,5 @@ RUN <<EOF
     chmod 0755 /usr/bin/unftp
 EOF
 
+VOLUME /etc/unftp
 VOLUME /var/lib/unftp
