@@ -1,4 +1,6 @@
-FROM repo.skarbek.name/h-con-infra/ubi10:10.2
+ARG PROJ_IMAGES_REPO
+
+FROM ${PROJ_IMAGES_REPO}/ubi10-minimal:latest
 
 COPY rootfs/ /
 

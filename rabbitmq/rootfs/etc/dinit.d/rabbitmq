@@ -1,7 +1,6 @@
 type = process
 command = /usr/sbin/rabbitmq-server
 stop-command = /usr/sbin/rabbitmqctl shutdown
-smooth-recovery = true
-restart = on-failure
+restart = false
 options: runs-on-console
-waits-for: rabbitmq-config
+after: rabbitmq-config

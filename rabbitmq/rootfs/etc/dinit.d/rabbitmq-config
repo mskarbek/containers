@@ -1,4 +1,4 @@
 type = scripted
-command = /usr/local/bin/rabbitmq-config
+command = /usr/bin/rabbitmq-config
 restart = false
 options: starts-on-console

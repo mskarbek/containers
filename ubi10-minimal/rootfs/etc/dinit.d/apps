@@ -1,4 +1,4 @@
 type = internal
-chain-to = stop
 depends-on.d: apps.d
+chain-to = stop
 options: always-chain

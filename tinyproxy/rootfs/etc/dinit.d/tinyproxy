@@ -1,4 +1,5 @@
 type = process
 command = /usr/bin/tinyproxy -d -c /etc/tinyproxy/tinyproxy.conf
 restart = false
+after: conf
 options: runs-on-console

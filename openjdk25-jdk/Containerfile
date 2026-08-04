@@ -4,6 +4,6 @@ FROM ${BASE_IMAGES_REPO}/openjdk25-jre:latest
 
 RUN <<EOF
     set -euxo pipefail
-    microdnf -y install java-25-openjdk-devel
+    microdnf -y install java-25-openjdk-devel maven-openjdk25
     microdnf clean all
 EOF

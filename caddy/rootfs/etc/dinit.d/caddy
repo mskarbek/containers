@@ -4,3 +4,4 @@ command += --config /etc/caddy/Caddyfile
 command += --adapter caddyfile
 restart = false
 options: runs-on-console
+after: conf

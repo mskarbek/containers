@@ -5,4 +5,5 @@ command += --auth-json-path=/etc/unftp/auth.json
 command += --sbe-type=filesystem
 command += --root-dir=/var/lib/unftp
 restart = false
+after: conf
 options: runs-on-console
