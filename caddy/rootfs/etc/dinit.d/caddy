@@ -3,6 +3,7 @@ command = /usr/bin/caddy run
 command += --config /etc/caddy/Caddyfile
 command += --adapter caddyfile
 working-dir = /tmp/caddy
+env-file = /etc/sysconfig/caddy
 restart = false
 options: runs-on-console
 after: conf
