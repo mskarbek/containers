@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+mkdir -p /tmp/caddy
+
 if [ ! -f /etc/caddy/Caddyfile ]; then
     cp /usr/share/caddy/Caddyfile /etc/caddy/Caddyfile
 fi

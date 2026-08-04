@@ -2,6 +2,7 @@ type = process
 command = /usr/bin/caddy run
 command += --config /etc/caddy/Caddyfile
 command += --adapter caddyfile
+working-dir = /tmp/caddy
 restart = false
 options: runs-on-console
 after: conf
