@@ -1,6 +1,6 @@
 type = process
-command = /usr/sbin/rabbitmq-server
-stop-command = /usr/sbin/rabbitmqctl shutdown
+command = /usr/lib/rabbitmq/bin/rabbitmq-server
+stop-command = /usr/lib/rabbitmq/bin/rabbitmqctl shutdown
 restart = false
 after: conf
 options: runs-on-console
