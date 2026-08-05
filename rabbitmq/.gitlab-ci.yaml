@@ -14,5 +14,7 @@ rabbitmq:
   image: $REPO_URL/buildah:latest
   script: |
     buildah login -u $REPO_USERNAME -p $REPO_PASSWORD $REPO_URL
-    buildah build -t $REPO_URL/rabbitmq --network=host ./rabbitmq/
+    buildah build -t $REPO_URL/rabbitmq --network=host \
+    --build-arg BASE_IMAGES_REPO=${REPO_URL} \
+    ./rabbitmq/
     buildah push $REPO_URL/rabbitmq
