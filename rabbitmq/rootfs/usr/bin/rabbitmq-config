@@ -2,8 +2,8 @@
 
 if [ ! -f /var/lib/rabbitmq/.lock ]; then
     export LC_ALL=C.UTF-8
-    rabbitmq-plugins enable rabbitmq_management
-    rabbitmq-plugins enable rabbitmq_auth_backend_ldap
-    rabbitmq-plugins enable rabbitmq_prometheus
+    /usr/lib/rabbitmq/bin/rabbitmq-plugins enable rabbitmq_management
+    /usr/lib/rabbitmq/bin/rabbitmq-plugins enable rabbitmq_auth_backend_ldap
+    /usr/lib/rabbitmq/bin/rabbitmq-plugins enable rabbitmq_prometheus
     touch /var/lib/rabbitmq/.lock
 fi
