@@ -1,0 +1,6 @@
+host "registry.terraform.io" {
+    services = {
+        "modules.v1" = ""
+        "providers.v1" = ""
+    }
+}

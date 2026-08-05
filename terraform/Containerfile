@@ -1,0 +1,22 @@
+ARG PROJ_IMAGES_REPO
+
+FROM ${PROJ_IMAGES_REPO}/ubi10-minimal:latest
+
+ARG PROJ_RAW_REPO
+ARG REPO_USERNAME
+ARG REPO_PASSWORD
+
+COPY rootfs/ /
+
+RUN <<EOF
+    set -euxo pipefail
+    microdnf -y install unzip
+    microdnf clean all
+    curl -u ${REPO_USERNAME}:${REPO_PASSWORD} -Lo /tmp/terraform.zip https://${PROJ_RAW_REPO}/terraform/1.15.8/terraform_1.15.8_linux_amd64.zip
+    cd /usr/bin
+    unzip /tmp/terraform.zip
+    rm LICENSE.txt
+    chmod 0755 /usr/bin/terraform
+EOF
+
+ENV TF_CLI_CONFIG_FILE=/etc/terraform/proxy.tfrc
