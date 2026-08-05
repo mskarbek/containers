@@ -10,6 +10,8 @@ RUN <<EOF
     dnf clean all
 EOF
 
+ENV HOME=/var/lib/rabbitmq
+
 VOLUME /etc/rabbitmq
 VOLUME /var/lib/rabbitmq
 VOLUME /var/log/rabbitmq
