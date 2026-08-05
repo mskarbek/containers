@@ -6,8 +6,9 @@ COPY rootfs/ /
 
 RUN <<EOF
     set -euxo pipefail
-    dnf -y install erlang rabbitmq-server
-    dnf clean all
+    microdnf -y install shadow-utils util-linux
+    microdnf -y install erlang rabbitmq-server
+    microdnf clean all
 EOF
 
 ENV HOME=/var/lib/rabbitmq
