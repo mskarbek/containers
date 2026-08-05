@@ -5,6 +5,7 @@ FROM ${PROJ_IMAGES_REPO}/ubi10-minimal:latest
 COPY rootfs/ /
 
 RUN <<EOF
+    set -euxo pipefail
     dnf -y install erlang rabbitmq-server
     dnf clean all
 EOF
