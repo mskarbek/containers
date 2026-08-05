@@ -2,5 +2,5 @@ type = process
 command = /usr/sbin/rabbitmq-server
 stop-command = /usr/sbin/rabbitmqctl shutdown
 restart = false
+after: conf
 options: runs-on-console
-after: rabbitmq-config
