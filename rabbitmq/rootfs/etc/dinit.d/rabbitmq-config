@@ -1,4 +1,5 @@
 type = scripted
 command = /usr/bin/rabbitmq-config
 restart = false
+start-timeout = 0
 options: starts-on-console
