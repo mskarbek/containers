@@ -2,15 +2,8 @@
 
 if [ ! -f /var/lib/rabbitmq/.lock ]; then
     export LC_ALL=C.UTF-8
-    export RABBITMQ_USER=root
-    export RABBITMQ_PASS=$(cat /proc/sys/kernel/random/uuid)
-    printf ${RABBITMQ_PASS} > /var/lib/rabbitmq/root.password
     rabbitmq-plugins enable rabbitmq_management
     rabbitmq-plugins enable rabbitmq_auth_backend_ldap
     rabbitmq-plugins enable rabbitmq_prometheus
-    rabbitmqctl add_user ${RABBITMQ_USER} ${RABBITMQ_PASS}
-    rabbitmqctl set_permissions -p "/" ${RABBITMQ_USER} ".*" ".*" ".*"
-    rabbitmqctl set_user_tags ${RABBITMQ_USER} administrator
-    rabbitmqctl delete_user guest
     touch /var/lib/rabbitmq/.lock
 fi
