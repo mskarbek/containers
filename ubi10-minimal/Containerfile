@@ -12,7 +12,7 @@ RUN <<EOF
     set -euxo pipefail
     rm /etc/yum.repos.d/ubi.repo
     microdnf -y update
-    microdnf -y install catatonit gettext-envsubst
+    microdnf -y install catatonit gettext-envsubst nmap-ncat
     envsubst < /etc/yum.repos.d/proj.tmpl > /etc/yum.repos.d/proj.repo
     rm /etc/yum.repos.d/proj.tmpl
     microdnf -y install dinit
