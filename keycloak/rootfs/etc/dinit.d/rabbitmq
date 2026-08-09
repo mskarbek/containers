@@ -1,0 +1,5 @@
+type = process
+command = /usr/lib/keycloak/bin/kc.sh start
+restart = false
+after: conf
+options: runs-on-console
