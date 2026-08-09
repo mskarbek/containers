@@ -8,6 +8,8 @@ RUN <<EOF
     set -euxo pipefail
     microdnf -y install gzip krb5-workstation
     microdnf clean all
-    mkdir /usr/lib/keycloak
-    curl -L https://repo.skarbek.name/repository/p-raw-github/keycloak/keycloak/releases/download/26.7.1/keycloak-26.7.1.tar.gz|tar --strip-component=1 -xzC /usr/lib/keycloak
+    mkdir -p /usr/lib/keycloak /etc/dinit.d/conf.d
+    curl -L https://repo.skarbek.name/repository/p-raw-github/keycloak/keycloak/releases/download/26.7.1/keycloak-26.7.1.tar.gz|tar --strip-components=1 -xzC /usr/lib/keycloak
 EOF
+
+VOLUME /usr/lib/keycloak/data
