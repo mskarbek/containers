@@ -1,8 +1,9 @@
-FROM repo.skarbek.name/h-con-infra/ubi10-minimal:10.2
+ARG PROJ_IMAGES_REPO
+
+FROM ${PROJ_IMAGES_REPO}/ubi10-minimal:latest
 
 RUN <<EOF
-    microdnf -y install python3.14 tar gzip gcc python3.14-devel
+    microdnf -y install python3.14
     microdnf clean all
-    cd /usr/local/bin
-    curl -L https://releases.astral.sh/github/uv/releases/download/0.11.16/uv-x86_64-unknown-linux-gnu.tar.gz|tar xvz --strip-components=1
+    curl -L https://repo.skarbek.name/repository/p-raw-github/astral-sh/uv/releases/download/0.12.3/uv-x86_64-unknown-linux-gnu.tar.gz|tar xvzC /usr/bin --strip-components=1
 EOF
