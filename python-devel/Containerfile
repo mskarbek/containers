@@ -4,6 +4,6 @@ FROM ${PROJ_IMAGES_REPO}/python:latest
 
 RUN <<EOF
     set -euxo pipefail
-    microdnf -y install python3-devel gzip gcc
+    microdnf -y install python3-devel gcc
     microdnf clean all
 EOF
