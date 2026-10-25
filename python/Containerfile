@@ -2,8 +2,10 @@ ARG PROJ_IMAGES_REPO
 
 FROM ${PROJ_IMAGES_REPO}/ubi10-minimal:latest
 
+ARG GHUB_RAW_PROXY
+
 RUN <<EOF
-    microdnf -y install python3.14
+    microdnf -y install python3
     microdnf clean all
-    curl -L https://repo.skarbek.name/repository/p-raw-github/astral-sh/uv/releases/download/0.12.3/uv-x86_64-unknown-linux-gnu.tar.gz|tar xvzC /usr/bin --strip-components=1
+    curl -L https://${GHUB_RAW_PROXY}/astral-sh/uv/releases/download/0.13.5/uv-x86_64-unknown-linux-gnu.tar.gz|tar -xvzC /usr/bin --strip-components=1
 EOF
