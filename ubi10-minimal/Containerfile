@@ -3,6 +3,7 @@ ARG BASE_IMAGES_REPO
 FROM ${BASE_IMAGES_REPO}/ubi10-minimal:latest
 
 ARG PROJ_YUM_REPO
+ARG EPEL_YUM_REPO
 ARG REPO_USERNAME
 ARG REPO_PASSWORD
 
@@ -10,13 +11,13 @@ COPY rootfs/ /
 
 RUN <<EOF
     set -euxo pipefail
-    rm /etc/yum.repos.d/ubi.repo
     microdnf -y update
     microdnf -y install catatonit gettext-envsubst nmap-ncat tar procps-ng
+    envsubst < /etc/yum.repos.d/epel.tmpl > /etc/yum.repos.d/epel.repo
     envsubst < /etc/yum.repos.d/proj.tmpl > /etc/yum.repos.d/proj.repo
     microdnf -y install dinit
     microdnf clean all
-    rm /etc/yum.repos.d/proj.tmpl
+    rm /etc/yum.repos.d/*.tmpl
 EOF
 
 ENV DINIT_SOCKET_PATH=/tmp/.dinitctl

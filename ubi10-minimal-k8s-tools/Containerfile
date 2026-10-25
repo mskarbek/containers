@@ -9,7 +9,6 @@ COPY rootfs/ /
 RUN <<EOF
     set -euxo pipefail
     microdnf -y update
-    microdnf -y install gettext-envsubst
     envsubst < /etc/yum.repos.d/epel.tmpl > /etc/yum.repos.d/epel.repo
     rm /etc/yum.repos.d/epel.tmpl
     microdnf -y install yq
