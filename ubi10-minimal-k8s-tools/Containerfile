@@ -1,0 +1,17 @@
+ARG BASE_IMAGES_REPO
+
+FROM ${BASE_IMAGES_REPO}/ubi10-minimal-k8s-tools:latest
+
+ARG EPEL_YUM_REPO
+
+COPY rootfs/ /
+
+RUN <<EOF
+    set -euxo pipefail
+    microdnf -y update
+    microdnf -y install gettext-envsubst
+    envsubst < /etc/yum.repos.d/epel.tmpl > /etc/yum.repos.d/epel.repo
+    rm /etc/yum.repos.d/epel.tmpl
+    microdnf -y install yq
+    microdnf clean all
+EOF
