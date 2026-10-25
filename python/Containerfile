@@ -5,6 +5,7 @@ FROM ${PROJ_IMAGES_REPO}/ubi10-minimal:latest
 ARG GHUB_RAW_PROXY
 
 RUN <<EOF
+    set -euxo pipefail
     microdnf -y install python3
     microdnf clean all
     curl -L https://${GHUB_RAW_PROXY}/astral-sh/uv/releases/download/0.13.5/uv-x86_64-unknown-linux-gnu.tar.gz|tar -xvzC /usr/bin --strip-components=1

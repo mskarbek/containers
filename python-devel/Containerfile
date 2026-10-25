@@ -1,0 +1,9 @@
+ARG PROJ_IMAGES_REPO
+
+FROM ${PROJ_IMAGES_REPO}/python:latest
+
+RUN <<EOF
+    set -euxo pipefail
+    microdnf -y install tar gzip gcc python3-devel
+    microdnf clean all
+EOF
